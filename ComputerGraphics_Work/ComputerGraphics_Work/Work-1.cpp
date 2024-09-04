@@ -75,8 +75,6 @@ void InsertMatrix()
 	}
 }
 
-
-
 void Matrix_Plus()
 {
 	cout << "=================================" << endl;
@@ -125,7 +123,36 @@ void Matrix_Minus()
 	cout << endl;
 }
 
-void Matrix_X()
+void Matrix_X() // Çà·ÄÀÇ °ö
+{
+	memset(fMatrixResult, 0, sizeof(fMatrixResult));
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			for (int r = 0; r < 4; ++r)
+			{
+				fMatrixResult[i][j] += fMatrixOne[i][r] * fMatrixTwo[j][r];
+			}
+		}
+	}
+
+	cout << "=================================" << endl;
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			cout << setw(3) << fMatrixResult[i][j];
+		}
+		cout << endl;
+	}
+	cout << "=================================" << endl;
+
+	cout << endl;
+}
+
+void Matrix_T() // ÀüÄ¡Çà·Ä
 {
 
 }
@@ -200,7 +227,7 @@ int main()
 		switch (cIN)
 		{
 		case 'm': // °ö¼À
-
+			Matrix_X();
 			break;
 
 		case 'a': // µ¡¼À
