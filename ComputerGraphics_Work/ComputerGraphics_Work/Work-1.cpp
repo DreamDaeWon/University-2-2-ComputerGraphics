@@ -185,7 +185,7 @@ void Matrix_Det() // 행렬식
 		{
 			iRaw = 0;
 
-			if (j == i)
+			if (j == 0)
 			{
 				continue; // 만약 선택한 행이면 다음 행으로 넘어감
 			}
@@ -196,37 +196,30 @@ void Matrix_Det() // 행렬식
 					continue; // 만약 선택한 열이면 다음 행으로 넘어감
 				}
 
-				fMatrix3_One[i][iCol][iRaw] = fMatrixOne[j][k] * fMatrixOne[i][i];
+				fMatrix3_One[i][iCol][iRaw] = fMatrixOne[j][k] * fMatrixOne[0][i] * powf(-1, (0 + i));
 
-				fMatrix3_Two[i][iCol][iRaw] = fMatrixTwo[j][k] * fMatrixTwo[i][i];
+				fMatrix3_Two[i][iCol][iRaw] = fMatrixTwo[j][k] * fMatrixTwo[0][i] * powf(-1, (0 + i));
 
 				++iRaw;
 			}
 			++iCol;
 		}
 
-		for (int a = 0; a < 3; ++a) // 3x3의 det구하기
-		{
-			iCol = 0;
-			iRaw = 0;
+	
+			fDet[0] += (fMatrix3_One[i][0][0] * fMatrix3_One[i][1][1] * fMatrix3_One[i][2][2]
+				+ fMatrix3_One[i][0][1] * fMatrix3_One[i][1][2] * fMatrix3_One[i][2][0]
+				+ fMatrix3_One[i][0][2] * fMatrix3_One[i][1][0] * fMatrix3_One[i][2][1])
+				- (fMatrix3_One[i][0][0] * fMatrix3_One[i][1][2] * fMatrix3_One[i][2][1]
+					+ fMatrix3_One[i][0][1] * fMatrix3_One[i][1][0] * fMatrix3_One[i][2][2]
+					+ fMatrix3_One[i][0][2] * fMatrix3_One[i][1][1] * fMatrix3_One[i][2][0]);
 
-			
+			fDet[1] += (fMatrix3_Two[i][0][0] * fMatrix3_Two[i][1][1] * fMatrix3_Two[i][2][2]
+				+ fMatrix3_Two[i][0][1] * fMatrix3_Two[i][1][2] * fMatrix3_Two[i][2][0]
+				+ fMatrix3_Two[i][0][2] * fMatrix3_Two[i][1][0] * fMatrix3_Two[i][2][1])
+				- (fMatrix3_Two[i][0][0] * fMatrix3_Two[i][1][2] * fMatrix3_Two[i][2][1]
+					+ fMatrix3_Two[i][0][1] * fMatrix3_Two[i][1][0] * fMatrix3_Two[i][2][2]
+					+ fMatrix3_Two[i][0][2] * fMatrix3_Two[i][1][1] * fMatrix3_Two[i][2][0]);
 
-			fDet[0] += (fMatrix3_One[a][0][0] * fMatrix3_One[a][1][1] * fMatrix3_One[a][2][2]
-				+ fMatrix3_One[a][0][1] * fMatrix3_One[a][1][2] * fMatrix3_One[a][2][0]
-				+ fMatrix3_One[a][0][2] * fMatrix3_One[a][1][0] * fMatrix3_One[a][2][1])
-				- (fMatrix3_One[a][0][0] * fMatrix3_One[a][1][2] * fMatrix3_One[a][2][1]
-					+ fMatrix3_One[a][0][1] * fMatrix3_One[a][1][0] * fMatrix3_One[a][2][2]
-					+ fMatrix3_One[a][0][2] * fMatrix3_One[a][1][1] * fMatrix3_One[a][2][0]);
-
-			fDet[1] += (fMatrix3_Two[a][0][0] * fMatrix3_Two[a][1][1] * fMatrix3_Two[a][2][2]
-				+ fMatrix3_Two[a][0][1] * fMatrix3_Two[a][1][2] * fMatrix3_Two[a][2][0]
-				+ fMatrix3_Two[a][0][2] * fMatrix3_Two[a][1][0] * fMatrix3_Two[a][2][1])
-				- (fMatrix3_Two[a][0][0] * fMatrix3_Two[a][1][2] * fMatrix3_Two[a][2][1]
-					+ fMatrix3_Two[a][0][1] * fMatrix3_Two[a][1][0] * fMatrix3_Two[a][2][2]
-					+ fMatrix3_Two[a][0][2] * fMatrix3_Two[a][1][1] * fMatrix3_Two[a][2][0]);
-
-		}
 	}
 
 
@@ -239,6 +232,129 @@ void Matrix_Det() // 행렬식
 
 }
 
+void Matrix_OddNum()
+{
+	float fMatrix_One_Even[4][4]{};
+	float fMatrix_Two_Even[4][4]{};
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			if ((int)fMatrixOne[i][j] % 2 == 0)
+			{
+				fMatrix_One_Even[i][j] = fMatrixOne[i][j];
+			}
+
+			if ((int)fMatrixTwo[i][j] % 2 == 0)
+			{
+				fMatrix_Two_Even[i][j] = fMatrixTwo[i][j];
+			}
+		}
+	}
+
+	cout << "=================================" << endl;
+	cout << "첫번째 행렬" << endl;
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			cout << setw(3) << fMatrix_One_Even[i][j];
+		}
+		cout << endl;
+	}
+	cout << "=================================" << endl;
+
+	cout << endl;
+
+	cout << "=================================" << endl;
+	cout << "두번째 행렬" << endl;
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			cout << setw(3) << fMatrix_Two_Even[i][j];
+		}
+		cout << endl;
+	}
+	cout << "=================================" << endl;
+
+	cout << endl;
+
+
+	char ccIn{};
+
+	while (true)
+	{
+		cin >> ccIn;
+
+		if (ccIn == 'e')
+		{
+			break;
+		}
+
+	}
+
+	float fMatrix_One_Odd[4][4]{};
+	float fMatrix_Two_Odd[4][4]{};
+
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			if ((int)fMatrixOne[i][j] % 2 != 0)
+			{
+				fMatrix_One_Odd[i][j] = fMatrixOne[i][j];
+			}
+
+			if ((int)fMatrixTwo[i][j] % 2 != 0)
+			{
+				fMatrix_Two_Odd[i][j] = fMatrixTwo[i][j];
+			}
+		}
+	}
+
+	cout << "=================================" << endl;
+	cout << "첫번째 행렬" << endl;
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			cout << setw(3) << fMatrix_One_Odd[i][j];
+		}
+		cout << endl;
+	}
+	cout << "=================================" << endl;
+
+	cout << endl;
+
+	cout << "=================================" << endl;
+	cout << "두번째 행렬" << endl;
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			cout << setw(3) << fMatrix_Two_Odd[i][j];
+		}
+		cout << endl;
+	}
+	cout << "=================================" << endl;
+
+	cout << endl;
+
+	ccIn = '\0';
+	while (true)
+	{
+		cin >> ccIn;
+
+		if (ccIn == 'e')
+		{
+			break;
+		}
+
+	}
+
+}
 
 void Matrix_T() // 전치행렬
 {
@@ -352,7 +468,7 @@ int main()
 			break;
 
 		case 'e': // 짝수만 다시 누르면 홀수 
-
+			Matrix_OddNum();
 			break;
 
 		case 's':
