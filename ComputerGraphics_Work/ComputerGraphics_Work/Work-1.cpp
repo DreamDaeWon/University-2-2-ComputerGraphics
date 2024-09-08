@@ -1,6 +1,6 @@
 #include "Define.h"
 #include <random>
-#include <iomanip>
+#include <iomanip> // WhiteSpace를 설정하는 명령어를 가지고 있다.
 
 random_device rd;
 mt19937 mt(rd());
