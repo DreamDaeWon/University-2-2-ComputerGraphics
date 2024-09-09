@@ -298,6 +298,7 @@ void ColorWord()
 			}
 			if (j == strAll[i].size() - 1)
 			{
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 				cout << strCheck;
 			}
 
