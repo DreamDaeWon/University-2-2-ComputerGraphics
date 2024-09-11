@@ -93,6 +93,7 @@ void InPutBottom()
 	cin >> AllPos[0].y;
 	cin >> AllPos[0].z;
 	AllPos[0].bInPut = true;
+	AllPos[0].fDistance = sqrtf((AllPos[0].x) * (AllPos[0].x) + (AllPos[0].y) * (AllPos[0].y) + (AllPos[0].z) * (AllPos[0].z));
 }
 
 void DeleteBottom()

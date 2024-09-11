@@ -1,5 +1,2 @@
-﻿  Work-3.cpp
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\ComputerGraphics_Work\ComputerGraphics_Work\Work-3.cpp(54,94): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\ComputerGraphics_Work\ComputerGraphics_Work\Work-3.cpp(157,85): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\ComputerGraphics_Work\ComputerGraphics_Work\Work-3.cpp(187,86): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+﻿  Work-4.cpp
   ComputerGraphics_Work.vcxproj -> C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\ComputerGraphics_Work\x64\Debug\ComputerGraphics_Work.exe

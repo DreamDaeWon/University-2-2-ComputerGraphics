@@ -2,6 +2,8 @@
 #include <random>
 #include <iomanip> // WhiteSpace를 설정하는 명령어를 가지고 있다.
 
+#include <thread>
+
 random_device rd;
 mt19937 mt(rd());
 uniform_int_distribution<int> Random_int {0,2};
@@ -421,6 +423,7 @@ void Matrix_Int_X(char _Num) // 상수 곱하기
 int main()
 {
 	InsertMatrix();
+	//thread t1(Matrix_Int_X,'5');
 
 	while (true)
 	{
@@ -494,11 +497,6 @@ int main()
 
 
 	}
-
-	
-
-
-
 
 
 	return 0;
