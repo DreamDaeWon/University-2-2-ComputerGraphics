@@ -13,6 +13,12 @@ char cStarBoard[5][5]{};
 
 int iPos[2][2]{};
 
+int iAllChance{};
+
+int iChance{12}; // 기회
+
+int iScore{};
+
 
 random_device rd;
 mt19937 mt(rd());
@@ -44,6 +50,7 @@ void Shuffle()
 void PrintAll()
 {
 	system("cls");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 	cout << "\ta\tb\tc\td\te" << endl << endl << endl;
 
 	for (int i = 0; i < 5; ++i)
@@ -104,6 +111,7 @@ bool Reverse(char pCIn[][2], int& iReverseNum)
 
 void Compare()
 {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 	if (iPos[0][0] == iPos[1][0] && iPos[0][1] == iPos[1][1])
 	{
 		cout << "같은 번호를 입력하셨습니다." << endl;
@@ -116,6 +124,7 @@ void Compare()
 	
 	if(cBoard[iPos[0][0]][iPos[0][1]] == '@')
 	{
+		iScore = iScore + 2;
 		cout << "조커를 찾았습니다. 새로운 반대편 카드를 열겠습니다." << endl;
 		system("pause");
 		for (int i = 0; i < 5; ++i)
@@ -133,6 +142,7 @@ void Compare()
 	}
 	else if (cBoard[iPos[1][0]][iPos[1][1]] == '@')
 	{
+		iScore = iScore + 2;
 		cout << "조커를 찾았습니다. 새로운 반대편 카드를 열겠습니다." << endl;
 		system("pause");
 		for (int i = 0; i < 5; ++i)
@@ -158,6 +168,7 @@ void Compare()
 	}
 	else
 	{
+		iScore = iScore + 2;
 		cout << "맞았습니다." << endl;
 		system("pause");
 	}
@@ -168,6 +179,8 @@ int main()
 {
 	memset(&cStarBoard, '*', sizeof(cStarBoard));
 	Shuffle();
+
+	iAllChance = iChance;
 
 	int iTwoReverse{};
 
@@ -187,12 +200,21 @@ int main()
 		iPos[iTwoReverse][1] = cCIN[iTwoReverse][0] - 97;
 
 		++iTwoReverse;
+		--iChance;
 
 		if (iTwoReverse == 2)
 		{
 			// 검사하는 코드 작성
 			Compare();
 			iTwoReverse = 0;
+		}
+
+		if (iChance == 0)
+		{
+			cout << "기회 " << iAllChance/2 <<"번이 끝났습니다. 당신의 점수는!" << endl;
+			cout << iScore << "점" << endl;
+			system("pause");
+			return 0;
 		}
 
 
