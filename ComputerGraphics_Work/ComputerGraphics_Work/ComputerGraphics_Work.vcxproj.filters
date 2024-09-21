@@ -39,6 +39,12 @@
     <ClCompile Include="Work-5.cpp">
       <Filter>소스 파일\Work</Filter>
     </ClCompile>
+    <ClCompile Include="Work-6.cpp">
+      <Filter>소스 파일\Work</Filter>
+    </ClCompile>
+    <ClCompile Include="Work-7.cpp">
+      <Filter>소스 파일\Work</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Random_Int.h">

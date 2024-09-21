@@ -16,7 +16,7 @@ int iRight{}; // 가로
 int iDown{}; // 세로
 
 
-Pos iSqare[2]{}; // 사실상 0만 쓸꺼임
+Pos iSquare[2]{}; // 사실상 0만 쓸꺼임
 
 
 void PrintBoard()
@@ -26,37 +26,37 @@ void PrintBoard()
 
 	Pos pSubPos[2]{};
 
-	if (iSqare[0].iY >= 30 && iSqare[0].iX >= 30)
+	if (iSquare[0].iY >= 30 && iSquare[0].iX >= 30)
 	{
-		iSqare[0].iX = iSqare[0].iX - 30;
+		iSquare[0].iX = iSquare[0].iX - 30;
 
-		iSqare[0].iY = iSqare[0].iY - 30;
+		iSquare[0].iY = iSquare[0].iY - 30;
 	}
-	else if (iSqare[0].iX >= 30)
+	else if (iSquare[0].iX >= 30)
 	{
-		iSqare[0].iX = iSqare[0].iX - 30;
+		iSquare[0].iX = iSquare[0].iX - 30;
 	}
-	else if (iSqare[0].iY >= 30)
+	else if (iSquare[0].iY >= 30)
 	{
-		iSqare[0].iY = iSqare[0].iY - 30;
+		iSquare[0].iY = iSquare[0].iY - 30;
 	}
-
-	
 
 	
 
-	if (iSqare[0].iX < 0 && iSqare[0].iY < 0)
+	
+
+	if (iSquare[0].iX < 0 && iSquare[0].iY < 0)
 	{
-		iSqare[0].iX = iSqare[0].iX + 30;
-		iSqare[0].iY = iSqare[0].iY + 30;
+		iSquare[0].iX = iSquare[0].iX + 30;
+		iSquare[0].iY = iSquare[0].iY + 30;
 	}
-	else if (iSqare[0].iX < 0)
+	else if (iSquare[0].iX < 0)
 	{
-		iSqare[0].iX = iSqare[0].iX + 30;
+		iSquare[0].iX = iSquare[0].iX + 30;
 	}
-	else if (iSqare[0].iY < 0)
+	else if (iSquare[0].iY < 0)
 	{
-		iSqare[0].iY = iSqare[0].iY + 30;
+		iSquare[0].iY = iSquare[0].iY + 30;
 	}
 
 
@@ -67,9 +67,9 @@ void PrintBoard()
 	// 내가 bool 값으로 처리하였기 때문에 가능한 것들을 생각해 보자
 
 
-	for (int i = iSqare[0].iY; i < iSqare[0].iY + iDown; ++i)
+	for (int i = iSquare[0].iY; i < iSquare[0].iY + iDown; ++i)
 	{
-		for (int j = iSqare[0].iX; j < iSqare[0].iX + iRight; ++j)
+		for (int j = iSquare[0].iX; j < iSquare[0].iX + iRight; ++j)
 		{
 			int iX = j; // 열
 			int iY = i; // 행
@@ -123,17 +123,17 @@ void CreatSqare()
 {
 	cout << "원하시는 네모의 좌표를 입력해 주세요. (좌상단)" << endl;
 
-	cin >> iSqare[0].iX;
-	cin >> iSqare[0].iY;
+	cin >> iSquare[0].iX;
+	cin >> iSquare[0].iY;
 
 	cout << "원하시는 네모의 좌표를 입력해 주세요. (우 하단)" << endl;
-	cin >> iSqare[1].iX;
-	cin >> iSqare[1].iY;
+	cin >> iSquare[1].iX;
+	cin >> iSquare[1].iY;
 
 
 	// 가로 세로 구하기
-	iRight = iSqare[1].iX - iSqare[0].iX+1;
-	iDown = iSqare[1].iY - iSqare[0].iY+1;
+	iRight = iSquare[1].iX - iSquare[0].iX+1;
+	iDown = iSquare[1].iY - iSquare[0].iY+1;
 
 }
 
@@ -154,19 +154,19 @@ int main()
 		switch (cCin)
 		{
 		case 'x':
-			iSqare[0].iX += 1;
+			iSquare[0].iX += 1;
 			break;
 
 		case 'X':
-			iSqare[0].iX -= 1;
+			iSquare[0].iX -= 1;
 			break;
 
 		case 'y':
-			iSqare[0].iY += 1;
+			iSquare[0].iY += 1;
 			break;
 
 		case 'Y':
-			iSqare[0].iY -= 1;
+			iSquare[0].iY -= 1;
 			break;
 
 		case 's':
