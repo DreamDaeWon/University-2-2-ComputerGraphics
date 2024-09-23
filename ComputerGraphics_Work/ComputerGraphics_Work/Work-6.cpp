@@ -1,5 +1,5 @@
 #include "Define.h"
-
+#include <list>
 
 random_device rd;
 mt19937 mt(rd());
@@ -112,7 +112,7 @@ void SetWall() // 장애물 셋팅
 	listAllRoadPos.push_back(Pos_And_Dir{0,0,Dir_Down});
 	memset(&cAllBoard, ' ', sizeof(cAllBoard));
 	memset(&bAllRoadBoard, 0, sizeof(bAllRoadBoard));
-	memset(&Wall, 0, sizeof(Wall));
+	memset(&Wall, 0, sizeof(Wall));//응갓
 
 
 	bool bOut{};
@@ -344,6 +344,7 @@ void SetRoad()
 		{
 			bAllRoadBoard[iter.iY][iter.iX] = true;
 		}
+		bAllRoadBoard[0][0] = true;
 	}
 
 
