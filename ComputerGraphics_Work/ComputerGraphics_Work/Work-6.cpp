@@ -102,6 +102,7 @@ void PtintAll()
 }
 
 
+
 void SetWall() // 장애물 셋팅
 {
 	GamePlayer.bLive = false;
@@ -203,6 +204,21 @@ Pos SetNextRoad(Pos NowPos)
 
 	memset(&CanMoveDir,true,sizeof(CanMoveDir));
 
+
+	int AllPosNum[4]{};
+
+	for (auto iter : listAllRoadPos)
+	{
+		int iChange{};
+
+		iChange = AllPosNum[iter.eDir];
+
+		memset(&AllPosNum, 0, sizeof(AllPosNum));
+
+		AllPosNum[iter.eDir] = iChange+1;
+	
+	}
+
 	while (true)
 	{
 		Dir eNextDir = (Dir)Random_Dir(mt); // 방향을 정하기
@@ -210,8 +226,14 @@ Pos SetNextRoad(Pos NowPos)
 		switch (eNextDir)
 		{
 		case Dir_Left:
+			if (AllPosNum[Dir_Left] >= 4)
+			{
+				CanMoveDir[Dir_Left] = false;
+				break;
+			}
+
 			if ((NowPos.iX - 1 >= 0) &&
-				(bNoCanMove[NowPos.iY][NowPos.iX - 1] != true))
+				(bNoCanMove[NowPos.iY][NowPos.iX - 1] != true) && !(NowPos.iY == 0 && NowPos.iX - 1 == 0))
 			{
 				Pos_And_Dir Input_Pos{ (NowPos.iX - 1),(NowPos.iY), (Dir_Left) };
 				listAllRoadPos.push_back(Input_Pos);
@@ -227,8 +249,14 @@ Pos SetNextRoad(Pos NowPos)
 			break;
 
 		case Dir_Right:
+			if (AllPosNum[Dir_Right] >= 4)
+			{
+				CanMoveDir[Dir_Right] = false;
+				break;
+			}
+
 			if ((NowPos.iX + 1 <= 29) &&
-				(bNoCanMove[NowPos.iY][NowPos.iX + 1] != true))
+				(bNoCanMove[NowPos.iY][NowPos.iX + 1] != true)&&!(NowPos.iY == 0 && NowPos.iX + 1 == 0))
 			{
 				Pos_And_Dir Input_Pos{ (NowPos.iX + 1),(NowPos.iY), (Dir_Right) };
 				listAllRoadPos.push_back(Input_Pos);
@@ -244,8 +272,14 @@ Pos SetNextRoad(Pos NowPos)
 			break;
 
 		case Dir_Up:
+			if (AllPosNum[Dir_Up] >= 4)
+			{
+				CanMoveDir[Dir_Up] = false;
+				break;
+			}
+
 			if ((NowPos.iY - 1 >= 0) &&
-				(bNoCanMove[NowPos.iY - 1][NowPos.iX] != true))
+				(bNoCanMove[NowPos.iY - 1][NowPos.iX] != true) && !(NowPos.iY - 1 == 0 && NowPos.iX == 0))
 			{
 				Pos_And_Dir Input_Pos{ (NowPos.iX),(NowPos.iY - 1), (Dir_Up) };
 				listAllRoadPos.push_back(Input_Pos);
@@ -265,8 +299,15 @@ Pos SetNextRoad(Pos NowPos)
 			break;
 
 		case Dir_Down:
+			if (AllPosNum[Dir_Down] >= 4)
+			{
+				CanMoveDir[Dir_Down] = false;
+				break;
+			}
+
+
 			if ((NowPos.iY + 1 <= 29) &&
-				(bNoCanMove[NowPos.iY + 1][NowPos.iX] != true))
+				(bNoCanMove[NowPos.iY + 1][NowPos.iX] != true) && !(NowPos.iY + 1 == 0 && NowPos.iX == 0))
 			{
 				Pos_And_Dir Input_Pos{ (NowPos.iX),(NowPos.iY + 1), (Dir_Down) };
 				listAllRoadPos.push_back(Input_Pos);
@@ -277,7 +318,6 @@ Pos SetNextRoad(Pos NowPos)
 				bNoCanMove[NowPos.iY + 1][NowPos.iX] = true;
 
 				return RePos;
-
 				
 
 			}
@@ -300,6 +340,18 @@ Pos SetNextRoad(Pos NowPos)
 		{
 			NowPos = BackTracaking();
 			memset(&CanMoveDir, true, sizeof(CanMoveDir));
+
+			for (auto iter : listAllRoadPos)
+			{
+				int iChange{};
+
+				iChange = AllPosNum[iter.eDir];
+
+				memset(&AllPosNum, 0, sizeof(AllPosNum));
+
+				AllPosNum[iter.eDir] = iChange + 1;
+
+			}
 		}
 		//system("cls");
 		//PtintAll(); // 임시
