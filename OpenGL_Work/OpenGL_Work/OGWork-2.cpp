@@ -7,7 +7,7 @@
 
 std::mt19937 mt;
 
-std::uniform_int_distribution<int> RandomIntNum(0, 10);
+std::uniform_int_distribution<int> RandomRGB(0, 10);
 
 
 GLvoid drawScene(GLvoid);
@@ -16,7 +16,10 @@ GLvoid KeyInput(unsigned char key, int x, int y);
 GLvoid TimerFunc(int Valule);
 GLvoid MouseInput(int button, int state, int x, int y);
 
-int CheckRect(GLfloat x, GLfloat y);
+int Check_Mouse_Rect(GLfloat x, GLfloat y);
+
+int WinsizeX = 800;
+int WinsizeY = 600;
 
 
 struct DWRect
@@ -26,30 +29,72 @@ struct DWRect
 };
 
 
+GLfloat CoordinateChangeX(GLfloat Coord)
+{
+	Coord = Coord - (WinsizeX / 2);
+	Coord = Coord / (WinsizeX/2);
+	return Coord;
+}
+
+GLfloat CoordinateChangeY(GLfloat Coord)
+{
+	Coord = -Coord;
+	Coord = Coord + (WinsizeY / 2);
+	Coord = Coord / (WinsizeY / 2);
+	return Coord;
+}
+
+GLvoid RectUpScale(GLfloat x, GLfloat y, DWRect* Rect)
+{
+	Rect->Size[0] -= x;
+	Rect->Size[2] += x;
+
+	Rect->Size[1] -= y;
+	Rect->Size[3] += y;
+}
+
+GLvoid RectDownScale(GLfloat x, GLfloat y, DWRect* Rect, GLfloat Minsize)
+{
+	if ((Rect->Size[2] - Rect->Size[0] < Minsize)
+		&& (Rect->Size[3] - Rect->Size[1] < Minsize))
+	{
+		return;
+	}
+
+	Rect->Size[0] += x;
+	Rect->Size[2] -= x;
+
+	Rect->Size[1] += y;
+	Rect->Size[3] -= y;
+}
+
+
+
+
 DWRect AllDWRect[4]{};
 
 
 GLvoid Set_DWRect()
 {
 	DWRect InRGB{ 0.6f, 0.9f, 0.f,
-	0.f, 0.f, 1.f, 1.f };
+	400.f, 0.f, 800.f, 300.f };
 
 	memcpy(&AllDWRect[0],&InRGB,sizeof(InRGB));
 
 
 	DWRect InRGBTwo{ 1.f, 0.7f, 0.f,
-	0.f, 0.f, -1.f, 1.f };
+	0.f, 0.f, 400.f, 300.f };
 
 	memcpy(&AllDWRect[1], &InRGBTwo, sizeof(InRGBTwo));
 
 	DWRect InRGBThree{ 1.f, 0.3f, 0.f,
-	0.f, 0.f, -1.f, -1.f };
+	0, 300.f, 400.f, 600.f };
 
 	memcpy(&AllDWRect[2], &InRGBThree, sizeof(InRGBThree));
 
 
 	DWRect InRGBFour{ 0.f, 0.7f, 1.f,
-	0.f, 0.f, 1.f, -1.f };
+	400.f, 300.f, 800.f, 600.f };
 
 	memcpy(&AllDWRect[3], &InRGBFour, sizeof(InRGBFour));
 
@@ -71,7 +116,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA); // 디스플레이 모드 설정
 	glutInitWindowPosition(100, 100); // 윈도우의 위치 지정
 	glutInitWindowSize(800, 600); // 윈도우의 크기 지정
-	g_WinID = glutCreateWindow("OGWork-1"); // 윈도우 생성(윈도우 이름)
+	g_WinID = glutCreateWindow("OGWork-2"); // 윈도우 생성(윈도우 이름)
 	//--- GLEW 초기화하기
 	glewExperimental = GL_TRUE;
 
@@ -103,7 +148,7 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 	for (int i = 0; i < 4; ++i)
 	{
 		glColor3f(AllDWRect[i].RGB[0], AllDWRect[i].RGB[1], AllDWRect[i].RGB[2]);
-		glRectf(AllDWRect[i].Size[0], AllDWRect[i].Size[1], AllDWRect[i].Size[2], AllDWRect[i].Size[3]);
+		glRectf(CoordinateChangeX(AllDWRect[i].Size[0]), CoordinateChangeY(AllDWRect[i].Size[1]), CoordinateChangeX(AllDWRect[i].Size[2]), CoordinateChangeY(AllDWRect[i].Size[3]));
 	}
 
 
@@ -126,27 +171,49 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 GLvoid MouseInput(int button, int state, int x, int y)
 {
-	
-	switch (button)
+	int iSqure = Check_Mouse_Rect(x, y);
+	if (state == GLUT_DOWN)
 	{
-	case GLUT_LEFT_BUTTON:
-		RGBA[0] = (RandomIntNum(mt) / 10.f);
-		RGBA[1] = (RandomIntNum(mt) / 10.f);
-		RGBA[2] = (RandomIntNum(mt) / 10.f);
-		break;
+		switch (button)
+		{
+		case GLUT_LEFT_BUTTON:
 
 
+			if (iSqure == -1)
+			{
+				RGBA[0] = (RandomRGB(mt) / 10.f);
+				RGBA[1] = (RandomRGB(mt) / 10.f);
+				RGBA[2] = (RandomRGB(mt) / 10.f);
+			}
+			else
+			{
+				AllDWRect[iSqure].RGB[0] = (RandomRGB(mt) / 10.f);
+				AllDWRect[iSqure].RGB[1] = (RandomRGB(mt) / 10.f);
+				AllDWRect[iSqure].RGB[2] = (RandomRGB(mt) / 10.f);
+			}
+			break;
+
+		case GLUT_RIGHT_BUTTON:
+			if (iSqure == -1)
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					RectUpScale(5.f,5.f,&AllDWRect[i]);
+				}
+			}
+			else
+			{
+				RectDownScale(5.f, 5.f, &AllDWRect[iSqure], 150.f);
+			}
 
 
-	default:
-		break;
+			break;
+		}
 	}
-
-
 	glutPostRedisplay();
 }
 
-int CheckRect(GLfloat x, GLfloat y)
+int Check_Mouse_Rect(GLfloat x, GLfloat y)
 {
 	for (int i = 0; i < 4; ++i)
 	{
@@ -165,9 +232,9 @@ int CheckRect(GLfloat x, GLfloat y)
 GLvoid TimerFunc(int Valule)
 {
 
-	RGBA[0] = (RandomIntNum(mt) / 10.f);
-	RGBA[1] = (RandomIntNum(mt) / 10.f);
-	RGBA[2] = (RandomIntNum(mt) / 10.f);
+	RGBA[0] = (RandomRGB(mt) / 10.f);
+	RGBA[1] = (RandomRGB(mt) / 10.f);
+	RGBA[2] = (RandomRGB(mt) / 10.f);
 
 	glutPostRedisplay();
 	if (bTimer)

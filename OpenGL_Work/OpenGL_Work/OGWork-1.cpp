@@ -7,7 +7,7 @@
 
 std::mt19937 mt;
 
-std::uniform_int_distribution<int> RandomIntNum(0, 10);
+std::uniform_int_distribution<int> RandomRGB(0, 10);
 
 
 GLvoid drawScene(GLvoid);
@@ -80,9 +80,9 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 		break;
 
 	case 'a':
-		RGBA[0] = (RandomIntNum(mt) / 10.f);
-		RGBA[1] = (RandomIntNum(mt) / 10.f);
-		RGBA[2] = (RandomIntNum(mt) / 10.f);
+		RGBA[0] = (RandomRGB(mt) / 10.f);
+		RGBA[1] = (RandomRGB(mt) / 10.f);
+		RGBA[2] = (RandomRGB(mt) / 10.f);
 		break;
 
 	case 'w':
@@ -122,9 +122,9 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 GLvoid TimerFunc(int Valule)
 {
 
-	RGBA[0] = (RandomIntNum(mt) / 10.f);
-	RGBA[1] = (RandomIntNum(mt) / 10.f);
-	RGBA[2] = (RandomIntNum(mt) / 10.f);
+	RGBA[0] = (RandomRGB(mt) / 10.f);
+	RGBA[1] = (RandomRGB(mt) / 10.f);
+	RGBA[2] = (RandomRGB(mt) / 10.f);
 
 	glutPostRedisplay();
 	if (bTimer)
