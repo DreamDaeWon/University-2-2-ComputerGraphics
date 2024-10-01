@@ -18,7 +18,7 @@ int WinsizeY = 600;
 std::uniform_real_distribution<GLfloat> RandomPosX(0, WinsizeX);
 std::uniform_real_distribution<GLfloat> RandomPosY(0, WinsizeY);
 
-uniform_int_distribution<int> RandomSize(0, 300);
+uniform_int_distribution<int> RandomSize(50, 100);
 
 
 GLvoid drawScene(GLvoid);
@@ -30,7 +30,11 @@ GLvoid MoveMouse(int X, int Y);
 
 
 // 4번
-GLvoid RectMoveDiagonal(); // 대각선 이동
+GLvoid RectMoveDiagonal(int Value); // 대각선 이동
+GLvoid RectZigZag(int Value);
+GLvoid SizeChange(int Value);
+GLvoid RandomColor(int Value);
+
 
 
 struct DWRect
@@ -41,6 +45,10 @@ struct DWRect
 
 	GLfloat Cx{};
 	GLfloat Cy{};
+
+	
+	GLfloat Origin_CenterX{};
+	GLfloat Origin_CenterY{};
 
 };
 
@@ -102,6 +110,9 @@ GLvoid Set_DWRect(GLfloat x, GLfloat y)
 	DWRect InRGB{ RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f,
 	CenterX, CenterY,Cx,Cy };
 
+	InRGB.Origin_CenterX = CenterX;
+	InRGB.Origin_CenterY = CenterY;
+
 	AllRect.push_back(new DWRect(InRGB));
 
 }
@@ -127,6 +138,13 @@ float fSize[4][4]{};
 unsigned int g_WinID{};// 윈도우 ID
 
 bool bTimer = false; // 타이머 문제 관련 변수
+
+
+// 4번 타이머 관련변수
+bool bDiagoanlMoveTimer = false;
+bool bZizgZagTimer = false;
+bool bSizeRandomTimer = false;
+bool bRandomColorTimer = false;
 
 void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정 
 { //--- 윈도우 생성하기
@@ -185,15 +203,17 @@ GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수
 
 GLvoid KeyInput(unsigned char key, int x, int y)
 {
-
+	
 	switch (key)
 	{
 	case '1':
-
+		bRandomColorTimer = !bRandomColorTimer;
+		glutTimerFunc(100, RandomColor,1);
 		break;
 
 	case '2':
-
+		bSizeRandomTimer = !bSizeRandomTimer;
+		glutTimerFunc(100, SizeChange, 1);
 		break;
 
 	case '3':
@@ -205,19 +225,28 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 		break;
 
 	case 's':
-
+		bDiagoanlMoveTimer = false;
+		bZizgZagTimer = false;
+		bSizeRandomTimer = false;
+		bRandomColorTimer = false;
 		break;
 
 	case 'm':
-
+		for (auto& iter : AllRect)
+		{
+			iter->CenterX = iter->Origin_CenterX;
+			iter->CenterY = iter->Origin_CenterY;
+		}
 		break;
 
 	case 'r':
+		bDiagoanlMoveTimer = false;
+		bZizgZagTimer = false;
+		bSizeRandomTimer = false;
+		bRandomColorTimer = false;
 		for (auto& iter : AllRect)
 		{
 			delete iter;
-
-
 		}
 
 		AllRect.clear();
@@ -328,11 +357,50 @@ GLvoid TimerFunc(int Valule)
 }
 
 
-GLvoid RectMoveDiagonal()
+GLvoid RectMoveDiagonal(int Value)
 {
 
 	for (auto& iter : AllRect)
 	{
 		
 	}
+}
+
+GLvoid RectZigZag(int Value)
+{
+
+
+
+	
+}
+
+GLvoid SizeChange(int Value)
+{
+	for (auto iter : AllRect)
+	{
+		iter->Cx = RandomSize(mt);
+		iter->Cy = RandomSize(mt);
+	}
+	glutPostRedisplay();
+	if (bSizeRandomTimer)
+	{
+		glutTimerFunc(100, SizeChange, 1);
+	}
+
+}
+
+GLvoid RandomColor(int Value)
+{
+	for (auto iter : AllRect)
+	{
+		iter->RGB[0] = RandomRGB(mt) / 10.f;
+		iter->RGB[1] = RandomRGB(mt) / 10.f;
+		iter->RGB[2] = RandomRGB(mt) / 10.f;
+	}
+	glutPostRedisplay();
+	if (bRandomColorTimer)
+	{
+		glutTimerFunc(100, RandomColor, 1);
+	}
+
 }
