@@ -29,6 +29,8 @@ GLvoid MouseInput(int button, int state, int x, int y);
 GLvoid MoveMouse(int X, int Y);
 
 
+// 4번
+GLvoid RectMoveDiagonal(); // 대각선 이동
 
 
 struct DWRect
@@ -84,16 +86,16 @@ vector<DWRect*> AllRect{};
 
 
 
-GLvoid Set_DWRect()
+GLvoid Set_DWRect(GLfloat x, GLfloat y)
 {
 
-	if (AllRect.size() == 10)
+	if (AllRect.size() == 5)
 	{
 		return;
 	}
 
-	GLfloat CenterX = RandomPosX(mt);
-	GLfloat CenterY = RandomPosY(mt);
+	GLfloat CenterX = x;
+	GLfloat CenterY = y;
 	GLfloat Cx = 50.f;
 	GLfloat Cy = 50.f;
 
@@ -159,10 +161,9 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 
 GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수 
 {
-	glClearColor(RGBA[0], RGBA[1], RGBA[2], 1.f); // 바탕색을 ‘blue’ 로 지정
+	glClearColor(0.1f, 0.1f, 0.1f, 1.f); // 바탕색을 ‘blue’ 로 지정
 	glClear(GL_COLOR_BUFFER_BIT); // 설정된 색으로 전체를 칠하기
 	// 그리기 부분 구현: 그리기 관련 부분이 여기에 포함된다
-
 
 
 	for (auto& iter : AllRect)
@@ -187,8 +188,44 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 	switch (key)
 	{
-	case 'a':
-		Set_DWRect();
+	case '1':
+
+		break;
+
+	case '2':
+
+		break;
+
+	case '3':
+
+		break;
+
+	case '4':
+
+		break;
+
+	case 's':
+
+		break;
+
+	case 'm':
+
+		break;
+
+	case 'r':
+		for (auto& iter : AllRect)
+		{
+			delete iter;
+
+
+		}
+
+		AllRect.clear();
+
+		break;
+
+	case 'q':
+		glutDestroyWindow(g_WinID);
 		break;
 
 	default:
@@ -222,65 +259,10 @@ GLvoid MouseInput(int button, int state, int x, int y)
 		{
 		case GLUT_LEFT_BUTTON:
 
-			if (iSqure != nullptr)
-			{
+			Set_DWRect(x, y);
 
-
-
-
-			}
 
 			break;
-
-		case GLUT_RIGHT_BUTTON:
-
-			break;
-		}
-	}
-	else if (state == GLUT_UP)
-	{
-		bPush_L_button = false;
-		switch (button)
-		{
-		case GLUT_LEFT_BUTTON:
-		{
-			DWRect* pMouseSqare = Check_Mouse_Rect(x, y);
-
-			DWRect* pSqure = Check_Rect_Rect(pMouseSqare);
-
-
-			if (pSqure != nullptr)
-			{
-				pMouseSqare->RGB[0] = (RandomRGB(mt) / 10.f);
-				pMouseSqare->RGB[1] = (RandomRGB(mt) / 10.f);
-				pMouseSqare->RGB[2] = (RandomRGB(mt) / 10.f);
-
-
-				if ((pSqure->CenterX - pSqure->Cx) > (pMouseSqare->CenterX - pMouseSqare->Cx))
-				{
-					pMouseSqare->Cx = ((pSqure->CenterX + pSqure->Cx) - (pMouseSqare->CenterX - pMouseSqare->Cx)) / 2.f;
-				}
-				else
-				{
-					pMouseSqare->Cx = ((pMouseSqare->CenterX + pMouseSqare->Cx) - (pSqure->CenterX - pSqure->Cx)) / 2.f;
-				}
-
-
-
-				if ((pSqure->CenterY + pSqure->Cy) > (pMouseSqare->CenterY + pMouseSqare->Cy))
-				{
-					pMouseSqare->Cy = ((pSqure->CenterY + pSqure->Cy) - (pMouseSqare->CenterY - pMouseSqare->Cy)) / 2.f;
-				}
-				else
-				{
-					pMouseSqare->Cy = ((pMouseSqare->CenterY + pMouseSqare->Cy) - (pSqure->CenterY - pSqure->Cy)) / 2.f;
-				}
-
-				DeleteRect(pSqure);
-
-			}
-		}
-		break;
 
 		case GLUT_RIGHT_BUTTON:
 
@@ -343,4 +325,14 @@ GLvoid TimerFunc(int Valule)
 		glutTimerFunc(100, TimerFunc, 1);
 	}
 
+}
+
+
+GLvoid RectMoveDiagonal()
+{
+
+	for (auto& iter : AllRect)
+	{
+		
+	}
 }
