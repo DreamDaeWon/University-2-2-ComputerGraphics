@@ -50,6 +50,9 @@ struct DWRect
 	GLfloat Origin_CenterX{};
 	GLfloat Origin_CenterY{};
 
+	bool LR{};
+	bool ZigZag{};
+
 };
 
 DWRect* Check_Mouse_Rect(GLfloat x, GLfloat y);
@@ -96,6 +99,12 @@ vector<DWRect*> AllRect{};
 
 GLvoid Set_DWRect(GLfloat x, GLfloat y)
 {
+	static bool bZigZag{true};
+	static bool bLR{};
+
+	bZigZag = !bZigZag;
+	bLR = !bLR;
+
 
 	if (AllRect.size() == 5)
 	{
@@ -112,6 +121,9 @@ GLvoid Set_DWRect(GLfloat x, GLfloat y)
 
 	InRGB.Origin_CenterX = CenterX;
 	InRGB.Origin_CenterY = CenterY;
+
+	InRGB.LR = bLR;
+	InRGB.ZigZag = bZigZag;
 
 	AllRect.push_back(new DWRect(InRGB));
 
@@ -207,21 +219,23 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 	switch (key)
 	{
 	case '1':
-		bRandomColorTimer = !bRandomColorTimer;
-		glutTimerFunc(100, RandomColor,1);
+		bDiagoanlMoveTimer = !bDiagoanlMoveTimer;
+		glutTimerFunc(100, RectMoveDiagonal, 1);
 		break;
 
 	case '2':
+		bZizgZagTimer = !bZizgZagTimer;
+		glutTimerFunc(100, RectZigZag, 1);
+		break;
+
+	case '3':
 		bSizeRandomTimer = !bSizeRandomTimer;
 		glutTimerFunc(100, SizeChange, 1);
 		break;
 
-	case '3':
-
-		break;
-
 	case '4':
-
+		bRandomColorTimer = !bRandomColorTimer;
+		glutTimerFunc(100, RandomColor, 1);
 		break;
 
 	case 's':
@@ -359,17 +373,156 @@ GLvoid TimerFunc(int Valule)
 
 GLvoid RectMoveDiagonal(int Value)
 {
-
 	for (auto& iter : AllRect)
 	{
-		
+		if (iter->LR) // 오른쪽
+		{
+			if (iter->CenterX + iter->Cx < WinsizeX)
+			{
+				iter->CenterX += 5;
+			}
+			else
+			{
+				iter->LR = !iter->LR;
+			}
+			if (iter->ZigZag) // 아래
+			{
+				if (iter->CenterY + iter->Cy < WinsizeY)
+				{
+					iter->CenterY += 5;
+				}
+				else
+				{
+					iter->ZigZag = !iter->ZigZag;
+				}
+			}
+			else // 위
+			{
+				if (iter->CenterY - iter->Cy > 0)
+				{
+					iter->CenterY -= 5;
+				}
+				else
+				{
+					iter->ZigZag = !iter->ZigZag;
+				}
+			}
+		}
+		if (!iter->LR) // 왼쪽
+		{
+			if (iter->CenterX - iter->Cx > 0)
+			{
+				iter->CenterX -= 5;
+			}
+			else
+			{
+				iter->LR = !iter->LR;
+			}
+			if (iter->ZigZag) // 아래
+			{
+				if (iter->CenterY + iter->Cy < WinsizeY)
+				{
+					iter->CenterY += 5;
+				}
+				else
+				{
+					iter->ZigZag = !iter->ZigZag;
+				}
+			}
+			else // 위
+			{
+				if (iter->CenterY - iter->Cy > 0)
+				{
+					iter->CenterY -= 5;
+				}
+				else
+				{
+					iter->ZigZag = !iter->ZigZag;
+				}
+			}
+		}
 	}
+	glutPostRedisplay();
+	if (bDiagoanlMoveTimer)
+	{
+		glutTimerFunc(10, RectMoveDiagonal, 1);
+	}
+
 }
 
 GLvoid RectZigZag(int Value)
 {
+	static bool ZigZag{}; // true면 가로 이동
+
+	static int iZigZag{};
+
+	iZigZag += 1;
+	if (iZigZag >= 10)
+	{
+		ZigZag = !ZigZag;
+		iZigZag = 0;
+	}
+
+	for (auto& iter : AllRect)
+	{
+		if (ZigZag)
+		{
+			if (iter->LR) // 오른쪽
+			{
+				if (iter->CenterX + iter->Cx < WinsizeX)
+				{
+					iter->CenterX += 5;
+				}
+				else
+				{
+					iter->LR = !iter->LR;
+				}
+			}
+			if (!iter->LR) // 왼쪽
+			{
+				if (iter->CenterX - iter->Cx > 0)
+				{
+					iter->CenterX -= 5;
+				}
+				else
+				{
+					iter->LR = !iter->LR;
+				}
+			}
+		}
+		else
+		{
 
 
+			if (iter->ZigZag) // 아래
+			{
+				if (iter->CenterY + iter->Cy < WinsizeY)
+				{
+					iter->CenterY += 5;
+				}
+				else
+				{
+					iter->ZigZag = !iter->ZigZag;
+				}
+			}
+			else // 위
+			{
+				if (iter->CenterY - iter->Cy > 0)
+				{
+					iter->CenterY -= 5;
+				}
+				else
+				{
+					iter->ZigZag = !iter->ZigZag;
+				}
+			}
+		}
+	}
+	glutPostRedisplay();
+	if (bZizgZagTimer)
+	{
+		glutTimerFunc(10, RectZigZag, 1);
+	}
 
 	
 }
