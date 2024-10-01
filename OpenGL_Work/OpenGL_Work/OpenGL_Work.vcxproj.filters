@@ -30,5 +30,11 @@
     <ClCompile Include="OSWork-4.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="OSWork-5.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OSWork-6.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
