@@ -225,7 +225,7 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 	case '2':
 		bZizgZagTimer = !bZizgZagTimer;
-		glutTimerFunc(100, RectZigZag, 1);
+		glutTimerFunc(100, RectZigZag, 2);
 		break;
 
 	case '3':
@@ -521,7 +521,7 @@ GLvoid RectZigZag(int Value)
 	glutPostRedisplay();
 	if (bZizgZagTimer)
 	{
-		glutTimerFunc(10, RectZigZag, 1);
+		glutTimerFunc(10, RectZigZag, 2);
 	}
 
 	
