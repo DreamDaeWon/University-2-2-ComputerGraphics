@@ -112,6 +112,10 @@ enum eMoveType { DIR_RIGHT, DIR_LEFT, DIR_UP, DIR_DOWN, DIR_LU, DIR_RU, DIR_LD, 
 
 // 7 번
 
+DrawType eDrawType{};
+
+GLvoid Create_DWArt(DrawType eDraw, GLfloat x, GLfloat y, GLfloat rx, GLfloat ry);
+
 GLvoid Create_Dot(GLfloat x, GLfloat y);
 GLvoid Create_Line(GLfloat x, GLfloat y, GLfloat rx, GLfloat ry);
 GLvoid Create_Triangle(GLfloat x, GLfloat y, GLfloat rx, GLfloat ry);
@@ -121,9 +125,7 @@ GLvoid Move(eMoveType Dir);
 
 GLvoid Delete_ALL();
 
-enum DrawType {DW_DOT,DW_LINE,DW_TRIANGLE,DW_RECT};
 
-DrawType eDrawType{};
 
 GLvoid SetMode(DrawType Type)
 {
@@ -196,42 +198,68 @@ void InitBuffer()
 		{
 		case DWART_DOT:
 			glGenVertexArrays(1, &AllArt[i]->VAO); //--- VAO 를 지정하고 할당하기
-			glBindVertexArray(AllArt[i]->VAO); //--- VAO를 바인드하기
-
 			glGenBuffers(2, AllArt[i]->VBO);
+
+			glBindVertexArray(AllArt[i]->VAO); //--- VAO를 바인드하기
 
 
 			glBindBuffer(GL_ARRAY_BUFFER, AllArt[i]->VBO[0]);
 
-			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWDot*>(AllArt[i])->Vertex), dynamic_cast<DWDot*>(AllArt[i])->Vertex, GL_STATIC_DRAW);
-			glVertexAttribPointer(0, 1, GL_FLOAT, GL_FALSE, 0, 0);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWDot*>(AllArt[i])->Vertex), dynamic_cast<DWDot*>(AllArt[i])->Vertex, GL_STREAM_DRAW);
+
+			glGenBuffers(1, &AllArt[i]->EBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, AllArt[i]->EBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(dynamic_cast<DWDot*>(AllArt[i])->indexVerTex), dynamic_cast<DWDot*>(AllArt[i])->indexVerTex, GL_STREAM_DRAW);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 
 			glEnableVertexAttribArray(0);
+
+			//glEnableVertexAttribArray(0);
 
 
 			/////////////////////////////////////////
 			glBindBuffer(GL_ARRAY_BUFFER, AllArt[i]->VBO[1]);
 
-			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWDot*>(AllArt[i])->VertexColor), dynamic_cast<DWDot*>(AllArt[i])->VertexColor, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWDot*>(AllArt[i])->VertexColor), dynamic_cast<DWDot*>(AllArt[i])->VertexColor, GL_STREAM_DRAW);
 
-			glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, 0, 0);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 
 			glEnableVertexAttribArray(1);
 			/////////////////////////////////////////
 
 
-			glGenBuffers(1, &AllArt[i]->EBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, AllArt[i]->EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(dynamic_cast<DWDot*>(AllArt[i])->indexVerTex), dynamic_cast<DWDot*>(AllArt[i])->indexVerTex, GL_STATIC_DRAW);
-			glVertexAttribPointer(0,1,GL_FLOAT,GL_FALSE,sizeof(float),0);
-			glEnableVertexAttribArray(0);
-			
-
 			break;
 
 		case DWART_LINE:
 			glGenVertexArrays(1, &AllArt[i]->VAO); //--- VAO 를 지정하고 할당하기
+			glGenBuffers(2, AllArt[i]->VBO);
+
 			glBindVertexArray(AllArt[i]->VAO); //--- VAO를 바인드하기
+
+
+			glBindBuffer(GL_ARRAY_BUFFER, AllArt[i]->VBO[0]);
+
+			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWLine*>(AllArt[i])->Vertex), dynamic_cast<DWLine*>(AllArt[i])->Vertex, GL_STREAM_DRAW);
+
+			glGenBuffers(1, &AllArt[i]->EBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, AllArt[i]->EBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(dynamic_cast<DWLine*>(AllArt[i])->indexVerTex), dynamic_cast<DWLine*>(AllArt[i])->indexVerTex, GL_STREAM_DRAW);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+
+			glEnableVertexAttribArray(0);
+
+			//glEnableVertexAttribArray(0);
+
+
+			/////////////////////////////////////////
+			glBindBuffer(GL_ARRAY_BUFFER, AllArt[i]->VBO[1]);
+
+			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWLine*>(AllArt[i])->VertexColor), dynamic_cast<DWLine*>(AllArt[i])->VertexColor, GL_STREAM_DRAW);
+
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+
+			glEnableVertexAttribArray(1);
+			/////////////////////////////////////////
 
 
 			break;
@@ -245,11 +273,11 @@ void InitBuffer()
 
 			glBindBuffer(GL_ARRAY_BUFFER, AllArt[i]->VBO[0]);
 
-			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWTriangle*>(AllArt[i])->Vertex), dynamic_cast<DWTriangle*>(AllArt[i])->Vertex, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWTriangle*>(AllArt[i])->Vertex), dynamic_cast<DWTriangle*>(AllArt[i])->Vertex, GL_STREAM_DRAW);
 
 			glGenBuffers(1, &AllArt[i]->EBO);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, AllArt[i]->EBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(dynamic_cast<DWTriangle*>(AllArt[i])->indexVerTex), dynamic_cast<DWTriangle*>(AllArt[i])->indexVerTex, GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(dynamic_cast<DWTriangle*>(AllArt[i])->indexVerTex), dynamic_cast<DWTriangle*>(AllArt[i])->indexVerTex, GL_STREAM_DRAW);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 
 			glEnableVertexAttribArray(0);
@@ -260,7 +288,7 @@ void InitBuffer()
 			/////////////////////////////////////////
 			glBindBuffer(GL_ARRAY_BUFFER, AllArt[i]->VBO[1]);
 
-			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWTriangle*>(AllArt[i])->VertexColor), dynamic_cast<DWTriangle*>(AllArt[i])->VertexColor, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWTriangle*>(AllArt[i])->VertexColor), dynamic_cast<DWTriangle*>(AllArt[i])->VertexColor, GL_STREAM_DRAW);
 
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 
@@ -270,9 +298,34 @@ void InitBuffer()
 
 		case DWART_RECTANGLE:
 			glGenVertexArrays(1, &AllArt[i]->VAO); //--- VAO 를 지정하고 할당하기
+			glGenBuffers(2, AllArt[i]->VBO);
+
 			glBindVertexArray(AllArt[i]->VAO); //--- VAO를 바인드하기
 
 
+			glBindBuffer(GL_ARRAY_BUFFER, AllArt[i]->VBO[0]);
+
+			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWRect*>(AllArt[i])->Vertex), dynamic_cast<DWRect*>(AllArt[i])->Vertex, GL_STREAM_DRAW);
+
+			glGenBuffers(1, &AllArt[i]->EBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, AllArt[i]->EBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(dynamic_cast<DWRect*>(AllArt[i])->indexVerTex), dynamic_cast<DWRect*>(AllArt[i])->indexVerTex, GL_STREAM_DRAW);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+
+			glEnableVertexAttribArray(0);
+
+			//glEnableVertexAttribArray(0);
+
+
+			/////////////////////////////////////////
+			glBindBuffer(GL_ARRAY_BUFFER, AllArt[i]->VBO[1]);
+
+			glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWRect*>(AllArt[i])->VertexColor), dynamic_cast<DWRect*>(AllArt[i])->VertexColor, GL_STREAM_DRAW);
+
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+
+			glEnableVertexAttribArray(1);
+			/////////////////////////////////////////
 			break;
 
 		default:
@@ -344,7 +397,8 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 		switch (iter->eType)
 		{
 		case DWART_DOT:
-			glDrawElements(GL_POINT, 1, GL_UNSIGNED_INT,0);
+			glPointSize(10);
+			glDrawElements(GL_POINTS, 1, GL_UNSIGNED_INT,0);
 			break;
 
 		case DWART_LINE:
@@ -394,17 +448,22 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 
 	case 'w':
-
+		Move(DIR_UP);
 		break;
 	case 'a':
-
+		Move(DIR_LEFT);
 		break;
 	case 's':
-
+		Move(DIR_DOWN);
 		break;
 	case 'd':
-
+		Move(DIR_RIGHT);
 		break;
+
+	case 'c':
+		Delete_ALL();
+		break;
+
 
 
 	case 'q':
@@ -436,10 +495,7 @@ GLvoid MouseInput(int button, int state, int x, int y)
 		switch (button)
 		{
 		case GLUT_LEFT_BUTTON:
-			//Create_Dot(x,y);
-			//Create_Line(x,y,50,50);
-
-			Create_Triangle(x,y,50,50);
+			Create_DWArt(eDrawType, x, y, 50, 50);
 			InitBuffer();
 
 			break;
@@ -450,6 +506,31 @@ GLvoid MouseInput(int button, int state, int x, int y)
 		}
 	}
 	glutPostRedisplay();
+}
+
+GLvoid Create_DWArt(DrawType eDraw ,GLfloat x, GLfloat y, GLfloat rx, GLfloat ry)
+{
+
+	if (AllArt.size() >= 10)
+	{
+		return;
+	}
+
+	switch (eDraw)
+	{
+	case DW_DOT:
+		Create_Dot(x,y);
+		break;
+	case DW_LINE:
+		Create_Line(x,y,rx,ry);
+		break;
+	case DW_TRIANGLE:
+		Create_Triangle(x, y, rx, ry);
+		break;
+	case DW_RECT:
+		Create_Rect(x, y, rx, ry);
+		break;
+	}
 }
 
 GLvoid Create_Dot(GLfloat x, GLfloat y)
@@ -466,13 +547,13 @@ GLvoid Create_Dot(GLfloat x, GLfloat y)
 
 	Art->RGB[0] = 1.f;
 
-	Art->Vertex[0][0] = x;
-	Art->Vertex[0][1] = y;
+	Art->Vertex[0][0] = CoordinateChangeX(x);
+	Art->Vertex[0][1] = CoordinateChangeY(y);
 	Art->Vertex[0][2] = 0.f;
 
-	Art->VertexColor[0][0] = 1.f;
-	Art->VertexColor[0][1] = 0.f;
-	Art->VertexColor[0][2] = 0.f;
+	Art->VertexColor[0][0] = RandomRGB(mt)/10.f;
+	Art->VertexColor[0][1] = RandomRGB(mt) / 10.f;
+	Art->VertexColor[0][2] = RandomRGB(mt) / 10.f;
 
 	// 인덱스
 	Art->indexVerTex[0] = 0;
@@ -515,15 +596,15 @@ GLvoid Create_Line(GLfloat x, GLfloat y, GLfloat rx, GLfloat ry)
 
 
 	// 정점 (왼쪽 위)
-	Art->VertexColor[0][0] = 1.f;
-	Art->VertexColor[0][1] = 0.f;
-	Art->VertexColor[0][2] = 0.f;
+	Art->VertexColor[0][0] = RandomRGB(mt) / 10.f;
+	Art->VertexColor[0][1] = RandomRGB(mt) / 10.f;
+	Art->VertexColor[0][2] = RandomRGB(mt) / 10.f;
 
 
 	// 정점 (오른쪽 아래)
-	Art->VertexColor[1][0] =1.f;
-	Art->VertexColor[1][1] =0.f;
-	Art->VertexColor[1][2] =0.f;
+	Art->VertexColor[1][0] = RandomRGB(mt) / 10.f;
+	Art->VertexColor[1][1] = RandomRGB(mt) / 10.f;
+	Art->VertexColor[1][2] = RandomRGB(mt) / 10.f;
 
 
 	// 인덱스
@@ -576,20 +657,20 @@ GLvoid Create_Triangle(GLfloat x, GLfloat y, GLfloat rx, GLfloat ry)
 
 
 	// 정점 (중간 위)
-	Art->VertexColor[0][0] = 1.f;
-	Art->VertexColor[0][1] = 0.f;
-	Art->VertexColor[0][2] = 0.f;
+	Art->VertexColor[0][0] = RandomRGB(mt) / 10.f;
+	Art->VertexColor[0][1] = RandomRGB(mt) / 10.f;
+	Art->VertexColor[0][2] = RandomRGB(mt) / 10.f;
 
 
 	// 정점 (오른쪽 아래)
-	Art->VertexColor[1][0] = 0.f;
-	Art->VertexColor[1][1] = 0.f;
-	Art->VertexColor[1][2] = 0.f;
+	Art->VertexColor[1][0] = RandomRGB(mt)/10.f;
+	Art->VertexColor[1][1] = RandomRGB(mt)/10.f;
+	Art->VertexColor[1][2] = RandomRGB(mt)/10.f;
 
 	// 정점 (왼쪽 아래)
-	Art->VertexColor[2][0] = 1.f;
-	Art->VertexColor[2][1] = 0.f;
-	Art->VertexColor[2][2] = 0.f;
+	Art->VertexColor[2][0] =  RandomRGB(mt)/10.f;
+	Art->VertexColor[2][1] =  RandomRGB(mt)/10.f;
+	Art->VertexColor[2][2] =  RandomRGB(mt)/10.f;
 
 
 
@@ -646,6 +727,28 @@ GLvoid Create_Rect(GLfloat x, GLfloat y, GLfloat rx, GLfloat ry)
 	Art->Vertex[3][2] = 0.f;
 
 
+	// 정점 (왼쪽 위)
+	Art->VertexColor[0][0] = RandomRGB(mt)/10.f;
+	Art->VertexColor[0][1] = RandomRGB(mt)/10.f;
+	Art->VertexColor[0][2] = RandomRGB(mt)/10.f;
+
+
+	// 정점 (오른쪽 위)
+	Art->VertexColor[1][0] = RandomRGB(mt)/10.f;
+	Art->VertexColor[1][1] = RandomRGB(mt)/10.f;
+	Art->VertexColor[1][2] = RandomRGB(mt)/10.f;
+
+	// 정점 (오른쪽 아래)
+	Art->VertexColor[2][0] = RandomRGB(mt)/10.f;
+	Art->VertexColor[2][1] = RandomRGB(mt)/10.f;
+	Art->VertexColor[2][2] = RandomRGB(mt)/10.f;
+
+	// 정점 (왼쪽 아래)
+	Art->VertexColor[3][0] = RandomRGB(mt)/10.f;
+	Art->VertexColor[3][1] = RandomRGB(mt)/10.f;
+	Art->VertexColor[3][2] = RandomRGB(mt)/10.f;
+
+
 
 	// 인덱스
 	Art->indexVerTex[0] = 0;
@@ -662,10 +765,39 @@ GLvoid Create_Rect(GLfloat x, GLfloat y, GLfloat rx, GLfloat ry)
 
 GLvoid Move(eMoveType Dir)
 {
-	return GLvoid();
+
+	if (AllArt.empty())
+	{
+		return;
+	}
+
+	uniform_int_distribution<int> AllArtRandom(0, AllArt.size() - 1);
+	
+	int index = AllArtRandom(mt);
+
+	switch (Dir)
+	{
+	case DIR_RIGHT:
+		AllArt[index]->CenterX += CoordinateChangeX(10);
+
+		break;
+	case DIR_LEFT:
+		AllArt[index]->CenterX -= CoordinateChangeX(10);
+		break;
+	case DIR_UP:
+		AllArt[index]->CenterY -= CoordinateChangeY(10);
+		break;
+	case DIR_DOWN:
+		AllArt[index]->CenterY += CoordinateChangeY(10);
+
+		break;
+	}
+
+
 }
 
 GLvoid Delete_ALL()
 {
-	return GLvoid();
+	Delete_ALL_Art(AllArt);
+	InitBuffer();
 }

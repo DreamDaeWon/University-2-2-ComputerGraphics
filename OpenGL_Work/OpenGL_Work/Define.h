@@ -20,6 +20,8 @@ GLint WinsizeX{800};
 GLint WinsizeY{800};
 
 enum ArtType {DWART_DOT,DWART_LINE, DWART_TRIANGLE,DWART_RECTANGLE};
+enum DrawType { DW_DOT, DW_LINE, DW_TRIANGLE, DW_RECT };
+
 
 struct DWArt
 {
@@ -78,6 +80,16 @@ struct DWLine : public DWArt
 };
 
 
+GLvoid Delete_ALL_Art(vector<DWArt*>& pvector)
+{
+	for (auto& iter : pvector)
+	{
+		delete iter;
+	}
+
+	pvector.clear();
+}
+
 
 GLvoid DeleteArt (vector<DWArt*> &pvector, DWArt* pArt)
 {
@@ -87,6 +99,18 @@ GLvoid DeleteArt (vector<DWArt*> &pvector, DWArt* pArt)
 		{
 			delete pArt;
 			pvector.erase(iter);
+			return;
+		}
+	}
+}
+
+GLvoid ReleaseArt(vector<DWArt*>& pvector, DWArt* pArt)
+{
+	for (vector<DWArt*>::iterator iter = pvector.begin(); iter != pvector.end(); ++iter)
+	{
+		if ((*iter) == pArt)
+		{
+			delete pArt;
 			return;
 		}
 	}
