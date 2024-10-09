@@ -60,6 +60,8 @@ GLfloat CoordinateChangeY(GLfloat Coord)
 	return Coord;
 }
 
+
+
 GLvoid RectUpScale(GLfloat x, GLfloat y, DWRect* Rect)
 {
 	Rect->Cx += x;
