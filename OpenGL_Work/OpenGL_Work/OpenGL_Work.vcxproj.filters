@@ -19,6 +19,9 @@
     <Filter Include="소스 파일\OSWork-8">
       <UniqueIdentifier>{b75ed5bb-9546-467c-aa64-677bd7313512}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\OSWork-9">
+      <UniqueIdentifier>{745b1ecc-4c32-4582-9ec4-76f00f086605}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -48,9 +51,15 @@
     <ClCompile Include="OSWork-8.cpp">
       <Filter>소스 파일\OSWork-8</Filter>
     </ClCompile>
+    <ClCompile Include="OSWork-9.cpp">
+      <Filter>소스 파일\OSWork-9</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Define_Work_9.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -60,6 +69,9 @@
     </None>
     <None Include="fragmemt_shader.glsl">
       <Filter>소스 파일\OSWork-7</Filter>
+    </None>
+    <None Include="Vertex_Shader_Rotate.glsl">
+      <Filter>소스 파일\OSWork-9</Filter>
     </None>
   </ItemGroup>
 </Project>

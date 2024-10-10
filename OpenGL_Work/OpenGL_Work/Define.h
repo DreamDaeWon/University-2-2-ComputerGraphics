@@ -89,6 +89,7 @@ struct DWTriangle : public DWArt
 	GLfloat Vertex[3][3]{};
 	GLfloat VertexColor[3][3]{};
 
+
 	GLuint indexVerTex[3]{};
 };
 
@@ -99,6 +100,13 @@ struct DWLine : public DWArt
 
 	GLuint indexVerTex[2]{};
 };
+
+
+
+
+
+
+
 
 
 
