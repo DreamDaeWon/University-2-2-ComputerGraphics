@@ -346,16 +346,70 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 	case '2':
 		// 좌우로 지그재그
+
+		for (auto& iter : AllArt)
+		{
+			iter->Move_Timer = 0;
+		}
 		Move_Style = 2;
 		break;
 
 	case '3':
+		for (auto& iter : AllArt)
+		{
+			iter->eDir = DIR_LEFT;
+			iter->Wall_Min_X = 0;
+			iter->Wall_Max_X = WinsizeX;
+			iter->Wall_Max_Y = WinsizeY;
+			iter->Wall_Min_Y = 0;
+		}
 		// 사각 스파이럴
 		Move_Style = 3;
 		break;
 
 	case '4':
+
+		for (auto& iter : AllArt)
+		{
+
+			if (iter->CenterX > WinsizeX / 2.f)
+			{
+				iter->LR = true; // 오른쪽
+			}
+
+			if (iter->CenterX < WinsizeX / 2.f)
+			{
+				iter->LR = false; // 왼쪽
+			}
+
+
+			if (iter->CenterY > WinsizeY / 2.f)
+			{
+				iter->ZigZag = false; // 아래쪽
+				
+			}
+
+			if (iter->CenterY < WinsizeY / 2.f)
+			{
+				iter->ZigZag = true; // 위쪽
+			}
+
+			iter->Circle_Rotate = 0.f;
+
+			iter->Rotate_Radius = 0.f;
+
+			iter->LRCenterMove = true;
+			iter->UDCenterMove = true;
+
+			iter->NowCenterX =0.f;
+			iter->NowCenterY = 0.f;
+
+		}
+
 		// 원 스파이럴
+
+
+
 		Move_Style = 4;
 		break;
 		
@@ -463,10 +517,13 @@ GLvoid All_Move_Func(GLint Value)
 		break;
 		
 	case 2:
+		
 		Move_ZigZig();
 		break;
 
 	case 3:
+	
+
 		Move_Squire_Spiral();
 		break;
 
@@ -644,49 +701,182 @@ GLvoid Move_Squire_Spiral()
 	for (auto& iter : AllArt)
 	{
 		// 왼쪽 벽에 박으면 아래로 고, 오른쪽 벽을 당김
-
-		if(!iter->LR) // 왼쪽
+		switch (iter->eDir)
 		{
-			if (iter->CenterX > 0)
+
+		case DIR_LEFT:
+			if (iter->CenterX > iter->Wall_Min_X)
 			{
 				iter->CenterX -= 10;
-				
+
 			}
 			else
 			{
-				iter->LR = !iter->LR;
+				iter->CenterX = iter->Wall_Min_X;
 
-				iter->ZigZag = true; // 아래방향으로 변경
+				iter->eDir = DIR_DOWN; // 아래방향으로 변경
 
-				iter->Wall_Max_X -= 50;
+				iter->Wall_Max_X -= 50; // 오른쪽 줄이기
+				iter->Rotate = RandomAngle(mt);
+
 			}
-		}
+			break;
 
-		// 아래 벽에 박으면 왼쪽으로 고, 위쪽 벽을 당김
-		if (!iter->LR) // 왼쪽
-		{
-			if (iter->CenterX > 0)
+		case DIR_RIGHT:
+			if (iter->CenterX < iter->Wall_Max_X)
 			{
-				iter->CenterX -= 10;
-				iter->LR = !iter->LR;
+				iter->CenterX += 10;
 
-				iter->ZigZag = true; // 아래방향으로 변경
-
-				iter->Wall_Max_X -= 50;
 			}
+			else
+			{
+				iter->CenterX = iter->Wall_Max_X;
+
+				iter->eDir = DIR_UP; // 위쪽방향 변경
+
+				iter->Wall_Min_X += 50; // 왼쪽 줄이기
+				iter->Rotate = RandomAngle(mt);
+			}
+			break;
+
+		case DIR_DOWN:
+			if (iter->CenterY < iter->Wall_Max_Y)
+			{
+				iter->CenterY += 10;
+
+			}
+			else
+			{
+				iter->CenterY = iter->Wall_Max_Y;
+
+				iter->eDir = DIR_RIGHT; // 오른쪽
+
+				iter->Wall_Min_Y += 50; // 위쪽 줄이기
+				iter->Rotate = RandomAngle(mt);
+			}
+			break;
+
+		case DIR_UP:
+			if (iter->CenterY > iter->Wall_Min_Y)
+			{
+				iter->CenterY -= 10;
+
+			}
+			else
+			{
+				iter->CenterY = iter->Wall_Min_Y;
+
+				iter->eDir = DIR_LEFT; // 왼쪽 방향으로 이동
+
+				iter->Wall_Max_Y -= 50; // 아래쪽 줄이기
+				iter->Rotate = RandomAngle(mt);
+			}
+			break;
+
+
+		default:
+			break;
 		}
-
-		// 오른쪽 벽에 박으면 위로 고 , 왼쪽 벽을 당김
-
-		
-
-		// 위쪽 벽에 박으면 왼쪽으로 고 , 아래쪽 벽을 당김
-
+		ReBindArt(iter, DWART_TRIANGLE);
 	}
 
 }
 
 GLvoid Move_Circle_spiral()
 {
-	
+	// 일단 가운데로 모이게 한다.
+
+	for (auto& iter : AllArt)
+	{
+		if (iter->LRCenterMove)
+		{
+			if (iter->LR) // 오른쪽
+			{
+				if (iter->CenterX > WinsizeX / 2.f)
+				{
+					iter->CenterX -= 10;
+				}
+				else
+				{
+					iter->CenterX = WinsizeX / 2.f;
+					iter->LRCenterMove = false;
+				}
+			}
+			else if (!iter->LR)
+			{
+				if (iter->CenterX < WinsizeX / 2.f)
+				{
+					iter->CenterX += 10;
+				}
+				else
+				{
+					iter->CenterX = WinsizeX / 2.f;
+					iter->LRCenterMove = false;
+				}
+			}
+		}
+		if (iter->UDCenterMove)
+		{
+			if (!iter->ZigZag) // 아래쪽
+			{
+				if (iter->CenterY > WinsizeY / 2.f)
+				{
+					iter->CenterY -= 10;
+				}
+				else
+				{
+					iter->CenterY = WinsizeY / 2.f;
+					iter->UDCenterMove = false;
+				}
+			}
+			else if (iter->ZigZag) // 위쪽
+			{
+				if (iter->CenterY < WinsizeY / 2.f)
+				{
+					iter->CenterY += 10;
+				}
+				else
+				{
+					iter->CenterY = WinsizeY / 2.f;
+					iter->UDCenterMove = false;
+				}
+			}
+		}
+		if (!iter->LRCenterMove and !iter->UDCenterMove)
+		{
+			
+
+			iter->CenterX = sinf(iter->Circle_Rotate * (M_PI / 180.0f)) * iter->Rotate_Radius;
+			iter->CenterY = cosf(iter->Circle_Rotate * (M_PI / 180.0f)) * iter->Rotate_Radius;
+
+			iter->CenterX += WinsizeX/2.f;
+			iter->CenterY += WinsizeY/2.f + iter->NowCenterY;
+
+			iter->Circle_Rotate += 1.f;
+
+			iter->Rotate += 1.f;
+
+			if ((int)iter->Circle_Rotate % 180 == 0)
+			{
+				iter->Rotate_Radius += 50.f;
+
+				if ((int)iter->Circle_Rotate == 180)
+				{
+					iter->NowCenterY = 50.f;
+				}
+				else if ((int)iter->Circle_Rotate == 360.f)
+				{
+					iter->NowCenterY =0.f;
+				}
+			}
+
+			if (iter->Circle_Rotate >= 360.f)
+			{
+				iter->Circle_Rotate = 0.f;
+			}
+		}
+
+		ReBindArt(iter, DWART_TRIANGLE);
+
+	}
 }

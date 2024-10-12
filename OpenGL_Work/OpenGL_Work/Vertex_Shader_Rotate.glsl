@@ -11,13 +11,13 @@ uniform float CenterY;
 
 void main(void) 
 {
-	vec3 Pos = {in_Position.x, in_Position.y, in_Position.z};
+	vec3 Pos = vec3(in_Position.x, in_Position.y, in_Position.z);
 
 	float rad = radians(Rotate);
 
 	mat3 Mat = mat3(cos(rad),sin(rad),0,-sin(rad),cos(rad),0,0,0,1);
 
-	vec3 Move = {in_Position.x - CenterX,in_Position.y - CenterY,in_Position.z};
+	vec3 Move = vec3(in_Position.x - CenterX,in_Position.y - CenterY,in_Position.z);
 
 	Move = Mat * Move;
 

@@ -8,6 +8,8 @@
 #include <random>
 #include <list>
 #include <vector>
+#include <math.h>
+#include <corecrt_math_defines.h>
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdlib.h>  
@@ -67,13 +69,21 @@ struct DWArt
 
 	bool ZigZag{};
 
+
+	bool LRCenterMove{}; // 좌우 가운데로 움직여야 하는가?
+	bool UDCenterMove{}; // 위 아래로 움직여야 하는가?
+
 	GLfloat Rotate{}; // 회전
 
+	GLfloat Circle_Rotate{}; //원 스파이럴 회전 값
+
+	GLfloat Rotate_Radius{}; // 회전 반지름 값
+
+	GLfloat NowCenterX{}; // 원 스파이럴 그릴 때 사용 할 지금 상태의 중심 값
+
+	GLfloat NowCenterY{}; // 원 스파이럴 그릴 때 사용 할 지금 상태의 중심 값
 
 	int Move_Timer{}; // 움직일 때 사용할 값
-
-
-
 
 	eMoveType eDir{}; // 사각 스파이럴 때 사용할 값
 	float Wall_Min_X{0}; // 사각 스파이럴 때 사용할 값
