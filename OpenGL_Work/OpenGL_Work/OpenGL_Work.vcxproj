@@ -137,7 +137,10 @@
     <ClCompile Include="OSWork-10.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="OSWork-11.cpp" />
+    <ClCompile Include="OSWork-11.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="OSWork-12.cpp" />
     <ClCompile Include="OSWork-3.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -167,6 +170,7 @@
     <ClInclude Include="Define.h" />
     <ClInclude Include="Define_Work_10.h" />
     <ClInclude Include="Define_Work_11.h" />
+    <ClInclude Include="Define_Work_12.h" />
     <ClInclude Include="Define_Work_9.h" />
   </ItemGroup>
   <ItemGroup>

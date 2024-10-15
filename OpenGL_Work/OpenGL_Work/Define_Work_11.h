@@ -74,6 +74,8 @@ struct DWArt
 
 	ArtType eWantType{}; // 변하기를 원하는 타입
 
+	bool Move{}; // 움직여야 하는가?
+
 
 	bool LRCenterMove{}; // 좌우 가운데로 움직여야 하는가?
 	bool UDCenterMove{}; // 위 아래로 움직여야 하는가?

@@ -28,6 +28,9 @@
     <Filter Include="소스 파일\OSWork-11">
       <UniqueIdentifier>{0679c466-93e2-4376-a4d1-c2e62326955d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\OSWork-12">
+      <UniqueIdentifier>{f8c197d7-c611-47be-a8e6-08eaffea5180}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -66,6 +69,9 @@
     <ClCompile Include="OSWork-11.cpp">
       <Filter>소스 파일\OSWork-11</Filter>
     </ClCompile>
+    <ClCompile Include="OSWork-12.cpp">
+      <Filter>소스 파일\OSWork-12</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -78,6 +84,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Define_Work_11.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Define_Work_12.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

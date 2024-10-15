@@ -1,2 +1,26 @@
-﻿  LINK : C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\x64\Debug\OpenGL_Work.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+﻿  OSWork-12.cpp
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_12.h(33,55): warning C4244: '인수': 'GLint'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_12.h(33,55): warning C4244:         with
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_12.h(33,55): warning C4244:         [
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_12.h(33,55): warning C4244:             _Ty=GLfloat
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_12.h(33,55): warning C4244:         ]
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_12.h(34,55): warning C4244: '인수': 'GLint'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_12.h(34,55): warning C4244:         with
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_12.h(34,55): warning C4244:         [
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_12.h(34,55): warning C4244:             _Ty=GLfloat
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_12.h(34,55): warning C4244:         ]
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(206,13): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(243,6): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(265,66): warning C4244: '인수': 'GLint'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(267,50): warning C4244: '인수': 'GLint'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(396,2): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(411,23): warning C4244: '=': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(412,23): warning C4244: '=': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(427,42): warning C4244: '인수': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(427,40): warning C4244: '인수': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(518,62): warning C4267: '인수': 'size_t'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(518,62): warning C4267:         with
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(518,62): warning C4267:         [
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(518,62): warning C4267:             _Ty=int
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OSWork-12.cpp(518,62): warning C4267:         ]
   OpenGL_Work.vcxproj -> C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\x64\Debug\OpenGL_Work.exe
