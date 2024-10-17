@@ -333,10 +333,9 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 		}
 	}
 
-
-
 	glutSwapBuffers(); // 화면에 출력하기
 }
+
 GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수 
 {
 

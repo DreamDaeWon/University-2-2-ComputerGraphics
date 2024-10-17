@@ -13,92 +13,119 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\OSWork-7">
+    <Filter Include="소스 파일\OSWork-13">
+      <UniqueIdentifier>{3fa6e5a0-7bd2-4aef-8479-f07e0f7c96f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\2D">
+      <UniqueIdentifier>{17089337-a181-4df3-98aa-9f6f3da72947}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\2D\OSWork-12">
+      <UniqueIdentifier>{f8c197d7-c611-47be-a8e6-08eaffea5180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\2D\OSWork-7">
       <UniqueIdentifier>{3caa1b9e-8261-4fe9-acc2-1db100d285c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OSWork-8">
+    <Filter Include="소스 파일\2D\OSWork-8">
       <UniqueIdentifier>{b75ed5bb-9546-467c-aa64-677bd7313512}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OSWork-9">
+    <Filter Include="소스 파일\2D\OSWork-9">
       <UniqueIdentifier>{745b1ecc-4c32-4582-9ec4-76f00f086605}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OSWork-10">
+    <Filter Include="소스 파일\2D\OSWork-10">
       <UniqueIdentifier>{7be0946b-c7f2-4665-af8d-215b1965120a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OSWork-11">
+    <Filter Include="소스 파일\2D\OSWork-11">
       <UniqueIdentifier>{0679c466-93e2-4376-a4d1-c2e62326955d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\OSWork-12">
-      <UniqueIdentifier>{f8c197d7-c611-47be-a8e6-08eaffea5180}</UniqueIdentifier>
+    <Filter Include="헤더 파일\2D">
+      <UniqueIdentifier>{ba4cbf87-2567-46f5-a25f-df53f19132e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\3D">
+      <UniqueIdentifier>{c8855aec-32ce-4ab1-b16c-a549d69317cf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="OGWork-1.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OGWork-2.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OSWork-3.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OSWork-4.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OSWork-5.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OSWork-6.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="OSWork-7.cpp">
-      <Filter>소스 파일\OSWork-7</Filter>
+      <Filter>소스 파일\2D\OSWork-7</Filter>
     </ClCompile>
     <ClCompile Include="OSWork-8.cpp">
-      <Filter>소스 파일\OSWork-8</Filter>
+      <Filter>소스 파일\2D\OSWork-8</Filter>
     </ClCompile>
     <ClCompile Include="OSWork-9.cpp">
-      <Filter>소스 파일\OSWork-9</Filter>
+      <Filter>소스 파일\2D\OSWork-9</Filter>
     </ClCompile>
     <ClCompile Include="OSWork-10.cpp">
-      <Filter>소스 파일\OSWork-10</Filter>
+      <Filter>소스 파일\2D\OSWork-10</Filter>
     </ClCompile>
     <ClCompile Include="OSWork-11.cpp">
-      <Filter>소스 파일\OSWork-11</Filter>
+      <Filter>소스 파일\2D\OSWork-11</Filter>
     </ClCompile>
     <ClCompile Include="OSWork-12.cpp">
-      <Filter>소스 파일\OSWork-12</Filter>
+      <Filter>소스 파일\2D\OSWork-12</Filter>
+    </ClCompile>
+    <ClCompile Include="OSWork-13.cpp">
+      <Filter>소스 파일\OSWork-13</Filter>
+    </ClCompile>
+    <ClCompile Include="OGWork-1.cpp">
+      <Filter>소스 파일\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="OGWork-2.cpp">
+      <Filter>소스 파일\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="OSWork-3.cpp">
+      <Filter>소스 파일\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="OSWork-4.cpp">
+      <Filter>소스 파일\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="OSWork-5.cpp">
+      <Filter>소스 파일\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="OSWork-6.cpp">
+      <Filter>소스 파일\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="DW_Camera.cpp">
+      <Filter>헤더 파일\3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\2D</Filter>
     </ClInclude>
     <ClInclude Include="Define_Work_9.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\2D</Filter>
     </ClInclude>
     <ClInclude Include="Define_Work_10.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\2D</Filter>
     </ClInclude>
     <ClInclude Include="Define_Work_11.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\2D</Filter>
     </ClInclude>
     <ClInclude Include="Define_Work_12.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Define_Work_3D.h">
+      <Filter>헤더 파일\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DW_Camera.h">
+      <Filter>헤더 파일\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertex_shader.glsl">
-      <Filter>소스 파일\OSWork-7</Filter>
+      <Filter>소스 파일\2D\OSWork-7</Filter>
     </None>
     <None Include="fragmemt_shader.glsl">
-      <Filter>소스 파일\OSWork-7</Filter>
+      <Filter>소스 파일\2D\OSWork-7</Filter>
     </None>
     <None Include="Vertex_Shader_Rotate.glsl">
-      <Filter>소스 파일\OSWork-9</Filter>
+      <Filter>소스 파일\2D\OSWork-9</Filter>
+    </None>
+    <None Include="Vertex_Shader_Matrix.glsl">
+      <Filter>소스 파일\OSWork-13</Filter>
     </None>
   </ItemGroup>
 </Project>

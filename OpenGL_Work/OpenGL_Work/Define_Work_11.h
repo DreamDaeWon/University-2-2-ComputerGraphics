@@ -403,12 +403,14 @@ inline GLvoid InitBuffer(DWArt* pArt)
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWDot*>(pArt)->Vertex), dynamic_cast<DWDot*>(pArt)->Vertex, GL_STREAM_DRAW);
 
+	
+
+		glEnableVertexAttribArray(0);
+
 		glGenBuffers(1, &pArt->EBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pArt->EBO);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(dynamic_cast<DWDot*>(pArt)->indexVerTex), dynamic_cast<DWDot*>(pArt)->indexVerTex, GL_STREAM_DRAW);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-
-		glEnableVertexAttribArray(0);
 
 		//glEnableVertexAttribArray(0);
 
@@ -436,16 +438,18 @@ inline GLvoid InitBuffer(DWArt* pArt)
 		glBindBuffer(GL_ARRAY_BUFFER, pArt->VBO[0]);
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(dynamic_cast<DWLine*>(pArt)->Vertex), dynamic_cast<DWLine*>(pArt)->Vertex, GL_STREAM_DRAW);
-
-		glGenBuffers(1, &pArt->EBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pArt->EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(dynamic_cast<DWLine*>(pArt)->indexVerTex), dynamic_cast<DWLine*>(pArt)->indexVerTex, GL_STREAM_DRAW);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+		
+
+
+
 
 		glEnableVertexAttribArray(0);
 
 		//glEnableVertexAttribArray(0);
 
+
+	
 
 		/////////////////////////////////////////
 		glBindBuffer(GL_ARRAY_BUFFER, pArt->VBO[1]);
@@ -456,6 +460,10 @@ inline GLvoid InitBuffer(DWArt* pArt)
 
 		glEnableVertexAttribArray(1);
 		/////////////////////////////////////////
+
+		glGenBuffers(1, &pArt->EBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pArt->EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(dynamic_cast<DWLine*>(pArt)->indexVerTex), dynamic_cast<DWLine*>(pArt)->indexVerTex, GL_STREAM_DRAW);
 
 
 		break;

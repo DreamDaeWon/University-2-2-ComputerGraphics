@@ -176,8 +176,8 @@ GLuint* vbo{}, * EBO{};
 GLvoid Timer(int Value)
 {
 	
-	for (auto& iter : AllArt)
-		UpdateBuffer(iter);
+	//for (auto& iter : AllArt)
+		//UpdateBuffer(iter);
 	glutPostRedisplay();
 	glutTimerFunc(10, Timer, 1);
 }
@@ -501,7 +501,7 @@ GLvoid All_Move_Func(GLint Value)
 		break;
 	}
 
-	glutTimerFunc(10, All_Move_Func, 1);
+	glutTimerFunc(1, All_Move_Func, 1);
 }
 
 GLvoid Move_Diagonal()
