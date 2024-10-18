@@ -22,4 +22,3 @@ void CDW_Camera::MoveCamera(glm::vec3 _Move_Pos)
 {
 	m_vPos += _Move_Pos;
 }
-

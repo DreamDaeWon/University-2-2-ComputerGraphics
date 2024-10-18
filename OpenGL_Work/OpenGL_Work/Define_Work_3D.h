@@ -207,8 +207,6 @@ GLvoid UpdateBuffer(DWArt* pArt)
 
 	glBindVertexArray(0); // VAO 바인딩 해제
 
-
-
 }
 
 inline GLvoid InitBuffer(DWArt* pArt)
@@ -236,6 +234,9 @@ inline GLvoid InitBuffer(DWArt* pArt)
 	glEnableVertexAttribArray(1);
 
 	glBindVertexArray(0); // VAO 바인딩 해제
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 }
 

@@ -83,6 +83,8 @@ void make_shaderProgram()
 
 
 
+void checkFrameBuffer();
+
 
 GLvoid drawScene(GLvoid);
 GLvoid Reshape(int w, int h);
@@ -373,7 +375,7 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 		}
 	}
 
-
+	checkFrameBuffer();
 
 	glutSwapBuffers(); // 화면에 출력하기
 }
@@ -796,4 +798,27 @@ GLvoid Move_Diagonal()
 		ReBindArt(iter, DWART_PENTAGON);
 	}
 
+}
+
+void checkFrameBuffer() {
+	int width = WinsizeX;
+	int height = WinsizeY;
+	std::vector<unsigned char> pixels(3 * width * height);
+	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+
+	// 프레임 버퍼 데이터를 확인
+	bool hasData = false;
+	for (size_t i = 0; i < pixels.size(); ++i) {
+		if (pixels[i] != 0) {
+			hasData = true;
+			break;
+		}
+	}
+
+	if (hasData) {
+		std::cout << "프레임 버퍼에 데이터가 있습니다." << std::endl;
+	}
+	else {
+		std::cout << "프레임 버퍼가 비어 있습니다." << std::endl;
+	}
 }

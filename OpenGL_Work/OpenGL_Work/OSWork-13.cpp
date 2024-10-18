@@ -3,7 +3,7 @@
 
 
 // 카메라 생성
-CDW_Camera DW_Camera{glm::vec3(0.f,0.f,1.f),glm::vec3(0.f,0.f,-1.f)};
+CDW_Camera DW_Camera{ glm::vec3(0.f,0.f,1.f),glm::vec3(0.f,0.f,-1.f) };
 
 
 // 셰이더 관련 변수
@@ -96,6 +96,9 @@ GLvoid MouseInput(int button, int state, int x, int y);
 GLvoid MoveMouse(int X, int Y);
 
 
+// 테스트 코드
+void checkFrameBuffer();
+
 
 
 // 7 번
@@ -141,9 +144,6 @@ bool bZizgZagTimer = false;
 bool bSizeRandomTimer = false;
 bool bRandomColorTimer = false;
 
-const GLfloat triShape[3][3] = { { -0.5, -0.5, 0.0 }, { 0.5, -0.5, 0.0 }, { 0.0, 0.5, 0.0} };
-
-const GLfloat colors[3][3] = { {  1.0,  0.0,  0.0  }, {  0.0,  1.0,  0.0  }, {  0.0,  0.0,  1.0  } };
 
 //GLuint vao, vbo[2];
 
@@ -155,7 +155,7 @@ GLvoid Timer(int Value)
 	for (auto& iter : AllArt)
 		UpdateBuffer(iter);
 	glutPostRedisplay();
-	glutTimerFunc(1, Timer, 1);
+	glutTimerFunc(16, Timer, 1);
 }
 
 
@@ -202,10 +202,13 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 { //--- 윈도우 생성하기
 
 	glutInit(&argc, argv); // glut 초기화
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA|GL_DEPTH_BUFFER_BIT); // 디스플레이 모드 설정
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); // 디스플레이 모드 설정
 	glutInitWindowPosition(100, 100); // 윈도우의 위치 지정
 	glutInitWindowSize(WinsizeX, WinsizeY); // 윈도우의 크기 지정
-	g_WinID = glutCreateWindow("OGWork-12"); // 윈도우 생성(윈도우 이름)
+	g_WinID = glutCreateWindow("OGWork-13"); // 윈도우 생성(윈도우 이름)
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	//--- GLEW 초기화하기
 	glewExperimental = GL_TRUE;
 
@@ -236,7 +239,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glutMouseFunc(MouseInput);
 	glutMotionFunc(MoveMouse);
 
-	glutTimerFunc(1, Timer, 1);
+	glutTimerFunc(16, Timer, 1);
 
 
 	glutMainLoop(); // 이벤트 처리 시작
@@ -246,10 +249,9 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수 
 {
 	glClearColor(0.f, 0.f, 0.f, 1.f); // 바탕색을 ‘blue’ 로 지정
-	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); // 설정된 색으로 전체를 칠하기
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 설정된 색으로 전체를 칠하기
 	// 그리기 부분 구현: 그리기 관련 부분이 여기에 포함된다
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+
 
 	//int vColorLocation = glGetUniformLocation(shaderProgramID,"vColor");
 
@@ -260,7 +262,7 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 	//glBindVertexArray(vao);
 	//glDrawArrays(GL_TRIANGLES, 0, 3);
 
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		vector<DWArt*>* pVec = AllVec[i];
 
@@ -296,12 +298,19 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 
 			}
 
+			GLenum err;
+			while ((err = glGetError()) != GL_NO_ERROR) {
+				std::cerr << "OpenGL error: " << err << std::endl;
+			}
+
+
 		}
 	}
 
-
+	checkFrameBuffer();
 
 	glutSwapBuffers(); // 화면에 출력하기
+	glutPostRedisplay();
 }
 GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수 
 {
@@ -420,4 +429,28 @@ GLvoid Move(eMoveType Dir)
 GLvoid Delete_ALL()
 {
 	Delete_ALL_Art(AllArt);
+}
+
+
+void checkFrameBuffer() {
+	int width = WinsizeX;
+	int height = WinsizeY;
+	std::vector<unsigned char> pixels(3 * width * height);
+	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+
+	// 프레임 버퍼 데이터를 확인
+	bool hasData = false;
+	for (size_t i = 0; i < pixels.size(); ++i) {
+		if (pixels[i] != 0) {
+			hasData = true;
+			break;
+		}
+	}
+
+	if (hasData) {
+		std::cout << "프레임 버퍼에 데이터가 있습니다." << std::endl;
+	}
+	else {
+		std::cout << "프레임 버퍼가 비어 있습니다." << std::endl;
+	}
 }

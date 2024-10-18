@@ -46,6 +46,14 @@ public:
 	}
 
 public:
+	void RotateX_Camera(float Angle);
+	void RotateY_Camera(float Angle);
+	void RotateZ_Camera(float Angle);
+
+	void MoveX_Camera(glm::vec3 Move);
+
+
+public:
 	void MoveCamera(glm::vec3 _Pos);
 
 
@@ -57,6 +65,8 @@ private:
 	glm::mat4 m_Matrix_View{ }; // ºäº¯È¯ Çà·Ä
 
 	//glm::vec3 m_vLook{}; // Ä«¸Þ¶óÀÇ ·èº¤ÅÍ
+
+
 
 };
 
