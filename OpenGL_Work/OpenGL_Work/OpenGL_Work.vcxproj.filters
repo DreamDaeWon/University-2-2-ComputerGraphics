@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\OSWork-13">
-      <UniqueIdentifier>{3fa6e5a0-7bd2-4aef-8479-f07e0f7c96f4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\2D">
       <UniqueIdentifier>{17089337-a181-4df3-98aa-9f6f3da72947}</UniqueIdentifier>
     </Filter>
@@ -43,6 +40,15 @@
     <Filter Include="헤더 파일\3D">
       <UniqueIdentifier>{c8855aec-32ce-4ab1-b16c-a549d69317cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\OGWork-14">
+      <UniqueIdentifier>{fce2dbd9-902b-4137-b10d-9fed960b0a75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\OGWork-13">
+      <UniqueIdentifier>{3fa6e5a0-7bd2-4aef-8479-f07e0f7c96f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\OGWork-15">
+      <UniqueIdentifier>{e54a5767-220b-4f4c-b945-426877fa6ae6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -66,8 +72,8 @@
     <ClCompile Include="OSWork-12.cpp">
       <Filter>소스 파일\2D\OSWork-12</Filter>
     </ClCompile>
-    <ClCompile Include="OSWork-13.cpp">
-      <Filter>소스 파일\OSWork-13</Filter>
+    <ClCompile Include="OGWork-13.cpp">
+      <Filter>소스 파일\OGWork-13</Filter>
     </ClCompile>
     <ClCompile Include="OGWork-1.cpp">
       <Filter>소스 파일\2D</Filter>
@@ -89,6 +95,12 @@
     </ClCompile>
     <ClCompile Include="DW_Camera.cpp">
       <Filter>헤더 파일\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="OGWork-14.cpp">
+      <Filter>소스 파일\OGWork-14</Filter>
+    </ClCompile>
+    <ClCompile Include="OGWork-15.cpp">
+      <Filter>소스 파일\OGWork-15</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,7 +137,7 @@
       <Filter>소스 파일\2D\OSWork-9</Filter>
     </None>
     <None Include="Vertex_Shader_Matrix.glsl">
-      <Filter>소스 파일\OSWork-13</Filter>
+      <Filter>소스 파일\OGWork-13</Filter>
     </None>
   </ItemGroup>
 </Project>
