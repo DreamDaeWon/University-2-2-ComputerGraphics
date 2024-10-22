@@ -3,7 +3,7 @@
 CDW_Camera::CDW_Camera(glm::vec3 _vPos, glm::vec3 _vLook)
 {
 	CreateCamera(_vPos, _vLook);
-
+	
 }
 
 CDW_Camera::~CDW_Camera()

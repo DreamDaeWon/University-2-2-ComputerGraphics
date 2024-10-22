@@ -7,7 +7,7 @@ uniform_int_distribution<int> RandomIndexTri(0, 5);
 
 
 // 카메라 생성
-CDW_Camera DW_Camera{ glm::vec3(0.f,0.f,1.f),glm::vec3(0.f,0.f,-1.f) };
+CDW_Camera DW_Camera{ glm::vec3(0.f,0.f,0.f),glm::vec3(0.f,0.f,-1.f) };
 
 
 // 셰이더 관련 변수
@@ -385,7 +385,7 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 	}
 
 	//checkFrameBuffer();
-
+	glViewport(0, 0, WinsizeX, WinsizeY);
 	glutSwapBuffers(); // 화면에 출력하기
 	glutPostRedisplay();
 }
@@ -519,7 +519,7 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 	case 'R':
 		RavolutionY = -1.f;
 		break;
-
+		 
 
 
 

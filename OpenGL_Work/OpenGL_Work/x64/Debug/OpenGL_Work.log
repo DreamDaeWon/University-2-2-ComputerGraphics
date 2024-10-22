@@ -1,4 +1,4 @@
-﻿  OGWork-15.cpp
+﻿  OGWork-16.cpp
 C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(43,55): warning C4244: '인수': 'GLint'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(43,55): warning C4244:         with
 C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(43,55): warning C4244:         [
@@ -9,21 +9,29 @@ C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics
 C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(44,55): warning C4244:         [
 C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(44,55): warning C4244:             _Ty=GLfloat
 C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(44,55): warning C4244:         ]
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(682,23): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(683,23): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(685,37): warning C4244: '인수': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(685,28): warning C4244: '인수': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(707,25): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(708,24): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(218,13): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(255,6): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(570,23): warning C4244: '=': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(571,23): warning C4244: '=': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(585,44): warning C4244: '인수': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(585,41): warning C4244: '인수': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(662,62): warning C4267: '인수': 'size_t'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(662,62): warning C4267:         with
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(662,62): warning C4267:         [
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(662,62): warning C4267:             _Ty=int
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-15.cpp(662,62): warning C4267:         ]
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(611,45): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(612,45): warning C4244: '인수': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(617,28): warning C4244: '+=': 'float'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(621,26): warning C4244: '+=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(625,32): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(629,32): warning C4244: '=': 'float'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(635,28): warning C4244: '=': 'float'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(754,23): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(755,23): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(757,37): warning C4244: '인수': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(757,28): warning C4244: '인수': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(779,25): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(780,24): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(252,13): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(289,6): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(394,57): warning C4267: '인수': 'size_t'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(638,23): warning C4244: '=': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(639,23): warning C4244: '=': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(653,44): warning C4244: '인수': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(653,41): warning C4244: '인수': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(730,62): warning C4267: '인수': 'size_t'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(730,62): warning C4267:         with
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(730,62): warning C4267:         [
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(730,62): warning C4267:             _Ty=int
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-16.cpp(730,62): warning C4267:         ]
   OpenGL_Work.vcxproj -> C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\x64\Debug\OpenGL_Work.exe

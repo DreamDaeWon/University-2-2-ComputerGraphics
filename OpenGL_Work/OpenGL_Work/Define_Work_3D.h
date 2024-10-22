@@ -27,7 +27,7 @@
 using namespace std;
 
 
-GLint WinsizeX{ 800 };
+GLint WinsizeX{ 1600 };
 GLint WinsizeY{ 800 };
 GLint WinsizeZ{ 800 };
 
@@ -60,7 +60,7 @@ float Pos_Pentagon[5][2]{ {-1.f,1.f },{-1.5f,-1.f }, {0.f,-2.f} ,{1.5f,-1.f} ,{1
 float Pos_Dot[5][2]{ {-0.1f,0.1f },{-0.1f,-0.1f }, {0.1f,-0.1f} ,{0.1f,-0.1f} ,{0.1f,0.1f} };
 
 
-enum ArtType {DWART_LINE, DWART_CUBE,DWART_TETRATEDRON, DWART_MODEL_SPHERE,DWART_MODEL_SYLINDER, DWART_END};
+enum ArtType {DWART_LINE, DWART_CIRCLE_SPIRAL, DWART_CUBE,DWART_TETRATEDRON, DWART_MODEL_SPHERE,DWART_MODEL_SYLINDER, DWART_END};
 enum eMoveType { DIR_RIGHT, DIR_LEFT, DIR_UP, DIR_DOWN, DIR_LU, DIR_RU, DIR_LD, DIR_RD };
 
 struct DWArt
@@ -92,6 +92,11 @@ struct DWArt
 	GLfloat Sylinder_ry{}; // 실린더의 높이
 
 
+	// 원 스파이럴
+	GLint Spiral_Center{};
+	GLint Spiral_radius{};
+	GLint Spiral_Now_Angle{};
+	GLint Spiral_Now_Center_X{};
 
 
 	glm::mat4 transformMatrix = glm::mat4(1.0f); // 본인의 매트릭스
@@ -169,11 +174,15 @@ GLvoid Create_Line_Pos(vector<DWArt*>* pVec, GLfloat x1, GLfloat y1, GLfloat z1,
 
 GLvoid Create_Cube(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 큐브 추가
 
+GLvoid Create_Circle_Spiral(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _final_Radius,GLfloat _UPRadius); // 원하는 벡터에 원하는 큐브 추가
+
 GLvoid Create_Tetrahedron(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 사면체 출력
 
 GLvoid Create_Sphere_Model(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _slices, GLfloat _stacks); // 원하는 벡터에 원하는 사면체 출력
 
 GLvoid Create_Sylinder_Model(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rxTop, GLfloat _rxBottom, GLfloat _ry, GLfloat _slices, GLfloat _stacks); // 원하는 벡터에 원하는 사면체 출력
+
+
 
 
 
@@ -476,7 +485,7 @@ inline GLvoid Create_Cube(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloa
 	// 중점
 	Art->vPos[0] = _CX;
 	Art->vPos[1] = _CY;
-	Art->vPos[2] = _CY;
+	Art->vPos[2] = _CZ;
 
 	// 색상
 	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
@@ -580,6 +589,69 @@ inline GLvoid Create_Cube(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloa
 
 
 	
+}
+
+inline GLvoid Create_Circle_Spiral(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _final_Radius, GLfloat _UPRadius)
+{
+	DWArt* Art = new DWArt{};
+
+	// 중점
+	Art->vPos[0] = _CX;
+	Art->vPos[1] = _CY;
+	Art->vPos[2] = _CY;
+
+	Art->CenterX = _CX;
+	Art->CenterY = _CY;
+
+	int iIndex{};
+
+
+	while(Art->Spiral_radius <= _final_Radius + _UPRadius)
+	{
+		Art->CenterX = sinf(Art->Spiral_Now_Angle * (M_PI / 180.0f)) * Art->Spiral_radius;
+		Art->CenterZ = cosf(Art->Spiral_Now_Angle * (M_PI / 180.0f)) * Art->Spiral_radius;
+
+		Art->CenterX += Art->vPos[0];
+		Art->CenterZ += Art->vPos[2] + Art->Spiral_Now_Center_X;
+
+		Art->Spiral_Now_Angle += 1.f;
+
+		if ((int)Art->Spiral_Now_Angle % 180 == 0)
+		{
+			Art->Spiral_radius += _UPRadius;
+
+			if ((int)Art->Spiral_Now_Angle == 180)
+			{
+				Art->Spiral_Now_Center_X = _UPRadius;
+			}
+			else if ((int)Art->Spiral_Now_Angle == 360.f)
+			{
+				Art->Spiral_Now_Center_X = 0.f;
+			}
+		}
+
+		if (Art->Spiral_Now_Angle >= 360.f)
+		{
+			Art->Spiral_Now_Angle = 0.f;
+		}
+
+		Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+		Art->Vertex.push_back(glm::vec3((Art->CenterX), (0.f), (Art->CenterZ)));
+		Art->indexVerTex.push_back(iIndex);
+		++iIndex;
+	}
+
+
+	// 반지름
+	//Art->rx = _rx;
+	//Art->ry = _ry;
+
+
+	// 형식
+	Art->eType = DWART_CIRCLE_SPIRAL;
+
+
+	pVec->push_back(Art);
 }
 
 inline GLvoid Create_Tetrahedron(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz)
@@ -728,11 +800,11 @@ GLvoid MakeWorldMartrix(DWArt* pArt)
 
 	pArt->transformMatrix = glm::mat4(1.0f);
 
-// 크기
-	// scale
-	glm::vec3 scaleFactor(pArt->vScale[0], pArt->vScale[1], pArt->vScale[2]); // 원하는 크기
-	pArt->transformMatrix = glm::scale(pArt->transformMatrix, scaleFactor);
 
+//	// 신축 (커지면 원점에서도 같이 멀어지기)
+//// scale
+//	glm::vec3 scaleFactor(pArt->vScale[0], pArt->vScale[1], pArt->vScale[2]); // 원하는 크기
+//	pArt->transformMatrix = glm::scale(pArt->transformMatrix, scaleFactor);
 
 // 공전
 	// revolution X
@@ -772,6 +844,10 @@ GLvoid MakeWorldMartrix(DWArt* pArt)
 	pArt->transformMatrix = glm::rotate(pArt->transformMatrix, angleZ, rotationAxisZ);
 	
 
+	// 크기
+	// scale
+	glm::vec3 scaleFactor(pArt->vScale[0], pArt->vScale[1], pArt->vScale[2]); // 원하는 크기
+	pArt->transformMatrix = glm::scale(pArt->transformMatrix, scaleFactor);
 
 
 
