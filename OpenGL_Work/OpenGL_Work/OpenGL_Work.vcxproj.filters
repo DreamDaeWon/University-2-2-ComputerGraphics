@@ -52,6 +52,9 @@
     <Filter Include="소스 파일\OGWork-16">
       <UniqueIdentifier>{e64e90ca-7393-4850-b478-f155aed8afae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\OGWork-17">
+      <UniqueIdentifier>{021e2d29-05c5-4a46-ab9a-4598cee4095e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -108,6 +111,12 @@
     <ClCompile Include="OGWork-16.cpp">
       <Filter>소스 파일\OGWork-16</Filter>
     </ClCompile>
+    <ClCompile Include="OGWork-17.cpp">
+      <Filter>소스 파일\OGWork-17</Filter>
+    </ClCompile>
+    <ClCompile Include="DW_Camera2.cpp">
+      <Filter>헤더 파일\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -129,6 +138,9 @@
       <Filter>헤더 파일\3D</Filter>
     </ClInclude>
     <ClInclude Include="DW_Camera.h">
+      <Filter>헤더 파일\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="DW_Camera2.h">
       <Filter>헤더 파일\3D</Filter>
     </ClInclude>
   </ItemGroup>

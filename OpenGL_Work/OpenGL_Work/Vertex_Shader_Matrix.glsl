@@ -21,11 +21,9 @@ void main()
 	Pos = ProjectionTransform * vec4(Pos);
 
 	// 원근나누기
-	Pos = vec4(Pos[0]/Pos[3],Pos[1]/Pos[3],Pos[2]/Pos[3],Pos[3]/Pos[3]);
+	//Pos = vec4(Pos[0]/Pos[3],Pos[1]/Pos[3],Pos[2]/Pos[3],Pos[3]/Pos[3]);
 
-	gl_Position[0] = Pos[0];
-	gl_Position[1] = Pos[1];
-	gl_Position[2] = Pos[2];
+	gl_Position = Pos;
 
 	out_Color = in_Color;
 }

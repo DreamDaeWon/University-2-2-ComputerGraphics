@@ -433,7 +433,9 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 			glEnable(GL_CULL_FACE);
 			bCallMode = !bCallMode;
 		}
-		else
+		break;
+
+	case'H':
 		{
 			glDisable(GL_CULL_FACE);
 			bCallMode = !bCallMode;

@@ -282,6 +282,8 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	InitBuffers(&LineArt);
 	Create_Line_Pos(&LineArt, 25.f, 0.f, 0.f, -25.f, 0.f, 0.f);
 	InitBuffers(&LineArt);
+	Create_Line_Pos(&LineArt, 0.f, 0.f, 25.f, 0.f, 0.f, -25.f);
+	InitBuffers(&LineArt);
 
 	Create_Sphere_Model(&AllArt,-15.f,0.f,0.f,5,20,20);
 	InitBuffers(&AllArt);

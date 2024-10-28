@@ -60,7 +60,8 @@ float Pos_Pentagon[5][2]{ {-1.f,1.f },{-1.5f,-1.f }, {0.f,-2.f} ,{1.5f,-1.f} ,{1
 float Pos_Dot[5][2]{ {-0.1f,0.1f },{-0.1f,-0.1f }, {0.1f,-0.1f} ,{0.1f,-0.1f} ,{0.1f,0.1f} };
 
 
-enum ArtType {DWART_LINE, DWART_CIRCLE_SPIRAL, DWART_CUBE,DWART_TETRATEDRON, DWART_MODEL_SPHERE,DWART_MODEL_SYLINDER, DWART_END};
+enum ArtType {DWART_LINE, DWART_CIRCLE_SPIRAL, DWART_FACE, DWART_CUBE,DWART_TETRATEDRON, DWART_MODEL_SPHERE,DWART_MODEL_SYLINDER, DWART_END};
+
 enum eMoveType { DIR_RIGHT, DIR_LEFT, DIR_UP, DIR_DOWN, DIR_LU, DIR_RU, DIR_LD, DIR_RD };
 
 struct DWArt
@@ -102,6 +103,9 @@ struct DWArt
 	glm::mat4 transformMatrix = glm::mat4(1.0f); // 본인의 매트릭스
 
 	GLfloat vScale[3]{ 1.f,1.f,1.f }; // 객체가 x,y,z 축으로 얼마나 커졌는지?
+
+
+	GLfloat vOneJomScale[3]{ 1.f,1.f,1.f }; // 객체가 x,y,z 축으로 얼마나 커졌는지?
 
 	GLfloat vRotate[3]{}; // 객체가 x y z 축으로 얼마만큼 회전하였는지?
 
@@ -171,6 +175,11 @@ GLvoid MakeWorldMartrix(DWArt* pArt); // 해당 객체의 최종 변환 행렬 만들어 주기(
 
 
 GLvoid Create_Line_Pos(vector<DWArt*>* pVec, GLfloat x1, GLfloat y1, GLfloat z1,  GLfloat x2, GLfloat y2, GLfloat z2); // 원하는 벡터에 원하는 두 점을 잇는 직선 추가
+
+GLvoid Create_Line_Pos(vector<DWArt*>* pVec, GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, glm::vec3 vColor_One, glm::vec3 vColor_Two); // 원하는 벡터에 원하는 두 점을 잇는 직선 추가
+
+GLvoid Create_Face(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 면 추가
+
 
 GLvoid Create_Cube(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 큐브 추가
 
@@ -475,6 +484,93 @@ GLvoid Create_Line_Pos(vector<DWArt*>* pVec, GLfloat x1, GLfloat y1, GLfloat z1,
 
 	pVec->push_back(Art);
 }
+
+inline GLvoid Create_Line_Pos(vector<DWArt*>* pVec, GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, glm::vec3 vColor_One, glm::vec3 vColor_Two)
+{
+	DWArt* Art = new DWArt{};
+
+	// 중점
+	//Art->CenterX = x;
+	//Art->CenterY = y;
+
+	// 색상
+	Art->VertexColor.push_back(vColor_One);
+	Art->VertexColor.push_back(vColor_Two);
+
+	// 반지름
+	//Art->rx = rx;
+	//Art->ry = ry;
+
+
+	// 형식
+	Art->eType = DWART_LINE;
+
+
+	Art->Vertex.push_back(glm::vec4(x1, y1, -z1, 1.f));
+	Art->Vertex.push_back(glm::vec4(x2, y2, -z2, 1.f));
+
+
+	// 인덱스
+	Art->indexVerTex.push_back(0);
+	Art->indexVerTex.push_back(1);
+
+
+	pVec->push_back(Art);
+}
+
+inline GLvoid Create_Face(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz)
+{
+	
+	DWArt* Art = new DWArt{};
+
+	// 중점
+	Art->vPos[0] = _CX;
+	Art->vPos[1] = _CY;
+	Art->vPos[2] = _CZ;
+
+	// 색상
+	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+
+	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+
+
+	// 반지름
+	Art->rx = _rx;
+	Art->ry = _ry;
+
+
+	// 형식
+	Art->eType = DWART_FACE;
+
+	// 0 1
+	Art->Vertex.push_back(glm::vec3((0 - _rx), (0), (0 + _rz)));
+	Art->Vertex.push_back(glm::vec3((0 - _rx), (0), (0 - _rz)));
+
+
+	// 2 3
+	Art->Vertex.push_back(glm::vec3((0 + _rx), (0), (0 - _rz)));
+	Art->Vertex.push_back(glm::vec3((0 + _rx), (0), (0 + _rz)));
+
+
+
+	// 인덱스
+
+	// 윗면
+	Art->indexVerTex.push_back(0);
+	Art->indexVerTex.push_back(3);
+	Art->indexVerTex.push_back(1);
+
+	Art->indexVerTex.push_back(1);
+	Art->indexVerTex.push_back(3);
+	Art->indexVerTex.push_back(2);
+
+	pVec->push_back(Art);
+
+}
+
+
 
 
 inline GLvoid Create_Cube(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz)
@@ -801,10 +897,10 @@ GLvoid MakeWorldMartrix(DWArt* pArt)
 	pArt->transformMatrix = glm::mat4(1.0f);
 
 
-//	// 신축 (커지면 원점에서도 같이 멀어지기)
-//// scale
-//	glm::vec3 scaleFactor(pArt->vScale[0], pArt->vScale[1], pArt->vScale[2]); // 원하는 크기
-//	pArt->transformMatrix = glm::scale(pArt->transformMatrix, scaleFactor);
+	// 신축 (커지면 원점에서도 같이 멀어지기)
+// scale
+	glm::vec3 OneJomScaleFactor(pArt->vOneJomScale[0], pArt->vOneJomScale[1], pArt->vOneJomScale[2]); // 원하는 크기
+	pArt->transformMatrix = glm::scale(pArt->transformMatrix, OneJomScaleFactor);
 
 // 공전
 	// revolution X

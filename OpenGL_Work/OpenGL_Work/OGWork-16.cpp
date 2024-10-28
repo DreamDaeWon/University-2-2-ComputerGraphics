@@ -7,7 +7,7 @@ uniform_int_distribution<int> RandomIndexTri(0, 5);
 
 
 // 카메라 생성
-CDW_Camera DW_Camera{ glm::vec3(0.f,0.f,0.f),glm::vec3(0.f,0.f,-1.f) };
+CDW_Camera DW_Camera{ glm::vec3(0.f,0.f,0.f),glm::vec3(0.f,0.f,1.f) };
 
 
 // 셰이더 관련 변수
@@ -169,6 +169,11 @@ bool bMove_Change_Revolution{};
 bool bMove_Change_Up_Down{};
 bool bMove_Rotate{};
 
+
+bool bOneChange{};
+bool bTwoChange{};
+
+
 GLint iMove_Sprial{}; // 얼마나 움직였는지?
 GLvoid MoveSpiral();
 
@@ -293,7 +298,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); // 디스플레이 모드 설정
 	glutInitWindowPosition(100, 100); // 윈도우의 위치 지정
 	glutInitWindowSize(WinsizeX, WinsizeY); // 윈도우의 크기 지정
-	g_WinID = glutCreateWindow("OGWork-14"); // 윈도우 생성(윈도우 이름)
+	g_WinID = glutCreateWindow("OGWork-16"); // 윈도우 생성(윈도우 이름)
 
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
@@ -315,6 +320,8 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	Create_Line_Pos(&LineArt, 0.f, 25.f, 0.f, 0.f, -25.f, 0.f);
 	InitBuffers(&LineArt);
 	Create_Line_Pos(&LineArt, 25.f, 0.f, 0.f, -25.f, 0.f, 0.f);
+	InitBuffers(&LineArt);
+	Create_Line_Pos(&LineArt, 0.f, 0.f, 25.f, 0.f, 0.f, -25.f);
 	InitBuffers(&LineArt);
 
 	Create_Sphere_Model(&AllArt, 0.f, 0.f, -15.f, 5, 20, 20);
@@ -446,28 +453,132 @@ GLvoid SpecialKeyInput(int key, int x, int y)
 	switch (key)
 	{
 	case GLUT_KEY_RIGHT:
-		for (auto& iter : AllArt)
+
+		if (bOneChange)
 		{
-			iter->vPos[0] += 1.f;
+			AllArt.front()->vPos[0] += 1.f;
+		}
+		if (bTwoChange)
+		{
+			AllArt.back()->vPos[0] += 1.f;
 		}
 		break;
 	case GLUT_KEY_LEFT:
-		for (auto& iter : AllArt)
+
+		if (bOneChange)
 		{
-			iter->vPos[0] -= 1.f;
+			AllArt.front()->vPos[0] -= 1.f;
 		}
+		if (bTwoChange)
+		{
+			AllArt.back()->vPos[0] -= 1.f;
+		}
+
+
 		break;
 
 	case GLUT_KEY_UP:
-		for (auto& iter : AllArt)
+		if (bOneChange)
 		{
-			iter->vPos[1] += 1.f;
+			AllArt.front()->vPos[1] += 1.f;
+		}
+		if (bTwoChange)
+		{
+			AllArt.back()->vPos[1] += 1.f;
 		}
 		break;
+
 	case GLUT_KEY_DOWN:
-		for (auto& iter : AllArt)
+		if (bOneChange)
 		{
-			iter->vPos[1] -= 1.f;
+			AllArt.front()->vPos[1] -= 1.f;
+		}
+		if (bTwoChange)
+		{
+			AllArt.back()->vPos[1] -= 1.f;
+		}
+		break;
+
+	case GLUT_KEY_F11:
+		if (bOneChange)
+		{
+			AllArt.front()->vPos[2] += 1.f;
+		}
+		if (bTwoChange)
+		{
+			AllArt.back()->vPos[2] += 1.f;
+		}
+		break;
+
+	case GLUT_KEY_F10:
+		if (bOneChange)
+		{
+			AllArt.front()->vPos[2] -= 1.f;
+		}
+		if (bTwoChange)
+		{
+			AllArt.back()->vPos[2] -= 1.f;
+		}
+		break;
+
+	case GLUT_KEY_F2:
+		if (bOneChange)
+		{
+			AllArt.front()->vScale[0] += 1.f;
+			AllArt.front()->vScale[1] += 1.f;
+			AllArt.front()->vScale[2] += 1.f;
+		}
+		if (bTwoChange)
+		{
+			AllArt.back()->vScale[0] += 1.f;
+			AllArt.back()->vScale[1] += 1.f;
+			AllArt.back()->vScale[2] += 1.f;
+		}
+		break;
+
+	case GLUT_KEY_F3:
+		if (bOneChange)
+		{
+			AllArt.front()->vScale[0] -= 1.f;
+			AllArt.front()->vScale[1] -= 1.f;
+			AllArt.front()->vScale[2] -= 1.f;
+		}
+		if (bTwoChange)
+		{
+			AllArt.back()->vScale[0] -= 1.f;
+			AllArt.back()->vScale[1] -= 1.f;
+			AllArt.back()->vScale[2] -= 1.f;
+		}
+		break;
+
+
+	case GLUT_KEY_F4:
+		if (bOneChange)
+		{
+			AllArt.front()->vOneJomScale[0] -= 1.f;
+			AllArt.front()->vOneJomScale[1] -= 1.f;
+			AllArt.front()->vOneJomScale[2] -= 1.f;
+		}
+		if (bTwoChange)
+		{
+			AllArt.back()->vOneJomScale[0] -= 1.f;
+			AllArt.back()->vOneJomScale[1] -= 1.f;
+			AllArt.back()->vOneJomScale[2] -= 1.f;
+		}
+		break;
+
+	case GLUT_KEY_F5:
+		if (bOneChange)
+		{
+			AllArt.front()->vOneJomScale[0] += 1.f;
+			AllArt.front()->vOneJomScale[1] += 1.f;
+			AllArt.front()->vOneJomScale[2] += 1.f;
+		}
+		if (bTwoChange)
+		{
+			AllArt.back()->vOneJomScale[0] += 1.f;
+			AllArt.back()->vOneJomScale[1] += 1.f;
+			AllArt.back()->vOneJomScale[2] += 1.f;
 		}
 		break;
 
@@ -538,6 +649,30 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 		break;
 
 
+	case '7':
+		//ChangeMode();
+
+		bOneChange = true;
+		bTwoChange = false;
+		break;
+
+	case '8':
+		//ChangeMode();
+		bOneChange = false;
+		bTwoChange = true;
+
+		break;
+
+	case '9':
+		//ChangeMode();
+		bOneChange = true;
+		bTwoChange = true;
+
+		break;
+
+
+
+
 
 	case 'h':
 		if (!bCallMode)
@@ -586,8 +721,40 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 		RavolutionY = -1.f;
 		break;
 
+	case 'j':
+		//RavolutionY = -1.f;
+
+		DW_Camera.RotateY_Camera(1.f);
+		break;
+
+	case 'J':
+		//RavolutionY = -1.f;
+
+		DW_Camera.RotateY_Camera(-1.f);
+		break;
 
 
+	case 'k':
+		//RavolutionY = -1.f;
+
+		DW_Camera.RotateX_Camera(1.f);
+		break;
+	case 'K':
+		//RavolutionY = -1.f;
+
+		DW_Camera.RotateX_Camera(-1.f);
+		break;
+
+	case 'l':
+		//RavolutionY = -1.f;
+
+		DW_Camera.RotateZ_Camera(1.f);
+		break;
+	case 'L':
+		//RavolutionY = -1.f;
+
+		DW_Camera.RotateZ_Camera(-1.f);
+		break;
 
 
 	case 's':
@@ -906,7 +1073,7 @@ GLvoid Move_Rotate()
 
 GLvoid ChangeMode()
 {
-	if (LineArt.size() == 3)
+	if (LineArt.size() == 4)
 	{
 		DeleteArt(LineArt, LineArt.back());
 	}
