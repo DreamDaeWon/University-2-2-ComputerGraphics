@@ -202,6 +202,10 @@ GLvoid ChangeMode();
 
 // 17번
 
+bool bOrtho{ false };
+
+
+
 bool bRotate_Up = false;
 
 bool bFront_open = false;
@@ -229,16 +233,20 @@ GLvoid Change_Draw_Timing_Cube();
 
 
 bool bOpen_All_Triangle{};
+bool bClose_All_Triangle{};
 
 
 
-bool bOpen_One_Triangle{true};
+bool bOpen_One_Triangle{false};
 
-bool bOpen_Two_Triangle{true};
+bool bOpen_Two_Triangle{false};
 
-bool bOpen_Three_Triangle{};
+bool bOpen_Three_Triangle{false};
 
-bool bOpen_Four_Triangle{};
+bool bOpen_Four_Triangle{false};
+
+
+
 
 GLvoid Change_Square_Pyramid();
 
@@ -291,6 +299,7 @@ GLvoid Timer(int Value)
 
 	//17
 	Change_Cube();
+	Change_Square_Pyramid();
 
 
 	RotateAll();
@@ -433,9 +442,16 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 			// 뷰
 			DW_Camera.Make_view_Matrix();
 			glUniformMatrix4fv(Shader_ViewTransform, 1, GL_FALSE, glm::value_ptr(DW_Camera.Get_view_Matrix()));
-
+			glm::mat4 projection;
 			// 투영
-			glm::mat4 projection = glm::perspective(glm::radians(90.f), (float)WinsizeX / WinsizeY, 0.1f, 200.f);
+			if(bOrtho)
+			{
+				projection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, 0.1f, 200.f);
+			}
+			else
+			{
+				projection = glm::perspective(glm::radians(90.f), (float)WinsizeX / WinsizeY, 0.1f, 200.f);
+			}
 
 			glUniformMatrix4fv(Shader_ProjectionTransform, 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -537,7 +553,15 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 		DW_Camera.Move_Right_Camera(0.5f);
 	}
 
+	if (key == 't')
+	{
+		bOrtho = true;
+	}
 
+	if (key == 'T')
+	{
+		bOrtho = false;
+	}
 
 
 	// 17
@@ -592,6 +616,7 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 		// 왼쪽
 		Create_Face_Trangle(&AllArt, 5.f, 5.f, 0.f, 5.f, 5.f, 5.f);
 		InitBuffers(&AllArt);
+
 		AllArt.back()->vRotate[1] = 90.f;
 
 		PyramidRotate[1] = 30.f;
@@ -600,19 +625,91 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 		InitBuffers(&AllArt);
 		AllArt.back()->vRotate[1] = 180.f;
 
-		PyramidRotate[1] = 30.f;
+		PyramidRotate[2] = 30.f;
 
-		// 오른쪽
-		Create_Face_Trangle(&AllArt, 0.f, 5.f, 5.f, 5.f, 5.f, 5.f);
+		//// 오른쪽
+		Create_Face_Trangle(&AllArt, -5.f, 5.f, 0.f, 5.f, 5.f, 5.f);
 		InitBuffers(&AllArt);
+
+		AllArt.back()->vRotate[1] = -90.f;
 
 		PyramidRotate[3] = 30.f;
 
 	}
 
+	if (key == 'y')
+	{
+		bOpen_One_Triangle = true;
+		bOpen_All_Triangle = false;
+		bClose_All_Triangle = false;
+	}
+
+	if (key == 'Y')
+	{
+		bOpen_One_Triangle = false;
+
+		bOpen_All_Triangle = false;
+		bClose_All_Triangle = false;
+	}
+
+	if (key == 'u')
+	{
+		bOpen_Two_Triangle = true;
+
+		bOpen_All_Triangle = false;
+		bClose_All_Triangle = false;
+	}
+
+	if (key == 'U')
+	{
+		bOpen_Two_Triangle = false;
+
+		bOpen_All_Triangle = false;
+		bClose_All_Triangle = false;
+	}
+
 	if (key == 'i')
 	{
-		PyramidRotate[0] += 1.f;
+		bOpen_Three_Triangle = true;
+
+		bOpen_All_Triangle = false;
+		bClose_All_Triangle = false;
+	}
+
+	if (key == 'I')
+	{
+		bOpen_Three_Triangle = false;
+
+		bOpen_All_Triangle = false;
+		bClose_All_Triangle = false;
+	}
+
+	if (key == 'o')
+	{
+		bOpen_Four_Triangle = true;
+
+		bOpen_All_Triangle = false;
+		bClose_All_Triangle = false;
+	}
+
+	if (key == 'O')
+	{
+		bOpen_Four_Triangle = false;
+
+		bOpen_All_Triangle = false;
+		bClose_All_Triangle = false;
+	}
+
+	if (key == 'p')
+	{
+		bOpen_All_Triangle = true;
+		bClose_All_Triangle = false;
+	}
+
+	if (key == 'P')
+	{
+		bOpen_All_Triangle = true;
+		bClose_All_Triangle = true;
 	}
 
 
@@ -1128,7 +1225,7 @@ GLvoid Change_Draw_Timing_Cube()
 	if (AllArt.size() >= 1 && AllArt.size() != 6)
 	{
 
-		if(bOpen_One_Triangle)
+		//if(bOpen_One_Triangle)
 		{
 			// rotate X
 			glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // X축 기준
@@ -1151,7 +1248,7 @@ GLvoid Change_Draw_Timing_Cube()
 			AllArt[1]->transformMatrix = glm::translate(AllArt[1]->transformMatrix, translationVector);
 		}
 
-		if (bOpen_Two_Triangle)
+		//if (bOpen_Two_Triangle)
 		{
 			// rotate X
 			glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // X축 기준
@@ -1160,7 +1257,7 @@ GLvoid Change_Draw_Timing_Cube()
 
 			// translation
 
-			glm::vec3 translationVector(0 /*- AllArt[2]->vPos[0]*/, 0 - AllArt[2]->vPos[2], 0 - AllArt[2]->vPos[2]);
+			glm::vec3 translationVector(0 - AllArt[2]->vPos[0], 0 - AllArt[2]->vPos[1], 0 - AllArt[2]->vPos[2]);
 
 			//glm::vec3 translationVector(0.f, 0.f, -2.5f);
 			AllArt[2]->transformMatrix = glm::translate(AllArt[2]->transformMatrix, translationVector);
@@ -1174,7 +1271,7 @@ GLvoid Change_Draw_Timing_Cube()
 			AllArt[2]->transformMatrix = glm::translate(AllArt[2]->transformMatrix, translationVector);
 		}
 
-		if (bOpen_Three_Triangle)
+		//if (bOpen_Three_Triangle)
 		{
 			// rotate X
 			glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // X축 기준
@@ -1183,7 +1280,7 @@ GLvoid Change_Draw_Timing_Cube()
 
 			// translation
 
-			glm::vec3 translationVector(0 - AllArt[3]->vPos[0], 0 - AllArt[3]->vPos[3], 0 /*- AllArt[3]->vPos[0]*/);
+			glm::vec3 translationVector(0 - AllArt[3]->vPos[0], 0 - AllArt[3]->vPos[1], 0 /*- AllArt[3]->vPos[0]*/);
 
 			//glm::vec3 translationVector(0.f, 0.f, -2.5f);
 			AllArt[3]->transformMatrix = glm::translate(AllArt[3]->transformMatrix, translationVector);
@@ -1197,7 +1294,7 @@ GLvoid Change_Draw_Timing_Cube()
 			AllArt[3]->transformMatrix = glm::translate(AllArt[3]->transformMatrix, translationVector);
 		}
 
-		if (bOpen_Four_Triangle)
+		//if (bOpen_Four_Triangle)
 		{
 			// rotate X
 			glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // X축 기준
@@ -1206,7 +1303,7 @@ GLvoid Change_Draw_Timing_Cube()
 
 			// translation
 
-			glm::vec3 translationVector(0 - AllArt[4]->vPos[0], 0 - AllArt[4]->vPos[4], 0 /*- AllArt[4]->vPos[0]*/);
+			glm::vec3 translationVector(0 - AllArt[4]->vPos[0], 0 - AllArt[4]->vPos[1], 0 /*- AllArt[4]->vPos[0]*/);
 
 			//glm::vec3 translationVector(0.f, 0.f, -2.5f);
 			AllArt[4]->transformMatrix = glm::translate(AllArt[4]->transformMatrix, translationVector);
@@ -1254,5 +1351,92 @@ GLvoid Change_Draw_Timing_Cube()
 
 GLvoid Change_Square_Pyramid()
 {
-	return GLvoid();
+	if (!bOpen_All_Triangle)
+	{
+		if (bOpen_One_Triangle)
+		{
+
+			if (PyramidRotate[0] > -90.f)
+			{
+				PyramidRotate[0] -= 1.f;
+			}
+
+		}
+		else
+		{
+			if (PyramidRotate[0] < 30.f)
+			{
+				PyramidRotate[0] += 1.f;
+			}
+		}
+
+		if (bOpen_Two_Triangle)
+		{
+
+			if (PyramidRotate[1] > -90.f)
+			{
+				PyramidRotate[1] -= 1.f;
+			}
+		}
+		else
+		{
+			if (PyramidRotate[1] < 30.f)
+			{
+				PyramidRotate[1] += 1.f;
+			}
+		}
+
+		if (bOpen_Three_Triangle)
+		{
+
+			if (PyramidRotate[2] > -90.f)
+			{
+				PyramidRotate[2] -= 1.f;
+			}
+		}
+		else
+		{
+			if (PyramidRotate[2] < 30.f)
+			{
+				PyramidRotate[2] += 1.f;
+			}
+		}
+
+		if (bOpen_Four_Triangle)
+		{
+
+			if (PyramidRotate[3] > -90.f)
+			{
+				PyramidRotate[3] -= 1.f;
+			}
+		}
+		else
+		{
+			if (PyramidRotate[3] < 30.f)
+			{
+				PyramidRotate[3] += 1.f;
+			}
+		}
+	}
+
+	if (bOpen_All_Triangle && !bClose_All_Triangle)
+	{
+		for (int i = 0; i < 4; ++i)
+		{
+			if (PyramidRotate[i] > -210.f)
+			{
+				PyramidRotate[i] -= 1.f;
+			}
+		}
+	}
+	else if (bClose_All_Triangle)
+	{
+		for (int i = 0; i < 4; ++i)
+		{
+			if (PyramidRotate[i] < 30.f)
+			{
+				PyramidRotate[i] += 1.f;
+			}
+		}
+	}
 }

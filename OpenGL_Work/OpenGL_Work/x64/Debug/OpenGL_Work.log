@@ -22,18 +22,18 @@ C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics
 C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(902,28): warning C4244: '인수': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(924,25): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\Define_Work_3D.h(925,24): warning C4244: '=': 'GLfloat'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(309,13): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(346,6): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(453,57): warning C4267: '인수': 'size_t'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(457,54): warning C4267: '인수': 'size_t'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(511,2): warning C4060: switch문에 'case' 또는 'default' 레이블이 없습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(717,27): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(718,27): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(749,44): warning C4244: '인수': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(749,41): warning C4244: '인수': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(826,62): warning C4267: '인수': 'size_t'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(826,62): warning C4267:         with
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(826,62): warning C4267:         [
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(826,62): warning C4267:             _Ty=int
-C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(826,62): warning C4267:         ]
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(318,13): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(355,6): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(469,57): warning C4267: '인수': 'size_t'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(473,54): warning C4267: '인수': 'size_t'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(527,2): warning C4060: switch문에 'case' 또는 'default' 레이블이 없습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(814,27): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(815,27): warning C4244: '인수': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(846,44): warning C4244: '인수': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(846,41): warning C4244: '인수': 'int'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(923,62): warning C4267: '인수': 'size_t'에서 '_Ty'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(923,62): warning C4267:         with
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(923,62): warning C4267:         [
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(923,62): warning C4267:             _Ty=int
+C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\OpenGL_Work\OGWork-17.cpp(923,62): warning C4267:         ]
   OpenGL_Work.vcxproj -> C:\Users\june2\Documents\GitHub\ComputerGraphics\University-2-2-ComputerGraphics\OpenGL_Work\x64\Debug\OpenGL_Work.exe
