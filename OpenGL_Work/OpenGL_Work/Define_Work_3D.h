@@ -181,6 +181,9 @@ GLvoid Create_Line_Pos(vector<DWArt*>* pVec, GLfloat x1, GLfloat y1, GLfloat z1,
 GLvoid Create_Face(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 면 추가
 
 
+GLvoid Create_Face_Trangle(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 면 추가
+
+
 GLvoid Create_Cube(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 큐브 추가
 
 GLvoid Create_Circle_Spiral(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _final_Radius,GLfloat _UPRadius); // 원하는 벡터에 원하는 큐브 추가
@@ -193,7 +196,7 @@ GLvoid Create_Sylinder_Model(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLf
 
 
 
-
+GLvoid Rotate_Art(DWArt* pArt, GLfloat fAngle);
 
 
 
@@ -570,6 +573,52 @@ inline GLvoid Create_Face(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloa
 
 }
 
+inline GLvoid Create_Face_Trangle(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz)
+{
+	DWArt* Art = new DWArt{};
+
+	// 중점
+	Art->vPos[0] = _CX;
+	Art->vPos[1] = _CY;
+	Art->vPos[2] = _CZ;
+
+	// 색상
+	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+	
+	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+
+	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+
+
+	// 반지름
+	Art->rx = _rx;
+	Art->ry = _ry;
+
+
+	// 형식
+	Art->eType = DWART_FACE;
+
+	// 0 1
+	Art->Vertex.push_back(glm::vec3((0 - _rx), (0 - _ry), (0)));
+
+
+	Art->Vertex.push_back(glm::vec3((0), (0 + _ry), (0)));
+
+	// 2 3
+	Art->Vertex.push_back(glm::vec3((0 + _rx), (0 - _ry), (0)));
+
+
+
+	// 인덱스
+
+	// 윗면
+	Art->indexVerTex.push_back(0);
+	Art->indexVerTex.push_back(2);
+	Art->indexVerTex.push_back(1);
+
+	pVec->push_back(Art);
+}
+
 
 
 
@@ -878,6 +927,11 @@ inline GLvoid Create_Sylinder_Model(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _
 	gluCylinder(Art->Model, Art->Sylinder_rx_Top, Art->Sylinder_rx_Bottom, Art->Sylinder_ry, Art->Sylinder_Slices, Art->Sylinder_Stacks);
 
 	pVec->push_back(Art);
+}
+
+inline GLvoid Rotate_Art(DWArt* pArt, GLfloat fAngle)
+{
+	
 }
 
 inline GLvoid Set_Draw_Model_Style(DWArt* pArt, int _iStyle)

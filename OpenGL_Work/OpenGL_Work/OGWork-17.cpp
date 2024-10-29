@@ -200,6 +200,51 @@ GLvoid Move_Rotate();
 
 GLvoid ChangeMode();
 
+// 17번
+
+bool bRotate_Up = false;
+
+bool bFront_open = false;
+
+
+bool bUp_LR = false;
+
+bool bBack_Scale = false;
+
+
+GLfloat fBack_Scale{1.f};
+
+GLfloat fUp{};
+
+GLfloat fFront_Angle = 0.f;
+
+GLvoid Change_Cube();
+
+GLvoid Change_Draw_Timing_Cube();
+
+
+
+
+
+
+
+bool bOpen_All_Triangle{};
+
+
+
+bool bOpen_One_Triangle{true};
+
+bool bOpen_Two_Triangle{true};
+
+bool bOpen_Three_Triangle{};
+
+bool bOpen_Four_Triangle{};
+
+GLvoid Change_Square_Pyramid();
+
+
+GLfloat PyramidRotate[4]{};
+
 
 //////////////////////////// 여기까지 문제관련
 
@@ -243,6 +288,11 @@ GLvoid Timer(int Value)
 	for (auto& iter : AllArt)
 		UpdateBuffer(iter);
 	glutPostRedisplay();
+
+	//17
+	Change_Cube();
+
+
 	RotateAll();
 	RavolutionAll();
 	MoveSpiral();
@@ -332,34 +382,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 
 	//Create_Cube(&AllArt, 0.f, 0.f, 0.f, 5.f, 5.f, 5.f);
 
-	// 윗
-	Create_Face(&AllArt, 0.f, 5.f, 0.f, 5.f, 5.f, 5.f);
-	InitBuffers(&AllArt);
-
-	// 왼
-	Create_Face(&AllArt, -5.f, 0.f, 0.f, 5.f, 5.f, 5.f);
-	InitBuffers(&AllArt);
-	AllArt.back()->vRotate[2] = 90.f;
-
-	// 아래
-	Create_Face(&AllArt, 0.f, -5.f, 0.f, 5.f, 5.f, 5.f);
-	InitBuffers(&AllArt);
-	AllArt.back()->vRotate[2] = 180.f;
-
-	// 앞
-	Create_Face(&AllArt, 0.f, 0.f, -5.f, 5.f, 5.f, 5.f);
-	InitBuffers(&AllArt);
-	AllArt.back()->vRotate[0] = -90.f;
-
-	// 오른쪽
-	Create_Face(&AllArt, 5.f, 0.f, 0.f, 5.f, 5.f, 5.f);
-	InitBuffers(&AllArt);
-	AllArt.back()->vRotate[2] = -90.f;
-
-	////뒤
-	Create_Face(&AllArt, 0.f, 0.f, 5.f, 5.f, 5.f, 5.f);
-	InitBuffers(&AllArt);
-	AllArt.back()->vRotate[0] = 90.f;
+	
 
 
 
@@ -402,6 +425,8 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 		{
 			MakeWorldMartrix(iter);
 
+			Change_Draw_Timing_Cube();
+			
 			// 월드
 			glUniformMatrix4fv(Shader_Matrix, 1, GL_FALSE, glm::value_ptr(iter->transformMatrix));
 
@@ -490,6 +515,8 @@ GLvoid SpecialKeyInput(int key, int x, int y)
 
 GLvoid KeyInput(unsigned char key, int x, int y)
 {
+	
+
 	if (key == 'w')
 	{
 		DW_Camera.Move_Front_Camera(0.5f);
@@ -515,6 +542,80 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 	// 17
 
+	if (key == 'g')
+	{
+		Delete_ALL_Art(AllArt);
+
+		// 윗
+		Create_Face(&AllArt, 0.f, 5.f, 0.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+
+		// 왼
+		Create_Face(&AllArt, -5.f, 0.f, 0.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+		AllArt.back()->vRotate[2] = 90.f;
+
+		// 아래
+		Create_Face(&AllArt, 0.f, -5.f, 0.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+		AllArt.back()->vRotate[2] = 180.f;
+
+		// 앞
+		Create_Face(&AllArt, 0.f, 0.f, -5.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+		AllArt.back()->vRotate[0] = -90.f;
+
+		// 오른쪽
+		Create_Face(&AllArt, 5.f, 0.f, 0.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+		AllArt.back()->vRotate[2] = -90.f;
+
+		////뒤
+		Create_Face(&AllArt, 0.f, 0.f, 5.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+		AllArt.back()->vRotate[0] = 90.f;
+	}
+	if (key == 'G')
+	{
+		Delete_ALL_Art(AllArt);
+
+		// 바닥
+		Create_Face(&AllArt, 0.f, 0.f, 0.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+
+		// 앞쪽
+		Create_Face_Trangle(&AllArt, 0.f, 5.f, 5.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+
+		PyramidRotate[0] = 30.f;
+
+		// 왼쪽
+		Create_Face_Trangle(&AllArt, 5.f, 5.f, 0.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+		AllArt.back()->vRotate[1] = 90.f;
+
+		PyramidRotate[1] = 30.f;
+		// 뒷쪽
+		Create_Face_Trangle(&AllArt, 0.f, 5.f, -5.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+		AllArt.back()->vRotate[1] = 180.f;
+
+		PyramidRotate[1] = 30.f;
+
+		// 오른쪽
+		Create_Face_Trangle(&AllArt, 0.f, 5.f, 5.f, 5.f, 5.f, 5.f);
+		InitBuffers(&AllArt);
+
+		PyramidRotate[3] = 30.f;
+
+	}
+
+	if (key == 'i')
+	{
+		PyramidRotate[0] += 1.f;
+	}
+
+
 	if (key == 'z')
 	{
 		glEnable(GL_CULL_FACE);
@@ -535,15 +636,50 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 		RavolutionY = 0.f;
 	}
 
+
 	if (key == 'c')
 	{
-		if (AllArt.front()->eType != DWART_CUBE)
-		{
-			
-		}
+		bRotate_Up = true;
 	}
 
+	if (key == 'C')
+	{
+		bRotate_Up = false;
+	}
 
+	if (key == 'v')
+	{
+		bFront_open = true;
+	
+	}
+
+	if (key == 'V')
+	{
+		bFront_open = false;
+	}
+
+	if (key == 'b')
+	{
+		bUp_LR = true;
+
+	}
+
+	if (key == 'B')
+	{
+		bUp_LR = false;
+	}
+	
+
+	if (key == 'n')
+	{
+		bBack_Scale = true;
+
+	}
+
+	if (key == 'N')
+	{
+		bBack_Scale = false;
+	}
 
 	/*switch (key)
 	{
@@ -672,8 +808,8 @@ GLvoid RotateAll()
 
 	for (auto& iter : AllArt)
 	{
-		iter->vRotate[0] += RotateX;
-		iter->vRotate[1] += RotateY;
+		iter->vRotate[0] += RotateX * 0.01f;
+		iter->vRotate[1] += RotateY * 0.01f;
 	}
 }
 
@@ -731,8 +867,8 @@ GLvoid RavolutionAll()
 {
 	for (auto& iter : AllArt)
 	{
-		iter->vRevolution[0] += RavolutionX;
-		iter->vRevolution[1] += RavolutionY;
+		iter->vRevolution[0] += RavolutionX * 0.1f;
+		iter->vRevolution[1] += RavolutionY * 0.1f;
 	}
 }
 
@@ -909,4 +1045,214 @@ GLvoid ChangeMode()
 	AllArt.back()->vPos[1] = 0.f;
 	AllArt.back()->vPos[2] = -20.f;
 
+}
+
+GLvoid Change_Cube()
+{
+	if (AllArt.size() != 6)
+	{
+		return;
+	}
+
+	if (bRotate_Up)
+	{
+		AllArt[0]->vRotate[0] += 1;
+
+	}
+
+	if(bFront_open)
+	{
+		if (fFront_Angle < 90)
+		{
+			fFront_Angle += 1.f;
+		}
+	}
+	else
+	{
+		if (fFront_Angle > 0)
+		{
+			fFront_Angle -= 1.f;
+		}
+	}
+
+	if (bUp_LR)
+	{
+		if (fUp < 10.f)
+		{
+			fUp += 0.1f;
+		}
+
+		AllArt[1]->vPos[1] = fUp;
+		AllArt[4]->vPos[1] = fUp;
+		
+	}
+	else
+	{
+		if (fUp > 0.0f)
+		{
+			fUp -= 0.1f;
+		}
+		AllArt[1]->vPos[1] = fUp;
+		AllArt[4]->vPos[1] = fUp;
+	}
+
+
+	if (!bBack_Scale)
+	{
+		if (fBack_Scale < 1.f)
+		{
+			fBack_Scale += 0.05f;
+		}
+
+		AllArt[5]->vScale[0] = fBack_Scale;
+		AllArt[5]->vScale[1] = fBack_Scale;
+		AllArt[5]->vScale[2] = fBack_Scale;
+
+	}
+	else
+	{
+		if (fBack_Scale > 0.05f)
+		{
+			fBack_Scale -= 0.05f;
+		}
+
+		AllArt[5]->vScale[0] = fBack_Scale;
+		AllArt[5]->vScale[1] = fBack_Scale;
+		AllArt[5]->vScale[2] = fBack_Scale;
+	}
+
+}
+
+GLvoid Change_Draw_Timing_Cube()
+{
+	if (AllArt.size() >= 1 && AllArt.size() != 6)
+	{
+
+		if(bOpen_One_Triangle)
+		{
+			// rotate X
+			glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // X축 기준
+
+			glm::mat4 MatMove = glm::mat4(1.f);
+
+			// translation
+
+			glm::vec3 translationVector(0 - AllArt[1]->vPos[0], 0  - AllArt[1]->vPos[1] , 0 /* - AllArt[1]->vPos[2]*/);
+
+			//glm::vec3 translationVector(0.f, 0.f, -2.5f);
+			AllArt[1]->transformMatrix = glm::translate(AllArt[1]->transformMatrix, translationVector);
+
+			//rotationAxisX = MatMove * glm::vec4(rotationAxisX, 1.f);
+
+			AllArt[1]->transformMatrix = glm::rotate(AllArt[1]->transformMatrix, glm::radians(-PyramidRotate[0]), rotationAxisX);
+
+
+			translationVector = glm::vec3(-translationVector.x, -(translationVector.y), -translationVector.z);
+			AllArt[1]->transformMatrix = glm::translate(AllArt[1]->transformMatrix, translationVector);
+		}
+
+		if (bOpen_Two_Triangle)
+		{
+			// rotate X
+			glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // X축 기준
+
+			glm::mat4 MatMove = glm::mat4(1.f);
+
+			// translation
+
+			glm::vec3 translationVector(0 /*- AllArt[2]->vPos[0]*/, 0 - AllArt[2]->vPos[2], 0 - AllArt[2]->vPos[2]);
+
+			//glm::vec3 translationVector(0.f, 0.f, -2.5f);
+			AllArt[2]->transformMatrix = glm::translate(AllArt[2]->transformMatrix, translationVector);
+
+			//rotationAxisX = MatMove * glm::vec4(rotationAxisX, 1.f);
+
+			AllArt[2]->transformMatrix = glm::rotate(AllArt[2]->transformMatrix, glm::radians(-PyramidRotate[1]), rotationAxisX);
+
+
+			translationVector = glm::vec3(-translationVector.x, -(translationVector.y), -translationVector.z);
+			AllArt[2]->transformMatrix = glm::translate(AllArt[2]->transformMatrix, translationVector);
+		}
+
+		if (bOpen_Three_Triangle)
+		{
+			// rotate X
+			glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // X축 기준
+
+			glm::mat4 MatMove = glm::mat4(1.f);
+
+			// translation
+
+			glm::vec3 translationVector(0 - AllArt[3]->vPos[0], 0 - AllArt[3]->vPos[3], 0 /*- AllArt[3]->vPos[0]*/);
+
+			//glm::vec3 translationVector(0.f, 0.f, -2.5f);
+			AllArt[3]->transformMatrix = glm::translate(AllArt[3]->transformMatrix, translationVector);
+
+			//rotationAxisX = MatMove * glm::vec4(rotationAxisX, 1.f);
+
+			AllArt[3]->transformMatrix = glm::rotate(AllArt[3]->transformMatrix, glm::radians(-PyramidRotate[2]), rotationAxisX);
+
+
+			translationVector = glm::vec3(-translationVector.x, -(translationVector.y), -translationVector.z);
+			AllArt[3]->transformMatrix = glm::translate(AllArt[3]->transformMatrix, translationVector);
+		}
+
+		if (bOpen_Four_Triangle)
+		{
+			// rotate X
+			glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // X축 기준
+
+			glm::mat4 MatMove = glm::mat4(1.f);
+
+			// translation
+
+			glm::vec3 translationVector(0 - AllArt[4]->vPos[0], 0 - AllArt[4]->vPos[4], 0 /*- AllArt[4]->vPos[0]*/);
+
+			//glm::vec3 translationVector(0.f, 0.f, -2.5f);
+			AllArt[4]->transformMatrix = glm::translate(AllArt[4]->transformMatrix, translationVector);
+
+			//rotationAxisX = MatMove * glm::vec4(rotationAxisX, 1.f);
+
+			AllArt[4]->transformMatrix = glm::rotate(AllArt[4]->transformMatrix, glm::radians(-PyramidRotate[3]), rotationAxisX);
+
+
+			translationVector = glm::vec3(-translationVector.x, -(translationVector.y), -translationVector.z);
+			AllArt[4]->transformMatrix = glm::translate(AllArt[4]->transformMatrix, translationVector);
+		}
+	}
+
+
+
+
+	if (AllArt.size() != 6)
+	{
+		return;
+	}
+
+
+	// rotate X
+	glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // X축 기준
+
+	rotationAxisX = glm::vec3(1.0f, 0.0f, 0.0f);
+
+	glm::mat4 MatMove = glm::mat4(1.f);
+
+	// translation
+	glm::vec3 translationVector(0.f, -0.f, -5.f);
+	AllArt[3]->transformMatrix = glm::translate(AllArt[3]->transformMatrix, translationVector);
+
+	//rotationAxisX = MatMove * glm::vec4(rotationAxisX, 1.f);
+
+	AllArt[3]->transformMatrix = glm::rotate(AllArt[3]->transformMatrix, glm::radians(-fFront_Angle), rotationAxisX);
+
+
+	translationVector = glm::vec3(0.f, 0.f, 5.f);
+	AllArt[3]->transformMatrix = glm::translate(AllArt[3]->transformMatrix, translationVector);
+
+
+}
+
+GLvoid Change_Square_Pyramid()
+{
+	return GLvoid();
 }
