@@ -102,6 +102,11 @@ struct DWArt
 
 	glm::mat4 transformMatrix = glm::mat4(1.0f); // 본인의 매트릭스
 
+
+	glm::mat4* ParentMatrix = nullptr; // 부모의 매트릭스
+
+
+
 	GLfloat vScale[3]{ 1.f,1.f,1.f }; // 객체가 x,y,z 축으로 얼마나 커졌는지?
 
 
@@ -109,9 +114,18 @@ struct DWArt
 
 	GLfloat vRotate[3]{}; // 객체가 x y z 축으로 얼마만큼 회전하였는지?
 
-	GLfloat vPos[3]{}; // 객체가 원점에서 얼마만큼 움직이는지?
+	GLfloat vPos[3]{}; // 객체가 원점에서 얼마만큼 움직이는지? // 로컬 좌표계임
 
-	GLfloat vRevolution[3]{}; // 객체가 x y z 축으로 얼마만큼 공전하였는지?
+	GLfloat vRevolution[4]{}; // 객체가 x y z 축으로 얼마만큼 공전하였는지?
+
+
+	GLfloat vWorldPos[3]{}; // 진짜 월드 좌표계 이걸 건드려야 똑바로 움직임
+
+
+	// 회전
+
+	glm::vec3 revolutionAxis_Want = glm::vec3(1.f);
+
 
 
 	ArtType eType{};
@@ -186,7 +200,10 @@ GLvoid Create_Face_Trangle(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLflo
 
 GLvoid Create_Cube(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 큐브 추가
 
-GLvoid Create_Circle_Spiral(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _final_Radius,GLfloat _UPRadius); // 원하는 벡터에 원하는 큐브 추가
+GLvoid Create_Circle_Spiral(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _final_Radius,GLfloat _UPRadius); // 원하는 벡터에 원하는 원 스파이럴 추가
+
+
+GLvoid Create_Circle_Line(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _Radius); // 원하는 벡터에 원하는 원 추가
 
 GLvoid Create_Tetrahedron(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 사면체 출력
 
@@ -799,6 +816,52 @@ inline GLvoid Create_Circle_Spiral(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _C
 	pVec->push_back(Art);
 }
 
+inline GLvoid Create_Circle_Line(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _Radius)
+{
+	DWArt* Art = new DWArt{};
+
+	// 중점
+	Art->vPos[0] = _CX;
+	Art->vPos[1] = _CY;
+	Art->vPos[2] = _CY;
+
+	Art->CenterX = _CX;
+	Art->CenterY = _CY;
+
+	int iIndex{};
+
+	Art->Spiral_radius = _Radius;
+
+	while (Art->Spiral_Now_Angle <= 360.f)
+	{
+		Art->CenterX = sinf(Art->Spiral_Now_Angle * (M_PI / 180.0f)) * Art->Spiral_radius;
+		Art->CenterZ = cosf(Art->Spiral_Now_Angle * (M_PI / 180.0f)) * Art->Spiral_radius;
+
+		Art->CenterX += Art->vPos[0];
+		Art->CenterZ += Art->vPos[2] + Art->Spiral_Now_Center_X;
+
+		Art->Spiral_Now_Angle += 1.f;
+
+
+		Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+		Art->Vertex.push_back(glm::vec3((Art->CenterX), (0.f), (Art->CenterZ)));
+		Art->indexVerTex.push_back(iIndex);
+		++iIndex;
+	}
+
+
+	// 반지름
+	//Art->rx = _rx;
+	//Art->ry = _ry;
+
+
+	// 형식
+	Art->eType = DWART_LINE;
+
+
+	pVec->push_back(Art);
+}
+
 inline GLvoid Create_Tetrahedron(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz)
 {
 	DWArt* Art = new DWArt{};
@@ -889,6 +952,8 @@ inline GLvoid Create_Sphere_Model(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY
 	Art->eType = DWART_MODEL_SPHERE;
 
 	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+	Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
 
 	Art->vPos[0] = _CX;
 	Art->vPos[1] = _CY;
@@ -951,6 +1016,11 @@ GLvoid MakeWorldMartrix(DWArt* pArt)
 	pArt->transformMatrix = glm::mat4(1.0f);
 
 
+	if(pArt->ParentMatrix != nullptr)
+	// 부모
+	pArt->transformMatrix = *pArt->ParentMatrix * pArt->transformMatrix;
+
+
 	// 신축 (커지면 원점에서도 같이 멀어지기)
 // scale
 	glm::vec3 OneJomScaleFactor(pArt->vOneJomScale[0], pArt->vOneJomScale[1], pArt->vOneJomScale[2]); // 원하는 크기
@@ -971,6 +1041,12 @@ GLvoid MakeWorldMartrix(DWArt* pArt)
 	float revolution_angleZ = glm::radians(pArt->vRevolution[2]); // 45도 회전 (라디안 단위)
 	glm::vec3 revolutionAxisZ(0.0f, 0.0f, 1.0f); // Z축 기준
 	pArt->transformMatrix = glm::rotate(pArt->transformMatrix, revolution_angleZ, revolutionAxisZ);
+
+	// revolution Want 원하는 축으로 회전
+	float revolution_angle_Want = glm::radians(pArt->vRevolution[3]); // 45도 회전 (라디안 단위)
+	//glm::vec3 revolutionAxis_Want(0.0f, 0.0f, 1.0f); // Z축 기준
+	pArt->transformMatrix = glm::rotate(pArt->transformMatrix, revolution_angle_Want, pArt->revolutionAxis_Want);
+
 
 // 이동
 	// translation
@@ -1001,7 +1077,7 @@ GLvoid MakeWorldMartrix(DWArt* pArt)
 
 
 
-// 부모
+
 
 
 

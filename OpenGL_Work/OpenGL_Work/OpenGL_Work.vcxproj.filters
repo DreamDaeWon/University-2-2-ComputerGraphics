@@ -55,6 +55,9 @@
     <Filter Include="소스 파일\OGWork-17">
       <UniqueIdentifier>{021e2d29-05c5-4a46-ab9a-4598cee4095e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\OGWork-18">
+      <UniqueIdentifier>{f9a61d86-76c6-42e9-af05-426624ae1cfd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -117,6 +120,9 @@
     <ClCompile Include="DW_Camera2.cpp">
       <Filter>헤더 파일\3D</Filter>
     </ClCompile>
+    <ClCompile Include="OGWork-18.cpp">
+      <Filter>소스 파일\OGWork-18</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -148,14 +154,14 @@
     <None Include="vertex_shader.glsl">
       <Filter>소스 파일\2D\OSWork-7</Filter>
     </None>
-    <None Include="fragmemt_shader.glsl">
-      <Filter>소스 파일\2D\OSWork-7</Filter>
-    </None>
     <None Include="Vertex_Shader_Rotate.glsl">
       <Filter>소스 파일\2D\OSWork-9</Filter>
     </None>
     <None Include="Vertex_Shader_Matrix.glsl">
       <Filter>소스 파일\OGWork-13</Filter>
+    </None>
+    <None Include="fragmemt_shader.glsl">
+      <Filter>헤더 파일\3D</Filter>
     </None>
   </ItemGroup>
 </Project>

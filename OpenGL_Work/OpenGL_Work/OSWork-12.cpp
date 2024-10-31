@@ -161,12 +161,12 @@ GLvoid SetMode(DrawType Type)
 
 vector<DWArt*> AllArt{};
 
-vector<DWArt*> LeftTop{};
-vector<DWArt*> RightTop{};
-vector<DWArt*> LeftBottom{};
+vector<DWArt*> AllArtTwo{};
+vector<DWArt*> AllArtThree{};
+vector<DWArt*> AllArtFour{};
 vector<DWArt*> RightBottom{};
 
-vector<DWArt*>* AllVec[5]{ &AllArt ,&LeftTop ,&RightTop ,&LeftBottom ,&RightBottom };
+vector<DWArt*>* AllVec[5]{ &AllArt ,&AllArtTwo ,&AllArtThree ,&AllArtFour ,&RightBottom };
 
 float fSize[4][4]{};
 
@@ -220,19 +220,19 @@ void UpdateBuffers()
 		UpdateBuffer(AllArt[i]);
 	}
 
-	for (int i = 0; i < LeftTop.size(); ++i)
+	for (int i = 0; i < AllArtTwo.size(); ++i)
 	{
-		UpdateBuffer(LeftTop[i]);
+		UpdateBuffer(AllArtTwo[i]);
 	}
 
-	for (int i = 0; i < RightTop.size(); ++i)
+	for (int i = 0; i < AllArtThree.size(); ++i)
 	{
-		UpdateBuffer(RightTop[i]);
+		UpdateBuffer(AllArtThree[i]);
 	}
 
-	for (int i = 0; i < LeftBottom.size(); ++i)
+	for (int i = 0; i < AllArtFour.size(); ++i)
 	{
-		UpdateBuffer(LeftBottom[i]);
+		UpdateBuffer(AllArtFour[i]);
 	}
 
 	for (int i = 0; i < RightBottom.size(); ++i)
@@ -264,10 +264,10 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 
 	make_shaderProgram();
 
-	Create_Line_Pos(&RightTop, WinsizeX / 2.f, 0.f, WinsizeX / 2.f, WinsizeY);
-	InitBuffers(&RightTop);
-	Create_Line_Pos(&RightTop, 0.f, WinsizeY / 2.f, WinsizeX, WinsizeY / 2.f);
-	InitBuffers(&RightTop);
+	Create_Line_Pos(&AllArtThree, WinsizeX / 2.f, 0.f, WinsizeX / 2.f, WinsizeY);
+	InitBuffers(&AllArtThree);
+	Create_Line_Pos(&AllArtThree, 0.f, WinsizeY / 2.f, WinsizeX, WinsizeY / 2.f);
+	InitBuffers(&AllArtThree);
 
 
 	//

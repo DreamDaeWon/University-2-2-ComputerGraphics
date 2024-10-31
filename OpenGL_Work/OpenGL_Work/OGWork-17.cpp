@@ -222,7 +222,7 @@ GLfloat fUp{};
 
 GLfloat fFront_Angle = 0.f;
 
-GLvoid Change_Cube();
+GLvoid Change_Move();
 
 GLvoid Change_Draw_Timing_Cube();
 
@@ -262,12 +262,12 @@ vector<DWArt*> AllArt{};
 
 vector<DWArt*> LineArt{};
 
-vector<DWArt*> LeftTop{};
-vector<DWArt*> RightTop{};
-vector<DWArt*> LeftBottom{};
+vector<DWArt*> AllArtTwo{};
+vector<DWArt*> AllArtThree{};
+vector<DWArt*> AllArtFour{};
 vector<DWArt*> RightBottom{};
 
-vector<DWArt*>* AllVec[6]{ &AllArt ,&LineArt,&LeftTop ,&RightTop ,&LeftBottom ,&RightBottom };
+vector<DWArt*>* AllVec[6]{ &AllArt ,&LineArt,&AllArtTwo ,&AllArtThree ,&AllArtFour ,&RightBottom };
 
 float fSize[4][4]{};
 
@@ -298,7 +298,7 @@ GLvoid Timer(int Value)
 	glutPostRedisplay();
 
 	//17
-	Change_Cube();
+	Change_Move();
 	Change_Square_Pyramid();
 
 
@@ -330,19 +330,19 @@ void UpdateBuffers()
 		UpdateBuffer(AllArt[i]);
 	}
 
-	for (int i = 0; i < LeftTop.size(); ++i)
+	for (int i = 0; i < AllArtTwo.size(); ++i)
 	{
-		UpdateBuffer(LeftTop[i]);
+		UpdateBuffer(AllArtTwo[i]);
 	}
 
-	for (int i = 0; i < RightTop.size(); ++i)
+	for (int i = 0; i < AllArtThree.size(); ++i)
 	{
-		UpdateBuffer(RightTop[i]);
+		UpdateBuffer(AllArtThree[i]);
 	}
 
-	for (int i = 0; i < LeftBottom.size(); ++i)
+	for (int i = 0; i < AllArtFour.size(); ++i)
 	{
-		UpdateBuffer(LeftBottom[i]);
+		UpdateBuffer(AllArtFour[i]);
 	}
 
 	for (int i = 0; i < RightBottom.size(); ++i)
@@ -359,7 +359,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); // 디스플레이 모드 설정
 	glutInitWindowPosition(100, 100); // 윈도우의 위치 지정
 	glutInitWindowSize(WinsizeX, WinsizeY); // 윈도우의 크기 지정
-	g_WinID = glutCreateWindow("OGWork-16"); // 윈도우 생성(윈도우 이름)
+	g_WinID = glutCreateWindow("OGWork-17"); // 윈도우 생성(윈도우 이름)
 
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
@@ -1144,7 +1144,7 @@ GLvoid ChangeMode()
 
 }
 
-GLvoid Change_Cube()
+GLvoid Change_Move()
 {
 	if (AllArt.size() != 6)
 	{

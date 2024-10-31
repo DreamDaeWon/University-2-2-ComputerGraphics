@@ -162,12 +162,12 @@ vector<DWArt*> AllArt{};
 
 vector<DWArt*> LineArt{};
 
-vector<DWArt*> LeftTop{};
-vector<DWArt*> RightTop{};
-vector<DWArt*> LeftBottom{};
+vector<DWArt*> AllArtTwo{};
+vector<DWArt*> AllArtThree{};
+vector<DWArt*> AllArtFour{};
 vector<DWArt*> RightBottom{};
 
-vector<DWArt*>* AllVec[6]{ &AllArt ,&LineArt,&LeftTop ,&RightTop ,&LeftBottom ,&RightBottom };
+vector<DWArt*>* AllVec[6]{ &AllArt ,&LineArt,&AllArtTwo ,&AllArtThree ,&AllArtFour ,&RightBottom };
 
 float fSize[4][4]{};
 
@@ -218,19 +218,19 @@ void UpdateBuffers()
 		UpdateBuffer(AllArt[i]);
 	}
 
-	for (int i = 0; i < LeftTop.size(); ++i)
+	for (int i = 0; i < AllArtTwo.size(); ++i)
 	{
-		UpdateBuffer(LeftTop[i]);
+		UpdateBuffer(AllArtTwo[i]);
 	}
 
-	for (int i = 0; i < RightTop.size(); ++i)
+	for (int i = 0; i < AllArtThree.size(); ++i)
 	{
-		UpdateBuffer(RightTop[i]);
+		UpdateBuffer(AllArtThree[i]);
 	}
 
-	for (int i = 0; i < LeftBottom.size(); ++i)
+	for (int i = 0; i < AllArtFour.size(); ++i)
 	{
-		UpdateBuffer(LeftBottom[i]);
+		UpdateBuffer(AllArtFour[i]);
 	}
 
 	for (int i = 0; i < RightBottom.size(); ++i)

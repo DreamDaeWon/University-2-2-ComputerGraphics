@@ -121,12 +121,12 @@ GLvoid SetMode(DrawType Type)
 
 vector<DWArt*> AllArt{};
 
-vector<DWArt*> LeftTop{};
-vector<DWArt*> RightTop{};
-vector<DWArt*> LeftBottom{};
+vector<DWArt*> AllArtTwo{};
+vector<DWArt*> AllArtThree{};
+vector<DWArt*> AllArtFour{};
 vector<DWArt*> RightBottom{};
 
-vector<DWArt*>* AllVec[5]{ &AllArt ,&LeftTop ,&RightTop ,&LeftBottom ,&RightBottom };
+vector<DWArt*>* AllVec[5]{ &AllArt ,&AllArtTwo ,&AllArtThree ,&AllArtFour ,&RightBottom };
 
 float fSize[4][4]{};
 
@@ -176,19 +176,19 @@ void UpdateBuffers()
 		UpdateBuffer(AllArt[i]);
 	}
 
-	for (int i = 0; i < LeftTop.size(); ++i)
+	for (int i = 0; i < AllArtTwo.size(); ++i)
 	{
-		UpdateBuffer(LeftTop[i]);
+		UpdateBuffer(AllArtTwo[i]);
 	}
 
-	for (int i = 0; i < RightTop.size(); ++i)
+	for (int i = 0; i < AllArtThree.size(); ++i)
 	{
-		UpdateBuffer(RightTop[i]);
+		UpdateBuffer(AllArtThree[i]);
 	}
 
-	for (int i = 0; i < LeftBottom.size(); ++i)
+	for (int i = 0; i < AllArtFour.size(); ++i)
 	{
-		UpdateBuffer(LeftBottom[i]);
+		UpdateBuffer(AllArtFour[i]);
 	}
 
 	for (int i = 0; i < RightBottom.size(); ++i)
@@ -224,12 +224,12 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	InitBuffers(&AllArt);
 	Create_Line_Pos(&AllArt, 0.f,WinsizeY/2.f, WinsizeX, WinsizeY / 2.f);
 	InitBuffers(&AllArt);
-	Create_Triangle(&RightTop,WinsizeX / 4.f * 3.f, WinsizeY / 4.f, 50.f, 100.f); // 1사분면
-	InitBuffers(&RightTop);
-	Create_Triangle(&LeftTop,WinsizeX/4.f, WinsizeY / 4.f,50.f,100.f); // 2 사분면
-	InitBuffers(&LeftTop);
-	Create_Triangle(&LeftBottom,WinsizeX/4.f, WinsizeY / 4.f*3.f,50.f,100.f); // 3사분면
-	InitBuffers(&LeftBottom);
+	Create_Triangle(&AllArtThree,WinsizeX / 4.f * 3.f, WinsizeY / 4.f, 50.f, 100.f); // 1사분면
+	InitBuffers(&AllArtThree);
+	Create_Triangle(&AllArtTwo,WinsizeX/4.f, WinsizeY / 4.f,50.f,100.f); // 2 사분면
+	InitBuffers(&AllArtTwo);
+	Create_Triangle(&AllArtFour,WinsizeX/4.f, WinsizeY / 4.f*3.f,50.f,100.f); // 3사분면
+	InitBuffers(&AllArtFour);
 	Create_Triangle(&RightBottom,WinsizeX/4.f*3.f, WinsizeY / 4.f*3.f,50.f,100.f); // 4사분면
 	InitBuffers(&RightBottom);
 
@@ -357,18 +357,18 @@ GLvoid MouseInput(int button, int state, int x, int y)
 				switch (iQuadrant)
 				{
 				case 1:
-					Delete_ALL_Art(RightTop);
-					Create_DWArt(&RightTop, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
+					Delete_ALL_Art(AllArtThree);
+					Create_DWArt(&AllArtThree, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
 					break;
 
 				case 2:
-					Delete_ALL_Art(LeftTop);
-					Create_DWArt(&LeftTop, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
+					Delete_ALL_Art(AllArtTwo);
+					Create_DWArt(&AllArtTwo, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
 					break;
 
 				case 3:
-					Delete_ALL_Art(LeftBottom);
-					Create_DWArt(&LeftBottom, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
+					Delete_ALL_Art(AllArtFour);
+					Create_DWArt(&AllArtFour, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
 					break;
 
 				case 4:
@@ -391,19 +391,19 @@ GLvoid MouseInput(int button, int state, int x, int y)
 				case 1:
 
 					
-					Create_DWArt(&RightTop, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
+					Create_DWArt(&AllArtThree, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
 					break;
 
 				case 2:
 
 					
-					Create_DWArt(&LeftTop, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
+					Create_DWArt(&AllArtTwo, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
 					break;
 
 				case 3:
 
 				
-					Create_DWArt(&LeftBottom, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
+					Create_DWArt(&AllArtFour, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
 					break;
 
 				case 4:
