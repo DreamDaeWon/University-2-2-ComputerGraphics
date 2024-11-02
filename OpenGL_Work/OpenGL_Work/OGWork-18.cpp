@@ -1148,14 +1148,14 @@ GLvoid Change_Move()
 
 
 		AllArtTwo[0]->revolutionAxis_Want = glm::vec3(1.f, 1.f, 0.f);
-		AllArtTwo[0]->vRevolution[3] += 0.1f;
+		AllArtTwo[0]->vRevolution[3] += 0.3f;
 
 
 		AllArtTwo[1]->revolutionAxis_Want = glm::vec3(0.f, 1.f, 0.f);
-		AllArtTwo[1]->vRevolution[3] += 0.1f; 
+		AllArtTwo[1]->vRevolution[3] += 0.3f; 
 
 		AllArtTwo[2]->revolutionAxis_Want = glm::vec3(-1.f, 1.f, 0.f);
-		AllArtTwo[2]->vRevolution[3] += 0.1f;
+		AllArtTwo[2]->vRevolution[3] += 0.3f;
 
 
 
@@ -1174,9 +1174,9 @@ GLvoid Change_Move()
 				AllArtThree[i]->vPos[2] = 0.f;
 
 
-				AllArtThree[i]->vRevolution[1] += 0.1f;
-				AllArtThree[i]->vRevolution[1] += 0.1f;
-				AllArtThree[i]->vRevolution[1] += 0.1f;
+				AllArtThree[i]->vRevolution[1] += 0.3f;
+				AllArtThree[i]->vRevolution[1] += 0.3f;
+				AllArtThree[i]->vRevolution[1] += 0.3f;
 
 				AllArtThree[i]->vRevolution[3] = 0.f;
 				AllArtThree[i]->vRevolution[3] = 0.f;
@@ -1205,15 +1205,15 @@ GLvoid Change_Move()
 				AllArtThree[0]->vPos[2] = 0.f;
 
 				AllArtThree[0]->revolutionAxis_Want = glm::vec3(1.f, 1.f, 0.f);
-				AllArtThree[0]->vRevolution[3] += 0.1f;
+				AllArtThree[0]->vRevolution[3] += 0.3f;
 
 
-				AllArtThree[1]->vPos[0] = 10.f;
+				AllArtThree[1]->vPos[0] = 10.f * sqrtf(2.f);
 				AllArtThree[1]->vPos[1] = 0.f;
 				AllArtThree[1]->vPos[2] = 0.f;
 
 				AllArtThree[1]->revolutionAxis_Want = glm::vec3(0.f, 1.f, 0.f);
-				AllArtThree[1]->vRevolution[3] += 0.1f;
+				AllArtThree[1]->vRevolution[3] += 0.3f;
 
 
 				AllArtThree[2]->vPos[0] = 10.f;
@@ -1221,7 +1221,7 @@ GLvoid Change_Move()
 				AllArtThree[2]->vPos[2] = 0.f;
 
 				AllArtThree[2]->revolutionAxis_Want = glm::vec3(-1.f, 1.f, 0.f);
-				AllArtThree[2]->vRevolution[3] += 0.1f;
+				AllArtThree[2]->vRevolution[3] += 0.3f;
 
 			}
 		}
