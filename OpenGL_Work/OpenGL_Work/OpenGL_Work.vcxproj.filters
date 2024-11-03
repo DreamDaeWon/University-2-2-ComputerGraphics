@@ -61,6 +61,12 @@
     <Filter Include="소스 파일\OGWork-19">
       <UniqueIdentifier>{f08ede12-fd8e-4ea1-af46-020e6e2aade7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\OGWork-Test">
+      <UniqueIdentifier>{e713d1fd-38d8-4e11-aa21-8ec880eb691b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\OGWork-20">
+      <UniqueIdentifier>{1acdbe0d-4c8c-4d37-b5e3-40c278d60c46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -128,6 +134,12 @@
     </ClCompile>
     <ClCompile Include="OGWork-19.cpp">
       <Filter>소스 파일\OGWork-19</Filter>
+    </ClCompile>
+    <ClCompile Include="OGWork-Test.cpp">
+      <Filter>소스 파일\OGWork-Test</Filter>
+    </ClCompile>
+    <ClCompile Include="OGWork-20.cpp">
+      <Filter>소스 파일\OGWork-20</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

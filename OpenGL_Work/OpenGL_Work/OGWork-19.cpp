@@ -7,7 +7,7 @@ uniform_int_distribution<int> RandomIndexTri(0, 5);
 
 
 // 카메라 생성
-CDW_Camera2 DW_Camera{ glm::vec3(20.f,20.f,15.f),glm::vec3(0.f,0.f,-1.f) };
+CDW_Camera2 DW_Camera{ glm::vec3(0.f,30.f,50.f),glm::vec3(0.f,0.f,-1.f) };
 
 
 
@@ -65,6 +65,11 @@ void make_fragmenetShaders() // 버텍스 셰이터 객체 만들기
 int Shader_Matrix{};
 int Shader_ViewTransform{};
 int Shader_ProjectionTransform{};
+
+void Initialize_Camera()
+{
+	DW_Camera.RotateX_Camera(-45.f);
+}
 
 
 void make_shaderProgram()
@@ -262,7 +267,8 @@ GLfloat PyramidRotate[4]{};
 GLvoid Change_Camera_Move();
 
 
-
+bool bRotateCamera{};
+bool bRevolutionCamera{};
 
 
 //////////////////////////// 여기까지 문제관련
@@ -388,14 +394,14 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 		std::cerr << "Unable to initialize GLEW" << std::endl;
 		exit(EXIT_FAILURE);
 		//DW_Camera.RotateY_Camera(90.f);
-		//DW_Camera.RotateX_Camera(-45.f);
+		//DW_Camera.RotateX_Camera(-90.f);
 		glutWarpPointer(WinsizeX / 2, WinsizeY / 2);
 
 	}
 	else
 		std::cout << "GLEW Initialized\n";
 
-
+	Initialize_Camera();
 	make_shaderProgram();
 
 	Create_Line_Pos(&LineArt, 0.f, 25.f, 0.f, 0.f, -25.f, 0.f, glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 0.f, 0.f));
@@ -542,6 +548,11 @@ GLvoid SpecialKeyInput(int key, int x, int y)
 
 GLvoid KeyInput(unsigned char key, int x, int y)
 {
+	if (key == 'q')
+	{
+		glutDestroyWindow(g_WinID);
+	}
+
 
 
 	if (key == 'w')
@@ -731,6 +742,10 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 		bUpshoot = false; // 위에 포신 움직이기
 		bUpAngle = false; // 위에 포신 움직이기
+
+		bRotateCamera = false;
+		bRevolutionCamera = false;
+
 	}
 	if (key == 'N')
 	{
@@ -750,6 +765,9 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 		bUpshoot = false; // 위에 포신 움직이기
 		bUpAngle = false; // 위에 포신 움직이기
+
+		bRotateCamera = false;
+		bRevolutionCamera = false;
 	}
 
 
@@ -814,12 +832,76 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 		bUpshoot = false; // 위에 포신 움직이기
 		bUpAngle = false; // 위에 포신 움직이기
 
+
+		bRotateCamera = false;
+		bRevolutionCamera = false;
+
 		fUpshoot = 0.f;
+
+		DW_Camera.Get_vPos()[0] = 0.f;
+		DW_Camera.Get_vPos()[1] = 30.f;
+		DW_Camera.Get_vPos()[2] = 50.f;
+
+
+		DW_Camera.Get_vRevolution()[0] = 0.f;
+		DW_Camera.Get_vRevolution()[1] = 0.f;
+		DW_Camera.Get_vRevolution()[2] = 0.f;
+
+		DW_Camera.Get_vRotate()[0] = 0.f;
+		DW_Camera.Get_vRotate()[1] = 0.f;
+		DW_Camera.Get_vRotate()[2] = 0.f;
+
+
+
+		
+		DW_Camera.RotateX_Camera(-45.f);
 	}
 	
 
+	if (key == 'h')
+	{
+		DW_Camera.Move_Front_Camera(0.5f);
+	}
+	if (key == 'H')
+	{
+		DW_Camera.Move_Back_Camera(0.5f);
+	}
 
+	if (key == 'j')
+	{
+		DW_Camera.Move_Right_Camera(0.5f);
+	}
+	if (key == 'J')
+	{
+		DW_Camera.Move_Left_Camera(0.5f);
+	}
 
+	if (key == 'k')
+	{
+		DW_Camera.Move_Up_Camera(0.5f);
+	}
+	if (key == 'K')
+	{
+		DW_Camera.Move_Down_Camera(0.5f);
+	}
+
+	if (key == 'l')
+	{
+		bRotateCamera = true;
+	}
+	if (key == 'L')
+	{
+		bRotateCamera = false;
+	}
+
+	if (key == ';')
+	{
+		bRevolutionCamera = true;
+	}
+	if (key == ':')
+	{
+		bRevolutionCamera = false;
+	}
 
 
 }
@@ -827,11 +909,12 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 bool bPush_L_button{ false };
 
 DWArt* pMouseArt{};
+
 GLvoid MoveMouse(int X, int Y)
 {
 
-	DW_Camera.RotateY_Camera(-(WinsizeX / 2 - X));
-	DW_Camera.RotateX_Camera(-(WinsizeY / 2 - Y));
+	DW_Camera.RotateY_Camera((WinsizeX / 2 - X) * 0.5f);
+	DW_Camera.RotateX_Camera((WinsizeY / 2 - Y) * 0.5f);
 
 
 	glutWarpPointer(WinsizeX / 2, WinsizeY / 2);
@@ -842,12 +925,12 @@ GLvoid MoveMouse(int X, int Y)
 GLvoid MoveMouse_Tick(int X, int Y)
 {
 
-	DW_Camera.RotateX_Camera((WinsizeY / 2 - Y) * 0.5f);
+	//DW_Camera.RotateX_Camera((WinsizeY / 2 - Y) * 0.5f);
 
-	DW_Camera.RotateY_Camera((WinsizeX / 2 - X) * 0.5f);
+	//DW_Camera.RotateY_Camera((WinsizeX / 2 - X) * 0.5f);
 
 
-	glutWarpPointer(WinsizeX / 2, WinsizeY / 2);
+	//glutWarpPointer(WinsizeX / 2, WinsizeY / 2);
 
 	//glutPostRedisplay();
 }
@@ -1372,5 +1455,13 @@ GLvoid Change_Square_Pyramid()
 
 GLvoid Change_Camera_Move()
 {
-	
+	if (bRotateCamera)
+	{
+		DW_Camera.RotateY_Camera(0.1f);
+	}
+
+	if (bRevolutionCamera)
+	{
+		DW_Camera.RevolutionY_Camera(0.1f);
+	}
 }
