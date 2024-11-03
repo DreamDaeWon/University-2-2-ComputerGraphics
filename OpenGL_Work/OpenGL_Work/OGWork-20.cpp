@@ -11,6 +11,9 @@ CDW_Camera2 DW_Camera{ glm::vec3(0.f,30.f,50.f),glm::vec3(0.f,0.f,-1.f) };
 
 
 
+
+
+
 // 셰이더 관련 변수
 GLuint shaderProgramID{}; // 셰이더 프로그램 이름
 
@@ -99,6 +102,8 @@ void make_shaderProgram()
 
 
 GLvoid drawScene(GLvoid);
+GLvoid drawScene2();
+GLvoid drawScene3();
 GLvoid Reshape(int w, int h);
 GLvoid KeyInput(unsigned char key, int x, int y);
 GLvoid SpecialKeyInput(int key, int x, int y);
@@ -430,11 +435,33 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 
 GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수 
 {
+	glViewport(100, 100, WinsizeX / 2.f, WinsizeY / 2.f);
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.f); // 바탕색을 ‘blue’ 로 지정
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 설정된 색으로 전체를 칠하기
 	// 그리기 부분 구현: 그리기 관련 부분이 여기에 포함된다
 	int ColorLocation = glGetUniformLocation(shaderProgramID, "vColor");
 	glUseProgram(shaderProgramID);
+
+	GLfloat Camera_vRotate[3]{}; // 객체가 x y z 축으로 얼마만큼 회전하였는지?
+
+	GLfloat Camera_vPos[3]{}; // 객체가 원점에서 얼마만큼 움직이는지? // 로컬 좌표계임
+
+	GLfloat Camera_vRevolution[4]{}; // 객체가 x y z 축으로 얼마만큼 공전하였는지?
+
+
+	Camera_vRotate[0] = DW_Camera.Get_vRotate()[0];
+	Camera_vRotate[1] = DW_Camera.Get_vRotate()[1];
+	Camera_vRotate[2] = DW_Camera.Get_vRotate()[2];
+
+	Camera_vPos[0] = DW_Camera.Get_vPos()[0];
+	Camera_vPos[1] = DW_Camera.Get_vPos()[1];
+	Camera_vPos[2] = DW_Camera.Get_vPos()[2];
+
+	Camera_vRevolution[0] = DW_Camera.Get_vRevolution()[0];
+	Camera_vRevolution[1] = DW_Camera.Get_vRevolution()[1];
+	Camera_vRevolution[2] = DW_Camera.Get_vRevolution()[2];
+
 
 
 	for (int i = 0; i < 6; ++i)
@@ -525,14 +552,255 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 	}
 
 	//checkFrameBuffer();
-	glViewport(0, 0, WinsizeX, WinsizeY);
+
+	drawScene2();
+	drawScene3();
+
+	memcpy(DW_Camera.Get_vRotate(), Camera_vRotate, sizeof(Camera_vRotate));
+	memcpy(DW_Camera.Get_vPos(), Camera_vPos, sizeof(Camera_vPos));
+	memcpy(DW_Camera.Get_vRevolution(), Camera_vRevolution, sizeof(Camera_vRevolution));
+
 	glutSwapBuffers(); // 화면에 출력하기
 	glutPostRedisplay();
 }
+
+GLvoid drawScene2() //--- 콜백 함수: 그리기 콜백 함수 
+{
+
+
+	DW_Camera.Get_vRotate()[0] = 0.f;
+	DW_Camera.Get_vRotate()[1] = 0.f;
+	DW_Camera.Get_vRotate()[2] = 0.f;
+
+	DW_Camera.Get_vPos()[0] = 0.f;
+	DW_Camera.Get_vPos()[1] = 0.f;
+	DW_Camera.Get_vPos()[2] = 150.f;
+
+	DW_Camera.Get_vRevolution()[0] = 0.f;
+	DW_Camera.Get_vRevolution()[1] = 0.f;
+	DW_Camera.Get_vRevolution()[2] = 0.f;
+
+	glViewport(WinsizeX * 2.f / 3.f, 100.f, WinsizeX / 4.f, WinsizeY / 4.f);
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.f); // 바탕색을 ‘blue’ 로 지정
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 설정된 색으로 전체를 칠하기
+	// 그리기 부분 구현: 그리기 관련 부분이 여기에 포함된다
+	int ColorLocation = glGetUniformLocation(shaderProgramID, "vColor");
+	glUseProgram(shaderProgramID);
+
+
+	for (int i = 0; i < 6; ++i)
+	{
+		vector<DWArt*>* pVec = AllVec[i];
+
+		for (auto& iter : *pVec)
+		{
+			MakeWorldMartrix(iter);
+
+			Change_Draw_Timing_Cube();
+
+			// 월드
+			glUniformMatrix4fv(Shader_Matrix, 1, GL_FALSE, glm::value_ptr(iter->transformMatrix));
+
+			// 뷰
+			DW_Camera.Make_view_Matrix();
+			glUniformMatrix4fv(Shader_ViewTransform, 1, GL_FALSE, glm::value_ptr(DW_Camera.Get_view_Matrix()));
+			glm::mat4 projection;
+			// 투영
+
+			projection = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, 0.1f, 200.f);
+	
+
+			glUniformMatrix4fv(Shader_ProjectionTransform, 1, GL_FALSE, glm::value_ptr(projection));
+
+			glBindVertexArray(iter->VAO);
+
+
+
+			switch (iter->eType)
+			{
+			case DWART_LINE:
+				glDrawElements(GL_LINE_STRIP, iter->indexVerTex.size(), GL_UNSIGNED_INT, 0);
+				break;
+
+			case DWART_CIRCLE_SPIRAL:
+				glDrawElements(iPrintType, iter->indexVerTex.size(), GL_UNSIGNED_INT, 0);
+				break;
+
+			case DWART_FACE:
+				glDrawElements(iPrintType, iter->indexVerTex.size(), GL_UNSIGNED_INT, 0);
+				break;
+
+			case DWART_CUBE:
+
+				glDrawElements(iPrintType, 36, GL_UNSIGNED_INT, 0);
+
+				break;
+
+			case DWART_TETRATEDRON:
+				glDrawElements(iPrintType, 18, GL_UNSIGNED_INT, 0);
+				break;
+
+
+			case DWART_MODEL_SPHERE:
+			{
+				glBindVertexArray(iter->VAO);
+				glUniform4f(ColorLocation, iter->VertexColor[0].x, iter->VertexColor[0].y, iter->VertexColor[0].z, 1);
+				gluSphere(iter->Model, iter->Sphere_rx, iter->Sphere_Slices, iter->Sphere_Stacks);
+				glUniform4f(ColorLocation, 0, 0, 0, 0);
+				glBindVertexArray(0);
+			}
+
+			break;
+
+			case DWART_MODEL_SYLINDER:
+				glBindVertexArray(iter->VAO);
+				gluCylinder(iter->Model, iter->Sylinder_rx_Top, iter->Sylinder_rx_Bottom, iter->Sylinder_ry, iter->Sylinder_Slices, iter->Sylinder_Stacks);
+				glBindVertexArray(0);
+
+				break;
+
+			}
+
+			GLenum err;
+			while ((err = glGetError()) != GL_NO_ERROR) {
+				std::cerr << "OpenGL error: " << err << std::endl;
+			}
+
+
+		}
+	}
+
+	//checkFrameBuffer();
+
+
+	//glutSwapBuffers(); // 화면에 출력하기
+	//glutPostRedisplay();
+}
+
+
+GLvoid drawScene3() //--- 콜백 함수: 그리기 콜백 함수 
+{
+
+
+	DW_Camera.Get_vRotate()[0] = -90.f;
+	DW_Camera.Get_vRotate()[1] = 0.f;
+	DW_Camera.Get_vRotate()[2] = 0.f;
+
+	DW_Camera.Get_vPos()[0] = 0.f;
+	DW_Camera.Get_vPos()[1] = 50.f;
+	DW_Camera.Get_vPos()[2] = 0.f;
+
+	DW_Camera.Get_vRevolution()[0] = 0.f;
+	DW_Camera.Get_vRevolution()[1] = 0.f;
+	DW_Camera.Get_vRevolution()[2] = 0.f;
+
+	glViewport(WinsizeX * 2.f / 3.f, 500.f, WinsizeX / 4.f, WinsizeY / 4.f);
+
+	
+
+
+	glClearColor(0.0f, 0.0f, 0.0f, 1.f); // 바탕색을 ‘blue’ 로 지정
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 설정된 색으로 전체를 칠하기
+	// 그리기 부분 구현: 그리기 관련 부분이 여기에 포함된다
+	int ColorLocation = glGetUniformLocation(shaderProgramID, "vColor");
+	glUseProgram(shaderProgramID);
+
+
+	for (int i = 0; i < 6; ++i)
+	{
+		vector<DWArt*>* pVec = AllVec[i];
+
+		for (auto& iter : *pVec)
+		{
+			MakeWorldMartrix(iter);
+
+			Change_Draw_Timing_Cube();
+
+			// 월드
+			glUniformMatrix4fv(Shader_Matrix, 1, GL_FALSE, glm::value_ptr(iter->transformMatrix));
+
+			// 뷰
+			DW_Camera.Make_view_Matrix();
+			glUniformMatrix4fv(Shader_ViewTransform, 1, GL_FALSE, glm::value_ptr(DW_Camera.Get_view_Matrix()));
+			glm::mat4 projection;
+			// 투영
+
+			projection = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, 0.1f, 200.f);
+		
+
+			glUniformMatrix4fv(Shader_ProjectionTransform, 1, GL_FALSE, glm::value_ptr(projection));
+
+			glBindVertexArray(iter->VAO);
+
+
+
+			switch (iter->eType)
+			{
+			case DWART_LINE:
+				glDrawElements(GL_LINE_STRIP, iter->indexVerTex.size(), GL_UNSIGNED_INT, 0);
+				break;
+
+			case DWART_CIRCLE_SPIRAL:
+				glDrawElements(iPrintType, iter->indexVerTex.size(), GL_UNSIGNED_INT, 0);
+				break;
+
+			case DWART_FACE:
+				glDrawElements(iPrintType, iter->indexVerTex.size(), GL_UNSIGNED_INT, 0);
+				break;
+
+			case DWART_CUBE:
+
+				glDrawElements(iPrintType, 36, GL_UNSIGNED_INT, 0);
+
+				break;
+
+			case DWART_TETRATEDRON:
+				glDrawElements(iPrintType, 18, GL_UNSIGNED_INT, 0);
+				break;
+
+
+			case DWART_MODEL_SPHERE:
+			{
+				glBindVertexArray(iter->VAO);
+				glUniform4f(ColorLocation, iter->VertexColor[0].x, iter->VertexColor[0].y, iter->VertexColor[0].z, 1);
+				gluSphere(iter->Model, iter->Sphere_rx, iter->Sphere_Slices, iter->Sphere_Stacks);
+				glUniform4f(ColorLocation, 0, 0, 0, 0);
+				glBindVertexArray(0);
+			}
+
+			break;
+
+			case DWART_MODEL_SYLINDER:
+				glBindVertexArray(iter->VAO);
+				gluCylinder(iter->Model, iter->Sylinder_rx_Top, iter->Sylinder_rx_Bottom, iter->Sylinder_ry, iter->Sylinder_Slices, iter->Sylinder_Stacks);
+				glBindVertexArray(0);
+
+				break;
+
+			}
+
+			GLenum err;
+			while ((err = glGetError()) != GL_NO_ERROR) {
+				std::cerr << "OpenGL error: " << err << std::endl;
+			}
+
+
+		}
+	}
+
+	//checkFrameBuffer();
+
+
+	//glutSwapBuffers(); // 화면에 출력하기
+	//glutPostRedisplay();
+}
+
+
 GLvoid Reshape(int w, int h) //--- 콜백 함수: 다시 그리기 콜백 함수 
 {
 
-	glViewport(0, 0, w, h);
+	//glViewport(0, 0, w, h);
 
 }
 
