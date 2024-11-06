@@ -50,15 +50,20 @@ void CDW_Camera2::Make_Camera_Matrix()
 	m_Matrix_View = glm::translate(m_Matrix_View, translationVector);
 
 	// 자전
-		// rotate X
-	float angleX = glm::radians(vRotate[0]); // 45도 회전 (라디안 단위)
-	glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // Y축 기준
-	m_Matrix_View = glm::rotate(m_Matrix_View, angleX, rotationAxisX);
+	// 
+	
 
 	// rotate Y
 	float angleY = glm::radians(vRotate[1]); // 45도 회전 (라디안 단위)
 	glm::vec3 rotationAxisY(0.0f, 1.0f, 0.0f); // Y축 기준
 	m_Matrix_View = glm::rotate(m_Matrix_View, angleY, rotationAxisY);
+
+		// rotate X
+	float angleX = glm::radians(vRotate[0]); // 45도 회전 (라디안 단위)
+	glm::vec3 rotationAxisX(1.0f, 0.0f, 0.0f); // Y축 기준
+	m_Matrix_View = glm::rotate(m_Matrix_View, angleX, rotationAxisX);
+
+
 
 	// rotate Z
 	float angleZ = glm::radians(vRotate[2]); // 45도 회전 (라디안 단위)
