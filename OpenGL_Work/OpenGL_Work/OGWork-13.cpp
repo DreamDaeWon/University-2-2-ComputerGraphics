@@ -375,7 +375,7 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 		}
 	}
 
-	checkFrameBuffer();
+	// checkFrameBuffer();
 
 	glutSwapBuffers(); // 화면에 출력하기
 	glutPostRedisplay();

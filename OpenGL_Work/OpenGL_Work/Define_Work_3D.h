@@ -119,7 +119,17 @@ struct DWArt
 	GLfloat vRevolution[4]{}; // 객체가 x y z 축으로 얼마만큼 공전하였는지?
 
 
+	GLfloat vLastMove[3]{}; // 원점에서 얼만큼 갔다가 다시 회전하고 돌아올 것인지? (ex : 박스 문 열기)
+	GLfloat vLastRotate[3]{}; // 마지막 회전
+
+
 	GLfloat vWorldPos[3]{}; // 진짜 월드 좌표계 이걸 건드려야 똑바로 움직임
+
+
+
+	// 움직임
+	GLfloat vMoveVec[3]{}; // 이동방향 벡터
+	GLfloat fSpeed{}; // 이동 속도
 
 
 	// 회전
@@ -138,6 +148,7 @@ struct DWArt
 
 	GLfloat rx{};
 	GLfloat ry{};
+	GLfloat rz{};
 
 	bool LR{};
 
@@ -193,6 +204,8 @@ GLvoid Create_Line_Pos(vector<DWArt*>* pVec, GLfloat x1, GLfloat y1, GLfloat z1,
 GLvoid Create_Line_Pos(vector<DWArt*>* pVec, GLfloat x1, GLfloat y1, GLfloat z1, GLfloat x2, GLfloat y2, GLfloat z2, glm::vec3 vColor_One, glm::vec3 vColor_Two); // 원하는 벡터에 원하는 두 점을 잇는 직선 추가
 
 GLvoid Create_Face(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 면 추가
+
+GLvoid Create_Face_Want_Color(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz, glm::vec3 vColor); // 원하는 벡터에 원하는 색상의 면 추가
 
 
 GLvoid Create_Face_Trangle(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 면 추가
@@ -559,7 +572,7 @@ inline GLvoid Create_Face(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloa
 	// 반지름
 	Art->rx = _rx;
 	Art->ry = _ry;
-
+	Art->rz = _rz;
 
 	// 형식
 	Art->eType = DWART_FACE;
@@ -588,6 +601,56 @@ inline GLvoid Create_Face(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloa
 
 	pVec->push_back(Art);
 
+}
+
+inline GLvoid Create_Face_Want_Color(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz, glm::vec3 vColor)
+{
+	DWArt* Art = new DWArt{};
+
+	// 중점
+	Art->vPos[0] = _CX;
+	Art->vPos[1] = _CY;
+	Art->vPos[2] = _CZ;
+
+	// 색상
+	Art->VertexColor.push_back(vColor);
+	Art->VertexColor.push_back(vColor);
+
+	Art->VertexColor.push_back(vColor);
+	Art->VertexColor.push_back(vColor);
+
+
+	// 반지름
+	Art->rx = _rx;
+	Art->ry = _ry;
+
+
+	// 형식
+	Art->eType = DWART_FACE;
+
+	// 0 1
+	Art->Vertex.push_back(glm::vec3((0 - _rx), (0), (0 + _rz)));
+	Art->Vertex.push_back(glm::vec3((0 - _rx), (0), (0 - _rz)));
+
+
+	// 2 3
+	Art->Vertex.push_back(glm::vec3((0 + _rx), (0), (0 - _rz)));
+	Art->Vertex.push_back(glm::vec3((0 + _rx), (0), (0 + _rz)));
+
+
+
+	// 인덱스
+
+	// 윗면
+	Art->indexVerTex.push_back(0);
+	Art->indexVerTex.push_back(3);
+	Art->indexVerTex.push_back(1);
+
+	Art->indexVerTex.push_back(1);
+	Art->indexVerTex.push_back(3);
+	Art->indexVerTex.push_back(2);
+
+	pVec->push_back(Art);
 }
 
 inline GLvoid Create_Face_Trangle(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz)
@@ -665,6 +728,7 @@ inline GLvoid Create_Cube(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloa
 	// 반지름
 	Art->rx = _rx;
 	Art->ry = _ry;
+	Art->rz = _rz;
 
 
 	// 형식
@@ -984,6 +1048,10 @@ inline GLvoid Create_Sylinder_Model(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _
 	Art->Sylinder_rx_Top = _rxTop;
 	Art->Sylinder_rx_Bottom = _rxBottom;
 
+	Art->rx = _rxTop;
+	Art->rz = _rxBottom;
+	Art->ry = _ry;
+
 	Art->Sylinder_ry = _ry;
 
 	Art->Sylinder_Slices = _slices;
@@ -1014,6 +1082,8 @@ GLvoid MakeWorldMartrix(DWArt* pArt)
 {
 
 	pArt->transformMatrix = glm::mat4(1.0f);
+
+
 
 
 	if(pArt->ParentMatrix != nullptr)
@@ -1077,10 +1147,36 @@ GLvoid MakeWorldMartrix(DWArt* pArt)
 
 
 
+	// 이동
+// translation
+	glm::vec3 Last_translationVector(pArt->vLastMove[0], pArt->vLastMove[1], pArt->vLastMove[2]);
+	pArt->transformMatrix = glm::translate(pArt->transformMatrix, Last_translationVector);
+
+
+	// 자전
+	// rotate X
+	float Last_angleX = glm::radians(pArt->vLastRotate[0]); // 45도 회전 (라디안 단위)
+	glm::vec3 Last_rotationAxisX(1.0f, 0.0f, 0.0f); // X축 기준
+	pArt->transformMatrix = glm::rotate(pArt->transformMatrix, Last_angleX, Last_rotationAxisX);
+
+	// rotate Y
+	float Last_angleY = glm::radians(pArt->vLastRotate[1]); // 45도 회전 (라디안 단위)
+	glm::vec3 Last_rotationAxisY(0.0f, 1.0f, 0.0f); // Y축 기준
+	pArt->transformMatrix = glm::rotate(pArt->transformMatrix, Last_angleY, Last_rotationAxisY);
+
+	// rotate Z
+	float Last_angleZ = glm::radians(pArt->vLastRotate[2]); // 45도 회전 (라디안 단위)
+	glm::vec3 Last_rotationAxisZ(0.0f, 0.0f, 1.0f); // Z축 기준
+	pArt->transformMatrix = glm::rotate(pArt->transformMatrix, Last_angleZ, Last_rotationAxisZ);
+
+	// 이동
+// translation
+	glm::vec3 Last_OneJeom_translationVector(-pArt->vLastMove[0], -pArt->vLastMove[1], -pArt->vLastMove[2]);
+	pArt->transformMatrix = glm::translate(pArt->transformMatrix, Last_OneJeom_translationVector);
 
 
 
-
+	
 
 }
 

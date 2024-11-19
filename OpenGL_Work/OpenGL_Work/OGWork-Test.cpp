@@ -1,4 +1,4 @@
-#include "Define_Work_3D.h"
+ #include "Define_Work_3D.h"
 #include "DW_Camera2.h"
 
 uniform_int_distribution<int> RandomIndex(0, 5);
@@ -167,7 +167,7 @@ float RavolutionZ{};
 GLvoid RavolutionAll();
 
 bool bMove_Sprial{};
-bool bMove_Change{};
+bool bOpen_door{};
 bool bMove_Change_Revolution{};
 bool bMove_Change_Up_Down{};
 bool bMove_Rotate{};
@@ -181,7 +181,7 @@ GLint iMove_Sprial{}; // 얼마나 움직였는지?
 GLvoid MoveSpiral();
 
 
-GLvoid MoveChange();
+GLvoid MoveDoor();
 
 GLvoid Move_Change_Revolution();
 
@@ -227,7 +227,7 @@ GLfloat fUp{};
 
 GLfloat fFront_Angle = 0.f;
 
-GLvoid Change_Move();
+GLvoid Ball_Move();
 
 GLvoid Change_Draw_Timing_Cube();
 
@@ -315,7 +315,7 @@ GLvoid Timer(int Value)
 
 	//17
 
-	Change_Move();
+	Ball_Move();
 	Change_Square_Pyramid();
 
 
@@ -1060,9 +1060,9 @@ GLvoid MoveSpiral()
 
 }
 
-GLvoid MoveChange()
+GLvoid MoveDoor()
 {
-	if (!bMove_Change)
+	if (!bOpen_door)
 	{
 		return;
 	}
@@ -1174,7 +1174,7 @@ GLvoid ChangeMode()
 	}
 
 	bMove_Sprial = false;
-	bMove_Change = false;
+	bOpen_door = false;
 	bMove_Change_Revolution = false;
 	bMove_Change_Up_Down = false;
 	bMove_Rotate = false;
@@ -1213,7 +1213,7 @@ GLvoid ChangeMode()
 
 }
 
-GLvoid Change_Move()
+GLvoid Ball_Move()
 {
 
 	if (AllArt.size() == 0)

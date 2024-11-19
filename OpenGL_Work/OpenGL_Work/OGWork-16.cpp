@@ -164,7 +164,7 @@ float RavolutionY{};
 GLvoid RavolutionAll();
 
 bool bMove_Sprial{};
-bool bMove_Change{};
+bool bOpen_door{};
 bool bMove_Change_Revolution{};
 bool bMove_Change_Up_Down{};
 bool bMove_Rotate{};
@@ -178,7 +178,7 @@ GLint iMove_Sprial{}; // 얼마나 움직였는지?
 GLvoid MoveSpiral();
 
 
-GLvoid MoveChange();
+GLvoid MoveDoor();
 
 GLvoid Move_Change_Revolution();
 
@@ -244,7 +244,7 @@ GLvoid Timer(int Value)
 	RotateAll();
 	RavolutionAll();
 	MoveSpiral();
-	MoveChange();
+	MoveDoor();
 	Move_Change_Revolution();
 	Move_Change_Up_Down();
 	Move_Rotate();
@@ -623,7 +623,7 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 	case '2':
 		ChangeMode();
 
-		bMove_Change = true;
+		bOpen_door = true;
 
 		break;
 
@@ -965,9 +965,9 @@ GLvoid MoveSpiral()
 
 }
 
-GLvoid MoveChange()
+GLvoid MoveDoor()
 {
-	if (!bMove_Change)
+	if (!bOpen_door)
 	{
 		return;
 	}
@@ -1079,7 +1079,7 @@ GLvoid ChangeMode()
 	}
 
 	bMove_Sprial = false;
-	bMove_Change = false;
+	bOpen_door = false;
 	bMove_Change_Revolution = false;
 	bMove_Change_Up_Down = false;
 	bMove_Rotate = false;

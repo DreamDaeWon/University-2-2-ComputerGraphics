@@ -6,8 +6,12 @@ uniform_int_distribution<int> RandomIndex(0, 5);
 uniform_int_distribution<int> RandomIndexTri(0, 5);
 
 
+
+uniform_int_distribution<int> RandomOnBoxPos(-45, 45);
+
+
 // 카메라 생성
-CDW_Camera2 DW_Camera{ glm::vec3(0.f,30.f,50.f),glm::vec3(0.f,0.f,-1.f) };
+CDW_Camera2 DW_Camera{ glm::vec3(0.f, 50.f,100.f),glm::vec3(0.f,0.f,-1.f) };
 
 
 
@@ -68,7 +72,7 @@ int Shader_ProjectionTransform{};
 
 void Initialize_Camera()
 {
-	DW_Camera.RotateX_Camera(-45.f);
+	DW_Camera.RotateX_Camera(-20.f);
 }
 
 
@@ -161,6 +165,8 @@ float RotateY{};
 
 GLvoid RotateAll();
 
+bool RotateCamera = false;
+
 
 // 15번
 //bool bLeftRevolution{};
@@ -172,7 +178,7 @@ float RavolutionZ{};
 GLvoid RavolutionAll();
 
 bool bMove_Sprial{};
-bool bMove_Change{};
+bool bOpen_door{};
 bool bMove_Change_Revolution{};
 bool bMove_Change_Up_Down{};
 bool bMove_Rotate{};
@@ -186,7 +192,7 @@ GLint iMove_Sprial{}; // 얼마나 움직였는지?
 GLvoid MoveSpiral();
 
 
-GLvoid MoveChange();
+GLvoid MoveDoor();
 
 GLvoid Move_Change_Revolution();
 
@@ -228,16 +234,27 @@ GLfloat fUp{};
 
 GLfloat fFront_Angle = 0.f;
 
-GLvoid Change_Move();
+GLvoid Ball_Move();
 
 GLvoid Change_Draw_Timing_Cube();
 
 
-bool bMoveAll{}; // 아래 몸통 움직이기
+bool bPlayerMove{}; // 몸통 움직이기
 
-bool bMoveLeft{}; // 아래 몸통 움직이기
+bool bMoveDir[4]{}; // 움직이는 방향 0. 왼, 1. 앞, 2. 오, 3. 뒤
 
-bool bParallel{}; // 아래몸통 회전
+float fSpeed = 5.0f;
+
+bool bJump = false;
+
+bool bOnBoxJump = false;
+
+float fJumpTime = 0.f;
+
+float fGravityTime = 0.f;
+
+
+
 
 
 bool bDownShootTrun{}; // 아래포신 회전
@@ -317,11 +334,11 @@ GLvoid Timer(int Value)
 
 	//17
 
-	Change_Move();
-	Change_Square_Pyramid();
+	Ball_Move();
+	//Change_Square_Pyramid();
 
-
-	//RotateAll();
+	MoveDoor();
+	RotateAll();
 	//RavolutionAll();
 	//MoveSpiral();
 	//MoveChange();
@@ -370,6 +387,8 @@ void UpdateBuffers()
 	for (int i = 0; i < RightBottom.size(); ++i)
 	{
 		UpdateBuffer(RightBottom[i]);
+
+		
 	}
 
 }
@@ -381,7 +400,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); // 디스플레이 모드 설정
 	glutInitWindowPosition(100, 100); // 윈도우의 위치 지정
 	glutInitWindowSize(WinsizeX, WinsizeY); // 윈도우의 크기 지정
-	g_WinID = glutCreateWindow("OGWork-18"); // 윈도우 생성(윈도우 이름)
+	g_WinID = glutCreateWindow("OGWork-21"); // 윈도우 생성(윈도우 이름)
 
 	glEnable(GL_DEPTH_TEST);
 	//glEnable(GL_CULL_FACE);
@@ -410,6 +429,88 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	InitBuffers(&LineArt);
 	Create_Line_Pos(&LineArt, 0.f, 0.f, 25.f, 0.f, 0.f, -25.f, glm::vec3(1.f, 1.f, 1.f), glm::vec3(0.f, 0.f, 1.f));
 	InitBuffers(&LineArt);
+
+
+
+	// 무대
+	Create_Face(&AllArt,0.f,0.f,0.f,50,0.f,50.f); // 아래
+	AllArt.back()->vRotate[0] = 0.f;
+	InitBuffers(&AllArt);
+
+	Create_Face(&AllArt, 0.f, 100.f, 0.f, 50, 0.f, 50.f); // 위
+	AllArt.back()->vRotate[0] = 180.f;
+	InitBuffers(&AllArt);
+
+	Create_Face(&AllArt, -50.f, 50.f, 0.f, 50, 0.f, 50.f); // 왼쪽
+	AllArt.back()->vRotate[2] = -90.f;
+	InitBuffers(&AllArt);
+
+	Create_Face(&AllArt, 50.f, 50.f, 0.f, 50, 0.f, 50.f); // 오른쪽
+	AllArt.back()->vRotate[2] = 90.f;
+	InitBuffers(&AllArt);
+
+	Create_Face(&AllArt, 0.f, 50.f, -50.f, 50, 0.f, 50.f); // 뒤
+	AllArt.back()->vRotate[0] = 90.f;
+	InitBuffers(&AllArt);
+
+
+	// 열리는 벽
+
+	Create_Face(&AllArtTwo, -25.f, 50.f, 50.f, 25.f, 0.f, 50.f); // 왼쪽
+	AllArtTwo.back()->vRotate[0] = 90.f;
+	InitBuffers(&AllArtTwo);
+
+	Create_Face(&AllArtTwo, 25.f, 50.f, 50.f, 25.f, 0.f, 50.f); // 오른쪽
+	AllArtTwo.back()->vRotate[0] = 90.f;
+	InitBuffers(&AllArtTwo);
+
+	// 장애물
+
+	Create_Cube(&AllArtThree,RandomOnBoxPos(mt), 5.f, RandomOnBoxPos(mt), 5.f, 5.f, 5.f);
+	InitBuffers(&AllArtThree);
+
+	Create_Cube(&AllArtThree, RandomOnBoxPos(mt), 5.f, RandomOnBoxPos(mt), 5.f, 5.f, 5.f);
+	InitBuffers(&AllArtThree);
+
+	Create_Cube(&AllArtThree, RandomOnBoxPos(mt), 5.f, RandomOnBoxPos(mt), 5.f, 5.f, 5.f);
+	InitBuffers(&AllArtThree);
+
+	// 플레이어 몸통
+	Create_Cube(&AllArtFour,0.f, 15.f, 0.f, 5.f, 5.f, 2.5f);
+	InitBuffers(&AllArtFour);
+
+	//	머리
+	Create_Cube(&AllArtFour, 0.f, 7.5f, 0.f, 2.5f, 2.5f, 2.5f);
+	AllArtFour.back()->ParentMatrix = &AllArtFour.front()->transformMatrix;
+	InitBuffers(&AllArtFour);
+
+	//	코
+	Create_Cube(&AllArtFour, 0.f, 8.75f, -12.5f, 0.5f, 0.5f, 12.5f);
+	AllArtFour.back()->ParentMatrix = &AllArtFour.front()->transformMatrix;
+	InitBuffers(&AllArtFour);
+
+
+	// 다리
+		// 왼 3
+	Create_Cube(&AllArtFour, -2.f, -10.f, 0.f, 1.f, 5.f, 1.f);
+	AllArtFour.back()->ParentMatrix = &AllArtFour.front()->transformMatrix;
+	InitBuffers(&AllArtFour);
+
+		// 오 4
+	Create_Cube(&AllArtFour, 2.f, -10.f, 0.f, 1.f, 5.f, 1.f);
+	AllArtFour.back()->ParentMatrix = &AllArtFour.front()->transformMatrix;
+	InitBuffers(&AllArtFour);
+
+	// 팔
+		// 왼 5
+	Create_Cube(&AllArtFour, -6.f, -2.5f, 0.f, 1.f, 5.f, 1.f);
+	AllArtFour.back()->ParentMatrix = &AllArtFour.front()->transformMatrix;
+	InitBuffers(&AllArtFour);
+
+		// 오 6
+	Create_Cube(&AllArtFour, 6.f, -2.5f, 0.f, 1.f, 5.f, 1.f);
+	AllArtFour.back()->ParentMatrix = &AllArtFour.front()->transformMatrix;
+	InitBuffers(&AllArtFour);
 
 
 
@@ -524,7 +625,7 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 		}
 	}
 
-	//checkFrameBuffer();
+	// checkFrameBuffer();
 	glViewport(0, 0, WinsizeX, WinsizeY);
 	glutSwapBuffers(); // 화면에 출력하기
 	glutPostRedisplay();
@@ -555,25 +656,120 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 
 
-	if (key == 'w')
+	if (key == 'z')
 	{
 		DW_Camera.Move_Front_Camera(0.5f);
 	}
 
-	if (key == 'a')
+	if (key == 'x')
 	{
 		DW_Camera.Move_Left_Camera(0.5f);
 	}
 
-	if (key == 's')
+	if (key == 'Z')
 	{
 		DW_Camera.Move_Back_Camera(0.5f);
 	}
 
-	if (key == 'd')
+	if (key == 'X')
 	{
 		DW_Camera.Move_Right_Camera(0.5f);
 	}
+
+	if (key == 'y')
+	{
+		RotateCamera = true;
+	}
+
+	if (key == 'Y')
+	{
+		RotateCamera = false;
+	}
+
+	if (key == 'w')
+	{
+		bPlayerMove = true;
+		memset(bMoveDir,0, sizeof(bMoveDir));
+		bMoveDir[1] = true;
+		
+	}
+
+	if (key == 'a')
+	{
+		bPlayerMove = true;
+		memset(bMoveDir, 0, sizeof(bMoveDir));
+		bMoveDir[0] = true;
+	}
+
+	if (key == 's')
+	{
+		bPlayerMove = true;
+		memset(bMoveDir, 0, sizeof(bMoveDir));
+		bMoveDir[3] = true;
+	}
+
+	if (key == 'd')
+	{
+		bPlayerMove = true;
+		memset(bMoveDir, 0, sizeof(bMoveDir));
+		bMoveDir[2] = true;
+	}
+
+
+	if (key == '+')
+	{
+		fSpeed += 1.f;
+	}
+
+	if (key == '-')
+	{
+		fSpeed -= 1.f;
+	}
+
+	if (key == 'j')
+	{
+		bJump = true;
+		bOnBoxJump = true;
+	}
+
+	if (key == 'i')
+	{
+		bJump = false;
+		bOnBoxJump = false;
+		RotateCamera = false;
+
+		bPlayerMove = false;
+		memset(bMoveDir, 0, sizeof(bMoveDir));
+
+		DW_Camera.Get_vPos()[0] = 0.f;
+		DW_Camera.Get_vPos()[1] = 50.f;
+		DW_Camera.Get_vPos()[2] = 100.f;
+
+		DW_Camera.Get_vRevolution()[1] = 0.f;
+
+		AllArtFour.front()->vRotate[1] = 0.f;
+
+		AllArtFour.front()->vPos[0] = 0.f;
+		AllArtFour.front()->vPos[1] = 15.f;
+		AllArtFour.front()->vPos[2] = 0.f;
+
+		AllArtFour[3]->vRevolution[0] = 0.f;
+		AllArtFour[6]->vRevolution[0] = 0.f;
+
+		AllArtFour[4]->vRevolution[0] = 0.f;
+		AllArtFour[5]->vRevolution[0] = 0.f;
+
+
+		bOpen_door = false;
+
+		AllArtTwo[0]->vPos[0] = -25;
+		AllArtTwo[1]->vPos[0] = 25;
+
+		fSpeed = 5.f;
+
+	}
+
+
 
 	if (key == 'p')
 	{
@@ -587,322 +783,18 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 	if (key == 'o')
 	{
-		glEnable(GL_CULL_FACE);
+		// glEnable(GL_CULL_FACE);
+
+		bOpen_door = true;
+
 	}
 
 	if (key == 'O')
 	{
-		glDisable(GL_CULL_FACE);
+		// glDisable(GL_CULL_FACE);
+		bOpen_door = true;
 	}
-
-
-
-	// 18
-
-	if (key == 'g')
-	{
-		Delete_ALL_Art(AllArt);
-		Delete_ALL_Art(AllArtTwo);
-		Delete_ALL_Art(AllArtThree);
-		Delete_ALL_Art(AllArtFour);
-
-		Create_Face(&LineArt, 0, 0, 0, 100, 100, 100);
-		InitBuffers(&LineArt);
-
-		Create_Cube(&AllArt, 0.f, 5.f, 0.f, 10.f, 5.f, 10.f);
-		InitBuffers(&AllArt);
-
-		Create_Cube(&AllArtTwo, 0.f, 7.5f, 0.f, 5.f, 2.5f, 5.f);
-		InitBuffers(&AllArtTwo);
-		AllArtTwo.back()->ParentMatrix = &AllArt.back()->transformMatrix;
-
-
-		// 자식 포신
-
-		// 왼 0
-		Create_Cube(&AllArtThree, 2.f, 5.f, 0.f, 1.f, 5.f, 1.f);
-		InitBuffers(&AllArtThree);
-		AllArtThree.back()->ParentMatrix = &AllArtTwo.back()->transformMatrix;
-
-		//// 오 1
-
-		Create_Cube(&AllArtThree, -2.f, 5.f, 0.f, 1.f, 5.f, 1.f);
-		InitBuffers(&AllArtThree);
-		AllArtThree.back()->ParentMatrix = &AllArtTwo.back()->transformMatrix;
-
-		// 몸통 포신
-
-		////왼 0
-		Create_Cube(&AllArtFour, 5.f, 0.f, 15.f, 1.f, 1.f, 7.f);
-		InitBuffers(&AllArtFour);
-		AllArtFour.back()->ParentMatrix = &AllArt.back()->transformMatrix;
-
-		//// 오 1
-		Create_Cube(&AllArtFour, -5.f, 0.f, 15.f, 1.f, 1.f, 7.f);
-		InitBuffers(&AllArtFour);
-		AllArtFour.back()->ParentMatrix = &AllArt.back()->transformMatrix;
-
-	}
-
-
-
-
-
-
-
-	if (key == 'z')
-	{
-
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-		bMoveAll = true;
-
-
-	}
-	if (key == 'Z')
-	{
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-		bMoveAll = false;
-
-
-	}
-
-
-	if (key == 'x')
-	{
-
-		bParallel = !bParallel;
-
-		RotateY = 1.f;
-
-	}
-	if (key == 'X')
-	{
-
-		bParallel = !bParallel;
-		RotateY = -1.f;
-	}
-
-	if (key == 'c')
-	{
-		bDownShoorMergePlay = false;
-		fDownShootTrun = 1.f;
-		bDownShootTrun = !bDownShootTrun;
-	}
-	if (key == 'C')
-	{
-		bDownShoorMergePlay = false;
-		fDownShootTrun = -1.f;
-		bDownShootTrun = !bDownShootTrun;
-	}
-
-	if (key == 'v')
-	{
-		bDownShoorMergePlay = true;
-		bDownShootMerge = true;
-		bDownShootTrun = false;
-
-	}
-	if (key == 'V')
-	{
-		bDownShoorMergePlay = true;
-		bDownShootMerge = false;
-		bDownShootTrun = false;
-
-	}
-
-
-	if (key == 'b')
-	{
-		bUpshoot = true;
-	}
-	if (key == 'B')
-	{
-		bUpshoot = false;
-	}
-
-
-
-
-	if (key == 'n')
-	{
-		bMoveAll = false; // 아래 몸통 움직이기
-
-		bMoveLeft = false; // 아래 몸통 움직이기
-
-		bParallel = false; // 아래몸통 회전
-
-
-		bDownShootTrun = false; // 아래포신 회전
-
-
-		bDownShoorMergePlay = false; // 실행 위에것 꺼야함
-		bDownShootMerge = false; // 아래포신 합치기
-
-		bUpshoot = false; // 위에 포신 움직이기
-		bUpAngle = false; // 위에 포신 움직이기
-
-		bRotateCamera = false;
-		bRevolutionCamera = false;
-
-	}
-	if (key == 'N')
-	{
-
-		bMoveAll = false; // 아래 몸통 움직이기
-
-		bMoveLeft = false; // 아래 몸통 움직이기
-
-		bParallel = false; // 아래몸통 회전
-
-
-		bDownShootTrun = false; // 아래포신 회전
-
-
-		bDownShoorMergePlay = false; // 실행 위에것 꺼야함
-		bDownShootMerge = false; // 아래포신 합치기
-
-		bUpshoot = false; // 위에 포신 움직이기
-		bUpAngle = false; // 위에 포신 움직이기
-
-		bRotateCamera = false;
-		bRevolutionCamera = false;
-	}
-
-
-	if (key == 'm')
-	{
-
-		Delete_ALL_Art(AllArt);
-		Delete_ALL_Art(AllArtTwo);
-		Delete_ALL_Art(AllArtThree);
-		Delete_ALL_Art(AllArtFour);
-
-		Create_Face(&LineArt, 0, 0, 0, 100, 100, 100);
-		InitBuffers(&LineArt);
-
-		Create_Cube(&AllArt, 0.f, 5.f, 0.f, 10.f, 5.f, 10.f);
-		InitBuffers(&AllArt);
-
-		Create_Cube(&AllArtTwo, 0.f, 7.5f, 0.f, 5.f, 2.5f, 5.f);
-		InitBuffers(&AllArtTwo);
-		AllArtTwo.back()->ParentMatrix = &AllArt.back()->transformMatrix;
-
-
-		// 자식 포신
-
-		// 왼 0
-		Create_Cube(&AllArtThree, 2.f, 5.f, 0.f, 1.f, 5.f, 1.f);
-		InitBuffers(&AllArtThree);
-		AllArtThree.back()->ParentMatrix = &AllArtTwo.back()->transformMatrix;
-
-		//// 오 1
-
-		Create_Cube(&AllArtThree, -2.f, 5.f, 0.f, 1.f, 5.f, 1.f);
-		InitBuffers(&AllArtThree);
-		AllArtThree.back()->ParentMatrix = &AllArtTwo.back()->transformMatrix;
-
-		// 몸통 포신
-
-		////왼 0
-		Create_Cube(&AllArtFour, 5.f, 0.f, 15.f, 1.f, 1.f, 7.f);
-		InitBuffers(&AllArtFour);
-		AllArtFour.back()->ParentMatrix = &AllArt.back()->transformMatrix;
-
-		//// 오 1
-		Create_Cube(&AllArtFour, -5.f, 0.f, 15.f, 1.f, 1.f, 7.f);
-		InitBuffers(&AllArtFour);
-		AllArtFour.back()->ParentMatrix = &AllArt.back()->transformMatrix;
-
-		bMoveAll = false; // 아래 몸통 움직이기
-
-		bMoveLeft = false; // 아래 몸통 움직이기
-
-		bParallel = false; // 아래몸통 회전
-
-
-		bDownShootTrun = false; // 아래포신 회전
-		fDownShootTrun = 0.f;
-
-
-		bDownShoorMergePlay = false; // 실행 위에것 꺼야함
-		bDownShootMerge = false; // 아래포신 합치기
-
-		bUpshoot = false; // 위에 포신 움직이기
-		bUpAngle = false; // 위에 포신 움직이기
-
-
-		bRotateCamera = false;
-		bRevolutionCamera = false;
-
-		fUpshoot = 0.f;
-
-		DW_Camera.Get_vPos()[0] = 0.f;
-		DW_Camera.Get_vPos()[1] = 30.f;
-		DW_Camera.Get_vPos()[2] = 50.f;
-
-
-		DW_Camera.Get_vRevolution()[0] = 0.f;
-		DW_Camera.Get_vRevolution()[1] = 0.f;
-		DW_Camera.Get_vRevolution()[2] = 0.f;
-
-		DW_Camera.Get_vRotate()[0] = 0.f;
-		DW_Camera.Get_vRotate()[1] = 0.f;
-		DW_Camera.Get_vRotate()[2] = 0.f;
-
-
-
-
-		DW_Camera.RotateX_Camera(-45.f);
-	}
-
-
-	if (key == 'h')
-	{
-		DW_Camera.Move_Front_Camera(0.5f);
-	}
-	if (key == 'H')
-	{
-		DW_Camera.Move_Back_Camera(0.5f);
-	}
-
-	if (key == 'j')
-	{
-		DW_Camera.Move_Right_Camera(0.5f);
-	}
-	if (key == 'J')
-	{
-		DW_Camera.Move_Left_Camera(0.5f);
-	}
-
-	if (key == 'k')
-	{
-		DW_Camera.Move_Up_Camera(0.5f);
-	}
-	if (key == 'K')
-	{
-		DW_Camera.Move_Down_Camera(0.5f);
-	}
-
-	if (key == 'l')
-	{
-		bRotateCamera = true;
-	}
-	if (key == 'L')
-	{
-		bRotateCamera = false;
-	}
-
-	if (key == ';')
-	{
-		bRevolutionCamera = true;
-	}
-	if (key == ':')
-	{
-		bRevolutionCamera = false;
-	}
-
+	
 
 }
 
@@ -994,27 +886,11 @@ GLvoid Create_DWArt(vector<DWArt*>* pVec, ArtType eDraw, GLfloat x, GLfloat y, G
 
 GLvoid RotateAll()
 {
-	//if (AllArt.size() == 0)
-	//{
-	//	return;
-	//}
+	if (RotateCamera)
+	{
+		DW_Camera.Get_vRotate()[1] += 0.1f;
 
-	//if (bLeftTrun)
-	//{
-	//	AllArt.front()->vRotate[0] += RotateX;
-	//	AllArt.front()->vRotate[1] += RotateY;
-	//}
-	//if (bRightTrun)
-	//{
-	//	AllArt.back()->vRotate[0] += RotateX;
-	//	AllArt.back()->vRotate[1] += RotateY;
-	//}
-
-	//for (auto& iter : AllArt)
-	//{
-	//	iter->vRotate[0] += RotateX * 0.01f;
-	//	iter->vRotate[1] += RotateY * 0.01f;
-	//}
+	}
 }
 
 
@@ -1112,21 +988,23 @@ GLvoid MoveSpiral()
 
 }
 
-GLvoid MoveChange()
+GLvoid MoveDoor()
 {
-	if (!bMove_Change)
+	if (!bOpen_door)
 	{
 		return;
 	}
 
-	if (iMove_Sprial < 400)
+	else
 	{
-		float t = (float)iMove_Sprial / 400.f;
-
-		AllArt.front()->vPos[2] = -20.f * (1.f - t) + 20.f * t;
-		AllArt.back()->vPos[2] = -20.f * t + 20.f * (1.f - t);
-		++iMove_Sprial;
+		if (abs(AllArtTwo.back()->vPos[0]) < 75.f)
+		{
+			AllArtTwo[0]->vPos[0] -= 0.1f;
+			AllArtTwo[1]->vPos[0] += 0.1f;
+		}
 	}
+
+
 }
 
 GLvoid Move_Change_Revolution()
@@ -1152,39 +1030,6 @@ GLvoid Move_Change_Up_Down()
 		return;
 	}
 
-	if (iMove_Up_down == 0)
-	{
-		float t = (float)iMove_Sprial / 200.f;
-
-		AllArt.front()->vPos[2] = -20.f * (1.f - t) + 0.f * t;
-		AllArt.front()->vPos[1] = 0.f * (1.f - t) + 10.f * t;
-
-		AllArt.back()->vPos[2] = 0.f * t + 20.f * (1.f - t);
-		AllArt.back()->vPos[1] = 0.f * (1.f - t) - 10.f * t;
-
-
-		++iMove_Sprial;
-	}
-	else if (iMove_Up_down == 1)
-	{
-		float t = (float)iMove_Sprial / 200.f;
-
-		AllArt.front()->vPos[2] = 0.f * (1.f - t) + 20.f * t;
-		AllArt.front()->vPos[1] = 10.f * (1.f - t) + 0.f * t;
-
-
-
-		AllArt.back()->vPos[2] = 0.f * (1.f - t) + -20.f * t;
-		AllArt.back()->vPos[1] = -10.f * (1.f - t) - 0.f * t;
-
-		++iMove_Sprial;
-	}
-
-	if (iMove_Sprial > 200)
-	{
-		iMove_Up_down += 1;
-		iMove_Sprial = 0;
-	}
 
 }
 
@@ -1194,241 +1039,188 @@ GLvoid Move_Rotate()
 	{
 		return;
 	}
-	else
-	{
-		RavolutionY = -1.f;
-		RotateX = -1.f;
-		RotateY = -1.f;
-
-		if (AllArt.back()->vScale[0] < 3.f)
-		{
-			AllArt.back()->vScale[0] += 0.01f;
-			AllArt.back()->vScale[1] += 0.01f;
-			AllArt.back()->vScale[2] += 0.01f;
-		}
-
-		if (AllArt.front()->vScale[0] > 1.f)
-		{
-			AllArt.front()->vScale[0] -= 0.01f;
-			AllArt.front()->vScale[1] -= 0.01f;
-			AllArt.front()->vScale[2] -= 0.01f;
-		}
-
-	}
 
 }
 
 GLvoid ChangeMode()
 {
-	if (LineArt.size() == 4)
-	{
-		DeleteArt(LineArt, LineArt.back());
-	}
-
-	bMove_Sprial = false;
-	bMove_Change = false;
-	bMove_Change_Revolution = false;
-	bMove_Change_Up_Down = false;
-	bMove_Rotate = false;
-
-	RavolutionX = 0.f;
-	RavolutionY = 0.f;
-
-	RotateX = 0.f;
-	RotateY = 0.f;
-
-	iMove_Sprial = 0;
-	iMove_Up_down = 0;
-
-	AllArt.front()->vRotate[0] = 0.f;
-	AllArt.front()->vRotate[1] = 0.f;
-	AllArt.front()->vRotate[2] = 0.f;
-
-	AllArt.back()->vRotate[0] = 0.f;
-	AllArt.back()->vRotate[1] = 0.f;
-	AllArt.back()->vRotate[2] = 0.f;
-
-
-	ScaleOne = 0.f;
-	ScaleTwo = 0.f;
-
-	AllArt.front()->vRevolution[1] = 0.f;
-	AllArt.back()->vRevolution[1] = 0.f;
-
-	AllArt.front()->vPos[0] = 0.f;
-	AllArt.front()->vPos[1] = 0.f;
-	AllArt.front()->vPos[2] = 20.f;
-
-	AllArt.back()->vPos[0] = 0.f;
-	AllArt.back()->vPos[1] = 0.f;
-	AllArt.back()->vPos[2] = -20.f;
-
+	
 }
 
-GLvoid Change_Move()
+GLvoid Ball_Move()
 {
 
-	if (AllArt.size() == 0)
-	{
-		return;
-	}
+	static float fAngle = 0.5f;
+	
+	static int LiDir = 1.f;
+	static int RiDir = -1.f;
 
-	if (bMoveAll)
+	if (bPlayerMove)
 	{
-		if (bMoveLeft)
+		if (fAngle <= 40.f + fSpeed && fAngle >= -40.f - fSpeed)
 		{
-			if (AllArt.back()->vPos[0] <= 50.f)
-			{
-				AllArt.back()->vPos[0] += 0.25f;
-			}
-			else
-			{
-				bMoveLeft = false;
-			}
+			fAngle += 0.05f * LiDir * fSpeed;
 
-		}
-		else
-		{
-			if (AllArt.back()->vPos[0] >= -50.f)
-			{
-				AllArt.back()->vPos[0] -= 0.25f;
-			}
-			else
-			{
-				bMoveLeft = true;
-			}
-		}
+			AllArtFour[3]->vRevolution[0] += 0.05f * LiDir * fSpeed;
+			AllArtFour[6]->vRevolution[0] += 0.05f * LiDir * fSpeed;
 
-	}
-
-
-	if (bParallel)
-	{
-		AllArt.back()->vRotate[1] += RotateY * 0.5f;
-	}
-	else
-	{
-
-	}
-
-	if (bDownShootTrun)
-	{
-		AllArtFour[0]->vRevolution[1] += fDownShootTrun * 0.5f;
-		AllArtFour[1]->vRevolution[1] -= fDownShootTrun * 0.5f;
-	}
-	else
-	{
-
-	}
-
-	if (bDownShoorMergePlay)
-	{
-		if (bDownShootMerge)
-		{
-			if (AllArtFour[0]->vRevolution[1] < 0)
-			{
-				AllArtFour[0]->vRevolution[1] += 0.5f;
-			}
-			else if (AllArtFour[0]->vRevolution[1] > 0)
-			{
-				AllArtFour[0]->vRevolution[1] -= 0.5f;
-			}
-
-			if (AllArtFour[1]->vRevolution[1] < 0)
-			{
-				AllArtFour[1]->vRevolution[1] += 0.5f;
-			}
-			else if (AllArtFour[1]->vRevolution[1] > 0)
-			{
-				AllArtFour[1]->vRevolution[1] -= 0.5f;
-			}
-
-			if (AllArtFour[0]->vRevolution[0] == 0 && AllArtFour[1]->vRevolution[1] == 0)
-			{
-				if (AllArtFour[0]->vPos[0] != 0.f)
-				{
-					AllArtFour[0]->vPos[0] -= 0.5f;
-				}
-				if (AllArtFour[1]->vPos[0] != 0.f)
-				{
-					AllArtFour[1]->vPos[0] += 0.5f;
-				}
-			}
-			if (AllArtFour[0]->vPos[0] == 0 && AllArtFour[1]->vPos[0] == 0)
-			{
-				bDownShoorMergePlay = false;
-			}
-
+			AllArtFour[4]->vRevolution[0] += 0.05f * RiDir * fSpeed;
+			AllArtFour[5]->vRevolution[0] += 0.05f * RiDir * fSpeed;
 		}
 		else
 		{
 
-			if (AllArtFour[0]->vRevolution[1] < 0)
+			fAngle = (40.f + fSpeed) * LiDir;
+
+			LiDir = -1 * LiDir;
+			RiDir = -1 * RiDir;
+
+			AllArtFour[3]->vRevolution[0] = fAngle;
+			AllArtFour[6]->vRevolution[0] = fAngle;
+
+			AllArtFour[4]->vRevolution[0] = -fAngle;
+			AllArtFour[5]->vRevolution[0] = -fAngle;
+
+		}
+
+
+		if (AllArtFour.front()->vPos[0] < -50.f)
+		{
+			memset(bMoveDir, 0, sizeof(bMoveDir));
+			bMoveDir[2] = true;
+		}
+
+		if (AllArtFour.front()->vPos[0] > 50.f)
+		{
+			memset(bMoveDir, 0, sizeof(bMoveDir));
+			bMoveDir[0] = true;
+		}
+
+		if (AllArtFour.front()->vPos[2] < -50.f)
+		{
+			memset(bMoveDir, 0, sizeof(bMoveDir));
+			bMoveDir[3] = true;
+		}
+
+		if (AllArtFour.front()->vPos[2] > 50.f)
+		{
+			memset(bMoveDir, 0, sizeof(bMoveDir));
+			bMoveDir[1] = true;
+		}
+
+
+		fGravityTime += 0.01f;
+
+		AllArtFour.front()->vPos[1] -= 5.8f * fGravityTime;
+
+		if (bJump && bOnBoxJump)
+		{
+			if (fJumpTime == 0.f)
 			{
-				AllArtFour[0]->vRevolution[1] += 0.5f;
-			}
-			else if (AllArtFour[0]->vRevolution[1] > 0)
-			{
-				AllArtFour[0]->vRevolution[1] -= 0.5f;
+				AllArtFour.front()->vPos[1] += 0.5f;
 			}
 
-			if (AllArtFour[1]->vRevolution[1] < 0)
-			{
-				AllArtFour[1]->vRevolution[1] += 0.5f;
-			}
-			else if (AllArtFour[1]->vRevolution[1] > 0)
-			{
-				AllArtFour[1]->vRevolution[1] -= 0.5f;
-			}
+			fJumpTime += 0.001f;
+			AllArtFour.front()->vPos[1] += 5.8f * fGravityTime;
 
-			if (AllArtFour[0]->vRevolution[0] == 0 && AllArtFour[1]->vRevolution[1] == 0)
+			AllArtFour.front()->vPos[1] += sinf(fJumpTime * 3.141592f / 180.f) * 100.f - 5.8f * fJumpTime * fJumpTime;
+
+		}
+
+
+
+
+		// 박스들과 충돌처리
+
+		for (int i = 0; i < 3; ++i)
+		{
+		
+
+			if (AllArtFour.front()->vPos[0] + AllArtFour.front()->rx > AllArtThree[i]->vPos[0] - AllArtThree[i]->rx &&
+				AllArtFour.front()->vPos[0] - AllArtFour.front()->rx < AllArtThree[i]->vPos[0] + AllArtThree[i]->rx &&
+				AllArtFour.front()->vPos[2] + AllArtFour.front()->rz > AllArtThree[i]->vPos[2] - AllArtThree[i]->rz &&
+				AllArtFour.front()->vPos[2] - AllArtFour.front()->rz < AllArtThree[i]->vPos[2] + AllArtThree[i]->rz)
 			{
-				if (AllArtFour[0]->vPos[0] != 5.f)
+
+				if (bJump)
 				{
-					AllArtFour[0]->vPos[0] += 0.5f;
-				}
-				if (AllArtFour[1]->vPos[0] != -5.f)
-				{
-					AllArtFour[1]->vPos[0] -= 0.5f;
-				}
-			}
+					if (AllArtFour.front()->vPos[1] < 25.f)
+					{
+						fJumpTime = 0.f;
+						fGravityTime = 0.f;
+						AllArtFour.front()->vPos[1] = 25.f;
+						bOnBoxJump = false;
+					}
 
-			if (AllArtFour[0]->vPos[0] == 5.f && AllArtFour[1]->vPos[0] == -5.f)
-			{
-				bDownShoorMergePlay = false;
+					break;
+				}
+				else if (AllArtFour.front()->vPos[1] > 15.f)
+				{
+					break;
+				}
+				else
+				{
+					for (int i = 0; i < 4; ++i)
+					{
+						if (bMoveDir[i])
+						{
+							memset(bMoveDir, 0, sizeof(bMoveDir));
+							bMoveDir[(i + 2) % 4] = true;
+							break;
+						}
+					}
+				}
 			}
+		}
+
+
+
+		if (AllArtFour.front()->vPos[1] < 15.f)
+		{
+			AllArtFour.front()->vPos[1] = 15.f;
+			fJumpTime = 0.f;
+			fGravityTime = 0.f;
+			bJump = false;
+			bOnBoxJump = true;
+		}
+
+
+
+
+
+		if (bMoveDir[0]) // 왼
+		{
+			AllArtFour.front()->vRotate[1] = 90.f;
+			AllArtFour.front()->vPos[0] -= fSpeed * 0.01f;
+
+			
+		}
+
+		if (bMoveDir[1]) // 앞
+		{
+			AllArtFour.front()->vRotate[1] = 0.f;
+			AllArtFour.front()->vPos[2] -= fSpeed * 0.01f;
+
+
+		}
+
+		if (bMoveDir[2]) // 오
+		{
+			AllArtFour.front()->vRotate[1] = -90.f;
+			AllArtFour.front()->vPos[0] += fSpeed * 0.01f;
+
+
+		}
+
+		if (bMoveDir[3]) // 뒤
+		{
+			AllArtFour.front()->vRotate[1] = 180.f;
+			AllArtFour.front()->vPos[2] += fSpeed * 0.01f;
+
+
 		}
 	}
-
-	if (bUpshoot)
-	{
-		if (bUpAngle)
-		{
-			if (fUpshoot < 90.f)
-			{
-				fUpshoot += 0.5f;
-			}
-			else
-			{
-				bUpAngle = false;
-			}
-		}
-		else
-		{
-			if (fUpshoot > -90.f)
-			{
-				fUpshoot -= 0.5f;
-			}
-			else
-			{
-				bUpAngle = true;
-			}
-		}
-
-		AllArtThree[0]->vRevolution[0] = fUpshoot;
-		AllArtThree[1]->vRevolution[0] = -fUpshoot;
-	}
-
+	
 }
 
 GLvoid Change_Draw_Timing_Cube()
