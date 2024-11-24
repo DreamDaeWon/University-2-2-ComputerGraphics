@@ -133,7 +133,6 @@ void CDW_Camera2::Move_Right_Camera(float _fMove)
 
 void CDW_Camera2::Move_Left_Camera(float _fMove)
 {
-
 	vPos[0] -= _fMove;
 
 	// translation

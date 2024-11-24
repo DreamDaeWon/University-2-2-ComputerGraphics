@@ -9,7 +9,7 @@ uniform_int_distribution<int> RandomIndexTri(0, 5);
 
 uniform_int_distribution<int> RandomOnBoxPos(-45, 45);
 
-uniform_real_distribution<float> RandomMoveVec(0.f, 1.f);
+uniform_real_distribution<float> RandomMoveVec(-1.f, 1.f);
 
 
 // 朝五虞 持失
@@ -1180,6 +1180,7 @@ GLvoid Box_Move()
 			AllArtThree[i]->vPos[1] -= 0.1f;
 			AllArtThree[i]->vPos[0] -= 0.1f;
 		}
+
 	}
 
 

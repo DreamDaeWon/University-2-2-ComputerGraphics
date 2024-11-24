@@ -19,6 +19,8 @@
 
 
 
+
+
 #define _CRT_SECURE_NO_WARNINGS
 #define MAX_LINE_LENGTH 256
 #include <stdlib.h>  
@@ -234,6 +236,10 @@ GLvoid Rotate_Art(DWArt* pArt, GLfloat fAngle);
 GLvoid Set_Draw_Model_Style(DWArt* pArt, int _iStyle); // 도형 스타일);
 
 GLvoid InitBuffer(DWArt* pArt);
+
+GLvoid InitBuffer_Light(DWArt* pArt);
+
+
 GLvoid UpdateBuffer(DWArt* pArt);
 
 
@@ -291,6 +297,40 @@ GLvoid UpdateBuffer(DWArt* pArt)
 }
 
 inline GLvoid InitBuffer(DWArt* pArt)
+{
+	glGenVertexArrays(1, &pArt->VAO); // VAO 할당
+	glGenBuffers(2, pArt->VBO); // VBO 할당
+	glGenBuffers(1, &pArt->EBO); // EBO 할당
+
+	glBindVertexArray(pArt->VAO); // VAO 바인딩
+
+	// Vertex 버퍼
+	glBindBuffer(GL_ARRAY_BUFFER, pArt->VBO[0]);
+	glBufferData(GL_ARRAY_BUFFER, pArt->Vertex.size() * sizeof(glm::vec3), pArt->Vertex.data(), GL_STREAM_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// Index 버퍼
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pArt->EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, pArt->indexVerTex.size() * sizeof(unsigned int), pArt->indexVerTex.data(), GL_STREAM_DRAW);
+
+	// VertexColor 버퍼
+	glBindBuffer(GL_ARRAY_BUFFER, pArt->VBO[1]);
+	glBufferData(GL_ARRAY_BUFFER, pArt->VertexColor.size() * sizeof(glm::vec3), pArt->VertexColor.data(), GL_STREAM_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+
+
+
+
+	glBindVertexArray(0); // VAO 바인딩 해제
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+}
+
+inline GLvoid InitBuffer_Light(DWArt* pArt)
 {
 	glGenVertexArrays(1, &pArt->VAO); // VAO 할당
 	glGenBuffers(2, pArt->VBO); // VBO 할당
@@ -1278,4 +1318,32 @@ void read_obj_file(const char* filename, Model* model)
 		}
 	}
 	fclose(file);
+}
+
+ULONG ProcIDFromWnd(HWND hwnd) // 윈도우 핸들로 프로세스 아이디 얻기  
+{
+	ULONG idProc;
+	GetWindowThreadProcessId(hwnd, &idProc);
+	return idProc;
+}
+
+HWND GetWinHandle(ULONG pid) // 프로세스 아이디로 윈도우 핸들 얻기  
+{
+	HWND tempHwnd = FindWindow(NULL, NULL); // 최상위 윈도우 핸들 찾기
+
+	while (tempHwnd != NULL)
+	{
+		if (GetParent(tempHwnd) == NULL) // 최상위 핸들인지 체크, 버튼 등도 핸들을 가질 수 있으므로 무시하기 위해  
+			if (pid == 1)
+				return tempHwnd;
+		tempHwnd = GetWindow(tempHwnd, GW_HWNDNEXT); // 다음 윈도우 핸들 찾기  
+	}
+	return NULL;
+}
+
+// GLUT 윈도우 핸들 얻기 
+HWND GetGLUTWindowHandle() 
+{ 
+	// 활성화된 윈도우 핸들 가져오기 
+	return GetForegroundWindow(); 
 }
