@@ -124,9 +124,9 @@ vector<DWArt*> AllArt{};
 vector<DWArt*> AllArtTwo{};
 vector<DWArt*> AllArtThree{};
 vector<DWArt*> AllArtFour{};
-vector<DWArt*> RightBottom{};
+vector<DWArt*> AllArt_Light{};
 
-vector<DWArt*>* AllVec[5]{ &AllArt ,&AllArtTwo ,&AllArtThree ,&AllArtFour ,&RightBottom };
+vector<DWArt*>* AllVec[5]{ &AllArt ,&AllArtTwo ,&AllArtThree ,&AllArtFour ,&AllArt_Light };
 
 float fSize[4][4]{};
 
@@ -191,9 +191,9 @@ void UpdateBuffers()
 		UpdateBuffer(AllArtFour[i]);
 	}
 
-	for (int i = 0; i < RightBottom.size(); ++i)
+	for (int i = 0; i < AllArt_Light.size(); ++i)
 	{
-		UpdateBuffer(RightBottom[i]);
+		UpdateBuffer(AllArt_Light[i]);
 	}
 
 }
@@ -230,8 +230,8 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	InitBuffers(&AllArtTwo);
 	Create_Triangle(&AllArtFour,WinsizeX/4.f, WinsizeY / 4.f*3.f,50.f,100.f); // 3사분면
 	InitBuffers(&AllArtFour);
-	Create_Triangle(&RightBottom,WinsizeX/4.f*3.f, WinsizeY / 4.f*3.f,50.f,100.f); // 4사분면
-	InitBuffers(&RightBottom);
+	Create_Triangle(&AllArt_Light,WinsizeX/4.f*3.f, WinsizeY / 4.f*3.f,50.f,100.f); // 4사분면
+	InitBuffers(&AllArt_Light);
 
 
 	glutDisplayFunc(drawScene); // 출력 함수의 지정
@@ -372,8 +372,8 @@ GLvoid MouseInput(int button, int state, int x, int y)
 					break;
 
 				case 4:
-					Delete_ALL_Art(RightBottom);
-					Create_DWArt(&RightBottom, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
+					Delete_ALL_Art(AllArt_Light);
+					Create_DWArt(&AllArt_Light, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
 					break;
 
 				default:
@@ -409,7 +409,7 @@ GLvoid MouseInput(int button, int state, int x, int y)
 				case 4:
 
 					
-					Create_DWArt(&RightBottom, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
+					Create_DWArt(&AllArt_Light, DW_TRIANGLE, x, y, fSize, fSize * 2.f);
 					break;
 
 				}

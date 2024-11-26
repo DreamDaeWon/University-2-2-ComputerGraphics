@@ -62,6 +62,46 @@ float Pos_Pentagon[5][2]{ {-1.f,1.f },{-1.5f,-1.f }, {0.f,-2.f} ,{1.5f,-1.f} ,{1
 float Pos_Dot[5][2]{ {-0.1f,0.1f },{-0.1f,-0.1f }, {0.1f,-0.1f} ,{0.1f,-0.1f} ,{0.1f,0.1f} };
 
 
+float vertices[] = { //--- 버텍스 속성: 좌표값(FragPos), 노말값 (Normal)
+0.0f, 0.0f, -1.0f,
+ 0.0f, 0.0f, -1.0f,
+0.0f, 0.0f, -1.0f,
+0.0f, 0.0f, -1.0f,
+ 0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, -1.0f,
+	0.0f, 0.0f, 1.0f,
+0.0f, 0.0f, 1.0f, 
+0.0f, 0.0f, 1.0f,
+0.0f, 0.0f, 1.0f,
+0.0f, 0.0f, 1.0f,
+	0.0f, 0.0f, 1.0f,
+-1.0f, 0.0f, 0.0f,
+ -1.0f, 0.0f, 0.0f, 
+	 -1.0f, 0.0f, 0.0f,
+	 -1.0f, 0.0f, 0.0f,
+	-1.0f, 0.0f, 0.0f, 
+-1.0f, 0.0f, 0.0f,
+1.0f, 0.0f, 0.0f, 
+ 1.0f, 0.0f, 0.0f,
+ 1.0f, 0.0f, 0.0f,
+	1.0f, 0.0f, 0.0f,
+1.0f, 0.0f, 0.0f,
+1.0f, 0.0f, 0.0f,
+	0.0f, -1.0f, 0.0f,
+ 0.0f, -1.0f, 0.0f, 
+0.0f, -1.0f, 0.0f,
+ 0.0f, -1.0f, 0.0f, 
+	0.0f, -1.0f, 0.0f,
+	 0.0f, -1.0f, 0.0f,
+	0.0f, 1.0f, 0.0f,
+ 0.0f, 1.0f, 0.0f, 
+0.0f, 1.0f, 0.0f,
+ 0.0f, 1.0f, 0.0f,
+ 0.0f, 1.0f, 0.0f,
+ 0.0f, 1.0f, 0.0f
+};
+
+
 enum ArtType {DWART_LINE, DWART_CIRCLE_SPIRAL, DWART_FACE, DWART_CUBE,DWART_TETRATEDRON, DWART_MODEL_SPHERE,DWART_MODEL_SYLINDER, DWART_END};
 
 enum eMoveType { DIR_RIGHT, DIR_LEFT, DIR_UP, DIR_DOWN, DIR_LU, DIR_RU, DIR_LD, DIR_RD };
@@ -164,11 +204,19 @@ struct DWArt
 	int Move_Timer{}; // 움직일 때 사용할 값
 
 	vector<glm::vec3> Vertex{}; // 버텍스
+
 	vector<glm::vec3> VertexColor{}; // 버텍스 색상
+
+	vector<glm::vec3> Vertex_Nomal{}; // 버텍스 노멀 벡터
+
 	vector<GLuint> indexVerTex{}; // 인덱스 정점
 
+
+
+
+
 	GLuint VAO{};
-	GLuint VBO[3]{};
+	GLuint VBO[4]{};
 
 	GLuint EBO{};
 };
@@ -184,6 +232,8 @@ struct DWArt
 
 // 함수 선언부
 char* filetobuf(const char* file);
+void read_obj_file(const char* filename, DWArt* pArt);
+
 GLvoid Delete_ALL_Art(vector<DWArt*>& pvector); // 해당 벡터의 모든 객체 지우기
 GLvoid DeleteArt(vector<DWArt*>& pvector, DWArt* pArt); // 해당 벡터에서 원하는 원소 지우기
 GLvoid ReleaseArt(vector<DWArt*>& pvector, DWArt* pArt); // 해당 벡터에서 원하는 원소 delete만 하기(벡터에는 nullptr값)
@@ -215,6 +265,10 @@ GLvoid Create_Face_Trangle(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLflo
 
 GLvoid Create_Cube(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 큐브 추가
 
+GLvoid Create_Obj(const char* filename, vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 큐브 추가
+
+GLvoid Create_Obj_Want_Color(const char* filename, glm::vec3 _color, vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz); // 원하는 벡터에 원하는 큐브 추가
+
 GLvoid Create_Circle_Spiral(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _final_Radius,GLfloat _UPRadius); // 원하는 벡터에 원하는 원 스파이럴 추가
 
 
@@ -241,6 +295,7 @@ GLvoid InitBuffer_Light(DWArt* pArt);
 
 
 GLvoid UpdateBuffer(DWArt* pArt);
+GLvoid Update_light_Buffer(DWArt* pArt);
 
 
 GLvoid ReBindArt(DWArt* pArt, ArtType eDraw);
@@ -296,10 +351,37 @@ GLvoid UpdateBuffer(DWArt* pArt)
 
 }
 
+GLvoid Update_light_Buffer(DWArt* pArt)
+{
+	glBindVertexArray(pArt->VAO); // VAO 바인딩
+
+	// Vertex 버퍼 업데이트
+	glBindBuffer(GL_ARRAY_BUFFER, pArt->VBO[0]);
+	glBufferData(GL_ARRAY_BUFFER, pArt->Vertex.size() * sizeof(glm::vec3), pArt->Vertex.data(), GL_DYNAMIC_DRAW);
+
+	// Index 버퍼 업데이트
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, pArt->EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, pArt->indexVerTex.size() * sizeof(unsigned int), pArt->indexVerTex.data(), GL_DYNAMIC_DRAW);
+
+	// VertexColor 버퍼 업데이트
+	glBindBuffer(GL_ARRAY_BUFFER, pArt->VBO[1]);
+	glBufferData(GL_ARRAY_BUFFER, pArt->VertexColor.size() * sizeof(glm::vec3), pArt->VertexColor.data(), GL_DYNAMIC_DRAW);
+
+
+	// Normal 버퍼
+	glBindBuffer(GL_ARRAY_BUFFER, pArt->VBO[2]);
+	glBufferData(GL_ARRAY_BUFFER, pArt->Vertex_Nomal.size() * sizeof(glm::vec3), pArt->Vertex_Nomal.data(), GL_STATIC_DRAW);
+
+
+	glBindVertexArray(0); // VAO 바인딩 해제
+
+}
+
+
 inline GLvoid InitBuffer(DWArt* pArt)
 {
 	glGenVertexArrays(1, &pArt->VAO); // VAO 할당
-	glGenBuffers(2, pArt->VBO); // VBO 할당
+	glGenBuffers(3, pArt->VBO); // VBO 할당
 	glGenBuffers(1, &pArt->EBO); // EBO 할당
 
 	glBindVertexArray(pArt->VAO); // VAO 바인딩
@@ -319,7 +401,6 @@ inline GLvoid InitBuffer(DWArt* pArt)
 	glBufferData(GL_ARRAY_BUFFER, pArt->VertexColor.size() * sizeof(glm::vec3), pArt->VertexColor.data(), GL_STREAM_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
-
 
 
 
@@ -333,7 +414,7 @@ inline GLvoid InitBuffer(DWArt* pArt)
 inline GLvoid InitBuffer_Light(DWArt* pArt)
 {
 	glGenVertexArrays(1, &pArt->VAO); // VAO 할당
-	glGenBuffers(2, pArt->VBO); // VBO 할당
+	glGenBuffers(3, pArt->VBO); // VBO 할당
 	glGenBuffers(1, &pArt->EBO); // EBO 할당
 
 	glBindVertexArray(pArt->VAO); // VAO 바인딩
@@ -353,6 +434,14 @@ inline GLvoid InitBuffer_Light(DWArt* pArt)
 	glBufferData(GL_ARRAY_BUFFER, pArt->VertexColor.size() * sizeof(glm::vec3), pArt->VertexColor.data(), GL_STREAM_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
+
+	// Normal 버퍼
+	glBindBuffer(GL_ARRAY_BUFFER, pArt->VBO[2]);
+	glBufferData(GL_ARRAY_BUFFER, pArt->Vertex_Nomal.size() * sizeof(glm::vec3), pArt->Vertex_Nomal.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); //--- 노말 속성
+	glEnableVertexAttribArray(2); // 이 숫자와 셰이더 간에 숫자를 일치 시켜야 함
+									// ex) layout (location = 2) in vec3 vNormal;
+
 
 	glBindVertexArray(0); // VAO 바인딩 해제
 
@@ -857,6 +946,83 @@ inline GLvoid Create_Cube(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloa
 	
 }
 
+inline GLvoid Create_Obj(const char* filename,vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz)
+{
+	DWArt* Art = new DWArt{};
+
+	// 중점
+	Art->vPos[0] = _CX;
+	Art->vPos[1] = _CY;
+	Art->vPos[2] = _CZ;
+
+
+
+	// 크기 설정
+	Art->rx = _rx;
+	Art->ry = _ry;
+	Art->rz = _rz;
+
+	Art->vScale[0] = _rx * 0.5f;
+	Art->vScale[1] = _ry * 0.5f;
+	Art->vScale[2] = _rz * 0.5f;
+
+	
+	// 형식
+	Art->eType = DWART_CUBE;
+
+	read_obj_file(filename, Art);
+
+
+	// 색상
+
+	for (int i = 0; i < Art->indexVerTex.size(); ++i)
+	{
+		//Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+		Art->VertexColor.push_back(glm::vec3(0.2f,0.5f,0.7f));
+	}
+
+	pVec->push_back(Art);
+
+}
+
+inline GLvoid Create_Obj_Want_Color(const char* filename, glm::vec3 _color, vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _rx, GLfloat _ry, GLfloat _rz)
+{
+	DWArt* Art = new DWArt{};
+
+	// 중점
+	Art->vPos[0] = _CX;
+	Art->vPos[1] = _CY;
+	Art->vPos[2] = _CZ;
+
+
+
+	// 크기 설정
+	Art->rx = _rx;
+	Art->ry = _ry;
+	Art->rz = _rz;
+
+	Art->vScale[0] = _rx * 0.5f;
+	Art->vScale[1] = _ry * 0.5f;
+	Art->vScale[2] = _rz * 0.5f;
+
+
+	// 형식
+	Art->eType = DWART_CUBE;
+
+	read_obj_file(filename, Art);
+
+
+	// 색상
+
+	for (int i = 0; i < Art->indexVerTex.size(); ++i)
+	{
+		//Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+		Art->VertexColor.push_back(_color);
+	}
+
+	pVec->push_back(Art);
+}
+
 inline GLvoid Create_Circle_Spiral(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloat _CZ, GLfloat _final_Radius, GLfloat _UPRadius)
 {
 	DWArt* Art = new DWArt{};
@@ -1273,8 +1439,28 @@ void read_newline(char* str)
 	if ((pos = strchr(str, '\n')) != NULL)
 		*pos = '\0';
 }
-void read_obj_file(const char* filename, Model* model) 
+
+struct DW_Model 
 {
+	unsigned int iVertexNum{};
+	unsigned int iNormalNum{};
+	unsigned int iIndexNum{};
+};
+
+void read_obj_file(const char* filename, DWArt* pArt) 
+{
+	int iVerNum{};
+
+	int iIndexNum{};
+
+	int iNormalNum{};
+
+	vector<DW_Model> vecIndex_Index{}; // 모든 인덱스 값
+
+	vector<glm::vec3> vec_All_Normal{}; // 모든 노멀벡터의 값
+
+	vector<glm::vec3> vec_All_Vertex{}; // 모든 정점벡터의 값
+
 	FILE* file;
 	fopen_s(&file, filename, "r");
 	if (!file) 
@@ -1283,40 +1469,99 @@ void read_obj_file(const char* filename, Model* model)
 		exit(EXIT_FAILURE);
 	}
 	char line[MAX_LINE_LENGTH];
-	model->vertex_count = 0;
-	model->face_count = 0;
-		while (fgets(line, sizeof(line), file)) 
-		{
-			read_newline(line);
-			if (line[0] == 'v' && line[1] == ' ')
-				model->vertex_count++;
-			else if (line[0] == 'f' && line[1] == ' ')
-				model->face_count++;
-		}
-	fseek(file, 0, SEEK_SET);
-	model->vertices = (Vertex*)malloc(model->vertex_count * sizeof(Vertex));
-	model->faces = (Face*)malloc(model->face_count * sizeof(Face));
-	size_t vertex_index = 0; size_t face_index = 0;
-	while (fgets(line, sizeof(line), file)) 
+	while (fgets(line, sizeof(line), file))
 	{
 		read_newline(line);
-		if (line[0] == 'v' && line[1] == ' ') 
+		if (line[0] == 'v' && line[1] == ' ')
 		{
-			int result = sscanf_s(line + 2, "%f %f %f", &model->vertices[vertex_index].x,
-				&model->vertices[vertex_index].y,
-				&model->vertices[vertex_index].z);
+			iVerNum++;
+		}
+		else if (line[0] == 'f' && line[1] == ' ')
+		{
+			iIndexNum += 3;
+		}
+		else if (line[0] == 'v' && line[1] == 'n')
+		{
+			iNormalNum++;
+		}
+
+
+	}
+	fseek(file, 0, SEEK_SET);
+
+
+	// 벡터 공간 만들기
+	for (int i = 0; i < iVerNum; ++i)
+	{
+		vec_All_Vertex.push_back(glm::vec3());
+	}
+
+	for (int i = 0; i < iIndexNum; ++i)
+	{
+		vecIndex_Index.push_back(DW_Model{}); // 해당 인덱스에 어떤 노멀값이 들어가는지에 대한 값
+	}
+
+	for (int i = 0; i < iNormalNum; ++i)
+	{
+		vec_All_Normal.push_back(glm::vec3());
+	}
+
+	size_t vertex_index = 0; size_t face_index = 0;
+	size_t Normal_index = 0;
+	while (fgets(line, sizeof(line), file))
+	{
+		read_newline(line);
+		if (line[0] == 'v' && line[1] == ' ')
+		{
+			int result = sscanf_s(line + 2, "%f %f %f",
+				&vec_All_Vertex[vertex_index].x,
+				&vec_All_Vertex[vertex_index].y,
+				&vec_All_Vertex[vertex_index].z
+			);
+			//vec_All_Vertex[vertex_index].z = -vec_All_Vertex[vertex_index].z;
+
 			vertex_index++;
 		}
-		else if (line[0] == 'f' && line[1] == ' ') 
+		else if (line[0] == 'v' && line[1] == 'n' && line[2] == ' ')
 		{
-			unsigned int v1, v2, v3;
-			int result = sscanf_s(line + 2, "%u %u %u", &v1, &v2, &v3);
-			model->faces[face_index].v1 = v1 - 1; // OBJ indices start at 1
-			model->faces[face_index].v2 = v2 - 1;
-			model->faces[face_index].v3 = v3 - 1;
-			face_index++;
+			int result = sscanf_s(line + 3, "%f %f %f",
+				&vec_All_Normal[Normal_index].x,
+				&vec_All_Normal[Normal_index].y,
+				&vec_All_Normal[Normal_index].z);
+			//vec_All_Normal[Normal_index].z = -vec_All_Normal[Normal_index].z;
+			Normal_index++;
+			
+		}
+		else if (line[0] == 'f' && line[1] == ' ')
+		{
+			unsigned int v1, v2, v3, v4, v5, v6;
+			int result = sscanf_s(line + 2, "%u//%u %u//%u %u//%u", &v1, &v2, &v3, &v4, &v5, &v6);
+
+			// f 4//4 8//4 5//4
+
+
+
+			vecIndex_Index[face_index].iNormalNum = v2 - 1;
+			vecIndex_Index[face_index++].iVertexNum = v1 - 1; // OBJ indices start at 1
+
+			vecIndex_Index[face_index].iNormalNum = v4 - 1;
+			vecIndex_Index[face_index++].iVertexNum = v3 - 1;
+
+			vecIndex_Index[face_index].iNormalNum = v6 - 1;
+			vecIndex_Index[face_index++].iVertexNum = v5 - 1;
+			//face_index++;
 		}
 	}
+
+	for (int i = 0; i < iIndexNum; ++i)
+	{
+		pArt->Vertex.push_back(vec_All_Vertex[vecIndex_Index[i].iVertexNum]);
+
+		pArt->Vertex_Nomal.push_back(vec_All_Normal[vecIndex_Index[i].iNormalNum]);
+
+		pArt->indexVerTex.push_back(i);
+	}
+
 	fclose(file);
 }
 

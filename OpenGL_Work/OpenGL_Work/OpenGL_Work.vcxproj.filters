@@ -88,6 +88,12 @@
     <Filter Include="소스 파일\IMGUI\real_example">
       <UniqueIdentifier>{5a7eea97-d005-4f6c-bc93-ad012bb7b7f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\OGWork-25">
+      <UniqueIdentifier>{9a777d02-9d4e-4bc5-9c61-51737f190c20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\OGWork-26">
+      <UniqueIdentifier>{49a91ebc-fcc2-426c-bc2e-1566c88bee89}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp">
@@ -210,6 +216,12 @@
     <ClCompile Include="DW_Imgui_Manager.cpp">
       <Filter>소스 파일\IMGUI TEST</Filter>
     </ClCompile>
+    <ClCompile Include="OGWork-25.cpp">
+      <Filter>소스 파일\OGWork-25</Filter>
+    </ClCompile>
+    <ClCompile Include="OGWork-26.cpp">
+      <Filter>소스 파일\OGWork-26</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Define.h">
@@ -280,13 +292,19 @@
     <None Include="Vertex_Shader_Rotate.glsl">
       <Filter>소스 파일\2D\OSWork-9</Filter>
     </None>
-    <None Include="Vertex_Shader_Matrix.glsl">
-      <Filter>소스 파일\OGWork-13</Filter>
-    </None>
     <None Include="fragmemt_shader.glsl">
       <Filter>헤더 파일\3D</Filter>
     </None>
     <None Include="light_fragment_shader.glsl">
+      <Filter>헤더 파일\3D</Filter>
+    </None>
+    <None Include="Vertex_Shader_Matrix.glsl">
+      <Filter>헤더 파일\3D</Filter>
+    </None>
+    <None Include="light_Vertex_shader.glsl">
+      <Filter>헤더 파일\3D</Filter>
+    </None>
+    <None Include="Non_distance_fragment_shader.glsl">
       <Filter>헤더 파일\3D</Filter>
     </None>
   </ItemGroup>

@@ -5,7 +5,7 @@ uniform_int_distribution<int> RandomIndex(0, 5);
 
 
 // 카메라 생성
-CDW_Camera2 DW_Camera{ glm::vec3(0.f, 50.f,100.f),glm::vec3(0.f,0.f,-1.f) };
+CDW_Camera2 DW_Camera{ glm::vec3(-1.f, 0.f,2.f),glm::vec3(0.f,0.f,-1.f) };
 
 
 
@@ -20,7 +20,7 @@ void make_vectexShaders() // 버텍스 셰이터 객체 만들기
 {
 	GLchar* vertexSource{};
 
-	vertexSource = filetobuf("Vertex_Shader_Matrix.glsl");
+	vertexSource = filetobuf("light_Vertex_shader.glsl");
 
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -64,6 +64,10 @@ int Shader_Matrix{};
 int Shader_ViewTransform{};
 int Shader_ProjectionTransform{};
 
+unsigned int lightPosLocation{};
+unsigned int lightColorLocation{};
+//unsigned int objColorLocation{};
+
 void Initialize_Camera()
 {
 	DW_Camera.RotateX_Camera(-20.f);
@@ -91,6 +95,14 @@ void make_shaderProgram()
 	Shader_Matrix = glGetUniformLocation(shaderProgramID, "WorldTransform");
 	Shader_ViewTransform = glGetUniformLocation(shaderProgramID, "ViewTransform");
 	Shader_ProjectionTransform = glGetUniformLocation(shaderProgramID, "ProjectionTransform");
+
+	lightPosLocation = glGetUniformLocation(shaderProgramID, "lightPos"); //--- lightPos 값 전달: (0.0, 0.0, 5.0);
+	//glUniform3f(lightPosLocation, 0.0, 0.0, 5.0);
+	lightColorLocation = glGetUniformLocation(shaderProgramID, "lightColor"); //--- lightColor 값 전달: (1.0, 1.0, 1.0) 백색
+	//glUniform3f(lightColorLocation, 1.0, 1.0, 1.0);
+	//objColorLocation = glGetUniformLocation(shaderProgramID, "objectColor"); //--- object Color값 전달: (1.0, 0.5, 0.3)의 색
+	//glUniform3f(objColorLocation, 1.0, 0.5, 0.3);
+
 }
 
 
@@ -128,6 +140,22 @@ GLvoid UpdateBuffers();
 //////////////////////////// 여기까지 문제관련
 
 
+// 24번
+
+bool bLight_Move{};
+bool bLight_Move_Up{};
+void Light_Move(float fTimer);
+void Light_Move_up(float fTimer);
+
+bool bObject_Move{};
+bool bObject_Move_Up{};
+void Object_Move(float fTimer);
+void Object_Move_up(float fTimer);
+
+
+////////////////
+
+
 
 vector<DWArt*> AllArt{};
 
@@ -137,9 +165,9 @@ vector<DWArt*> AllArtTwo{};
 vector<DWArt*> AllArtThree{};
 
 vector<DWArt*> AllArtFour{};
-vector<DWArt*> RightBottom{};
+vector<DWArt*> AllArt_Light{};
 
-vector<DWArt*>* AllVec[6]{ &LineArt, &AllArt , &AllArtTwo ,&AllArtThree ,&AllArtFour , &RightBottom };
+vector<DWArt*>* AllVec[6]{ &LineArt, &AllArt , &AllArtTwo ,&AllArtThree ,&AllArtFour , &AllArt_Light };
 
 float fSize[4][4]{};
 
@@ -165,8 +193,12 @@ GLuint* vbo{}, * EBO{};
 
 GLvoid Timer(int Value)
 {
+	Light_Move(0.01f);
+	Light_Move_up(0.01f);
+	Object_Move(0.01f);
+
 	for (auto& iter : AllArt)
-		UpdateBuffer(iter);
+		Update_light_Buffer(iter);
 	glutPostRedisplay();
 
 	glutTimerFunc(1, Timer, 1);
@@ -178,6 +210,14 @@ void InitBuffers(vector<DWArt*>* pVec)
 	for (int i = (*pVec).size() - 1; i < (*pVec).size(); ++i)
 	{
 		InitBuffer((*pVec)[i]);
+	}
+}
+
+void Init_light_Buffers(vector<DWArt*>* pVec)
+{
+	for (int i = (*pVec).size() - 1; i < (*pVec).size(); ++i)
+	{
+		InitBuffer_Light((*pVec)[i]);
 	}
 }
 
@@ -204,9 +244,9 @@ void UpdateBuffers()
 		UpdateBuffer(AllArtFour[i]);
 	}
 
-	for (int i = 0; i < RightBottom.size(); ++i)
+	for (int i = 0; i < AllArt_Light.size(); ++i)
 	{
-		UpdateBuffer(RightBottom[i]);
+		UpdateBuffer(AllArt_Light[i]);
 
 
 	}
@@ -223,7 +263,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	g_WinID = glutCreateWindow("OGWork-24"); // 윈도우 생성(윈도우 이름)
 
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_CULL_FACE);
 
 	//--- GLEW 초기화하기
@@ -244,20 +284,12 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	Initialize_Camera();
 	make_shaderProgram();
 
-	Create_Line_Pos(&LineArt, 0.f, 25.f, 0.f, 0.f, -25.f, 0.f, glm::vec3(1.f, 1.f, 1.f), glm::vec3(1.f, 0.f, 0.f));
-	InitBuffers(&LineArt);
-	Create_Line_Pos(&LineArt, 25.f, 0.f, 0.f, -25.f, 0.f, 0.f, glm::vec3(1.f, 1.f, 1.f), glm::vec3(0.f, 1.f, 0.f));
-	InitBuffers(&LineArt);
-	Create_Line_Pos(&LineArt, 0.f, 0.f, 25.f, 0.f, 0.f, -25.f, glm::vec3(1.f, 1.f, 1.f), glm::vec3(0.f, 0.f, 1.f));
-	InitBuffers(&LineArt);
-
-
-	Create_Cube(&AllArt,0,0,0,25,25,25);
-	InitBuffers(&AllArt);
+	Create_Obj_Want_Color("obj_file\\cube3.obj", glm::vec3(1, 1, 1), &AllArt_Light, 0, -2, 2, 1, 1, 1);
+	Init_light_Buffers(&AllArt_Light);
 
 
 
-
+	
 	glutKeyboardFunc(KeyInput);
 	glutSpecialFunc(SpecialKeyInput);
 	glutMouseFunc(MouseInput);
@@ -309,7 +341,31 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 
 			glUniformMatrix4fv(Shader_ProjectionTransform, 1, GL_FALSE, glm::value_ptr(projection));
 
+
+			glm::vec3 Light_Pos = {};
+			glm::vec3 Light_Color = {};
+
+			if (AllArt_Light.size() != 0)
+			{
+				Light_Pos = glm::vec3(AllArt_Light.back()->vPos[0], AllArt_Light.back()->vPos[1], AllArt_Light.back()->vPos[2]);
+
+				//Light_Pos = DW_Camera.Get_view_Matrix() * glm::vec4(Light_Pos, 1.f);
+
+
+				MakeWorldMartrix(AllArt_Light.back());
+
+				Light_Pos = AllArt_Light.back()->transformMatrix * glm::vec4(Light_Pos, 1.f);
+
+				Light_Color = AllArt_Light.back()->VertexColor.back();
+			}
+
+			glUniform3f(lightPosLocation, Light_Pos.x, Light_Pos.y, Light_Pos.z);
+			glUniform3f(lightColorLocation, Light_Color.x, Light_Color.y, Light_Color.z);
+			//glUniform3f(objColorLocation, 1.0, 0.5, 0.3);
+
+
 			glBindVertexArray(iter->VAO);
+
 
 
 
@@ -331,7 +387,7 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 
 			case DWART_CUBE:
 
-				glDrawElements(iPrintType, 36, GL_UNSIGNED_INT, 0);
+				glDrawElements(iPrintType, iter->indexVerTex.size(), GL_UNSIGNED_INT, 0);
 
 				break;
 
@@ -398,6 +454,127 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 	if (key == 'q')
 	{
 		glutDestroyWindow(g_WinID);
+	}
+
+	if (key == 'w')
+	{
+		DW_Camera.Move_Front_Camera(0.1f);
+	}
+
+	if (key == 'a')
+	{
+		DW_Camera.Move_Left_Camera(0.1f);
+	}
+
+	if (key == 's')
+	{
+		DW_Camera.Move_Back_Camera(0.1f);
+	}
+
+	if (key == 'd')
+	{
+		DW_Camera.Move_Right_Camera(0.1f);
+	}
+
+	if (key == 'c')
+	{
+		DW_Camera.Move_Down_Camera(0.1f);
+	}
+
+	if (key == 'v')
+	{
+		DW_Camera.Move_Up_Camera(0.1f);
+	}
+
+
+	if (key == 'b')
+	{
+		bLight_Move = true;
+	}
+
+	if (key == 'B')
+	{
+		bLight_Move = false;
+	}
+
+	if (key == 'n')
+	{
+		bLight_Move_Up = true;
+	}
+
+	if (key == 'N')
+	{
+		bLight_Move_Up = false;
+	}
+
+
+
+
+
+
+
+
+
+	if (key == 't')
+	{
+		Delete_ALL_Art(AllArt);
+
+		Create_Obj("obj_file\\cube3.obj", &AllArt, 0, -2, 0, 2, 2, 2);
+		Init_light_Buffers(&AllArt);
+	}
+	if (key == 'T')
+	{
+		Delete_ALL_Art(AllArt);
+		Create_Obj("obj_file\\cone.obj", &AllArt, 0, -2, 0, 5, 5, 5);
+		Init_light_Buffers(&AllArt);
+		AllArt.back()->vRotate[0] = 90.f;
+	}
+
+	if (key == 'y')
+	{
+		Delete_ALL_Art(AllArt_Light);
+	}
+	if (key == 'Y')
+	{
+		Create_Obj_Want_Color("obj_file\\cube3.obj", glm::vec3(1, 1, 1), &AllArt_Light, 0, -2, 2, 1, 1, 1);
+		Init_light_Buffers(&AllArt_Light);
+	}
+
+	if (key == 'u')
+	{
+		bObject_Move = true;
+		bObject_Move_Up = false;
+	}
+	if (key == 'U')
+	{
+		bObject_Move_Up = true;
+		bObject_Move = false;
+	}
+
+	if (key == 'i')
+	{
+		bLight_Move = true;
+	}
+
+	if (key == 'I')
+	{
+		bLight_Move = false;
+	}
+
+	if (key == 'o')
+	{
+		if (AllArt_Light.size())
+		{
+			AllArt_Light.back()->vPos[2] += 0.1f;
+		}
+	}
+
+	if (key == 'O')
+	{
+		if (AllArt_Light.size())
+		{
+			AllArt_Light.back()->vPos[2] -= 0.1f;
+		}
 	}
 
 }
@@ -481,4 +658,64 @@ void checkFrameBuffer() {
 	else {
 		std::cout << "프레임 버퍼가 비어 있습니다." << std::endl;
 	}
+}
+
+void Light_Move(float fTimer)
+{
+
+	if (AllArt_Light.size() == 0)
+	{
+		return;
+	}
+
+	if (bLight_Move)
+	{
+		AllArt_Light.back()->vRevolution[1] += 20.f * fTimer;
+		//AllArt_Light.back()->vRotate[1] += 20.f * fTimer;
+	}
+
+
+}
+
+void Light_Move_up(float fTimer)
+{
+
+
+	if (AllArt_Light.size() == 0)
+	{
+		return;
+	}
+
+	if (bLight_Move_Up)
+	{
+		AllArt_Light.back()->vRevolution[0] += 20.f * fTimer;
+	}
+
+
+}
+
+void Object_Move(float fTimer)
+{
+	if (AllArt.size() == 0)
+	{
+		return;
+	}
+
+	if (bObject_Move)
+	{
+		for (int i = 0; i < AllArt.size(); ++i)
+		{
+			AllArt[i]->vRotate[1] += 20.f * fTimer;
+		}
+	}
+
+	if (bObject_Move_Up)
+	{
+		for (int i = 0; i < AllArt.size(); ++i)
+		{
+			AllArt[i]->vRotate[1] -= 20.f * fTimer;
+		}
+	}
+
+
 }

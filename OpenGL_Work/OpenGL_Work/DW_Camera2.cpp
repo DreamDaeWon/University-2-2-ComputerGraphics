@@ -83,6 +83,17 @@ void CDW_Camera2::RotateX_Camera(float Angle)
 	//angleX -= Angle;
 	vRotate[0] += Angle;
 
+
+	if (vRotate[0] > 89.f)
+	{
+		vRotate[0] = 89.f;
+	}
+
+	if (vRotate[0] < -89.f)
+	{
+		vRotate[0] = -89.f;
+	}
+
 	//glm::vec3 rotationAxisX(1.f, 0.f, 0.f); // X축 기준
 
 	//m_Matrix_View = glm::rotate(m_Matrix_View, glm::radians(Angle), rotationAxisX);
@@ -93,6 +104,7 @@ void CDW_Camera2::RotateY_Camera(float Angle)
 {
 	//angleY -= Angle;
 	vRotate[1] += Angle;
+
 
 	//glm::vec3 rotationAxisY(0.f, 1.f, 0.f); // Y축 기준
 	//m_Matrix_View = glm::rotate(m_Matrix_View, glm::radians(Angle), rotationAxisY);
@@ -124,52 +136,82 @@ void CDW_Camera2::RevolutionZ_Camera(float Angle)
 
 void CDW_Camera2::Move_Right_Camera(float _fMove)
 {
+	glm::vec3 translationVector(m_Matrix_View[0][0], m_Matrix_View[1][0], m_Matrix_View[2][0]);
 
-	vPos[0] += _fMove;
+	translationVector.x = translationVector.x * _fMove;
+	translationVector.y = translationVector.y * _fMove;
+	translationVector.z = translationVector.z * _fMove;
 
-	//glm::vec3 translationVector(_fMove, 0.f, 0.f);
-	//m_Matrix_View = glm::translate(m_Matrix_View, translationVector);
+
+	vPos[0] += translationVector.x;
+	//vPos[1] += translationVector.y;
+	vPos[2] -= translationVector.z;
 }
 
 void CDW_Camera2::Move_Left_Camera(float _fMove)
 {
-	vPos[0] -= _fMove;
+	glm::vec3 translationVector(m_Matrix_View[0][0], m_Matrix_View[1][0], m_Matrix_View[2][0]);
 
-	// translation
-	//glm::vec3 translationVector(-_fMove, 0.f, 0.f);
-	//m_Matrix_View = glm::translate(m_Matrix_View, translationVector);
+	translationVector.x = translationVector.x * _fMove;
+	translationVector.y = translationVector.y * _fMove;
+	translationVector.z = translationVector.z * _fMove;
+
+
+	vPos[0] -= translationVector.x;
+	//vPos[1] -= translationVector.y;
+	vPos[2] += translationVector.z;
 }
 
 void CDW_Camera2::Move_Back_Camera(float _fMove)
 {
+	glm::vec3 translationVector(m_Matrix_View[0][2], m_Matrix_View[1][2], m_Matrix_View[2][2]);
 
+	translationVector.x = translationVector.x * _fMove;
+	translationVector.y = translationVector.y * _fMove;
+	translationVector.z = translationVector.z * _fMove;
 
-	vPos[2] += _fMove;
-
-
-	// translation
-	//glm::vec3 translationVector(0.f, 0.f, _fMove);
-	//m_Matrix_View = glm::translate(m_Matrix_View, translationVector);
+	vPos[0] -= translationVector.x;
+	//vPos[1] -= translationVector.y;
+	vPos[2] += translationVector.z;
 }
 
 void CDW_Camera2::Move_Front_Camera(float _fMove)
 {
+	glm::vec3 translationVector(m_Matrix_View[0][2], m_Matrix_View[1][2], m_Matrix_View[2][2]);
 
-	vPos[2] -= _fMove;
+	translationVector.x = translationVector.x * _fMove;
+	translationVector.y = translationVector.y * _fMove;
+	translationVector.z = translationVector.z * _fMove;
 
-	// translation
-	//glm::vec3 translationVector(0.f, 0.f, -_fMove);
-	//m_Matrix_View = glm::translate(m_Matrix_View, translationVector);
+	vPos[0] += translationVector.x;
+	//vPos[1] += translationVector.y;
+	vPos[2] -= translationVector.z;
 }
 
 void CDW_Camera2::Move_Up_Camera(float _fMove)
 {
-	vPos[1] += _fMove;
+	glm::vec3 translationVector(0.f, 1.f, 0.f);
+
+	translationVector.x = translationVector.x * _fMove;
+	translationVector.y = translationVector.y * _fMove;
+	translationVector.z = translationVector.z * _fMove;
+
+	//vPos[0] += translationVector.x;
+	vPos[1] += translationVector.y;
+	//vPos[2] -= translationVector.z;
 }
 
 void CDW_Camera2::Move_Down_Camera(float _fMove)
 {
-	vPos[1] -= _fMove;
+	glm::vec3 translationVector(0.f, 1.f, 0.f);
+
+	translationVector.x = translationVector.x * _fMove;
+	translationVector.y = translationVector.y * _fMove;
+	translationVector.z = translationVector.z * _fMove;
+
+	//vPos[0] += translationVector.x;
+	vPos[1] -= translationVector.y;
+	//vPos[2] -= translationVector.z;
 }
 
 void CDW_Camera2::MoveCamera(glm::vec3 _Move_Pos)

@@ -154,9 +154,9 @@ vector<DWArt*> LineArt{};
 vector<DWArt*> AllArtTwo{};
 vector<DWArt*> AllArtThree{};
 vector<DWArt*> AllArtFour{};
-vector<DWArt*> RightBottom{};
+vector<DWArt*> AllArt_Light{};
 
-vector<DWArt*>* AllVec[6]{ &AllArt ,&LineArt,&AllArtTwo ,&AllArtThree ,&AllArtFour ,&RightBottom };
+vector<DWArt*>* AllVec[6]{ &AllArt ,&LineArt,&AllArtTwo ,&AllArtThree ,&AllArtFour ,&AllArt_Light };
 
 float fSize[4][4]{};
 
@@ -221,9 +221,9 @@ void UpdateBuffers()
 		UpdateBuffer(AllArtFour[i]);
 	}
 
-	for (int i = 0; i < RightBottom.size(); ++i)
+	for (int i = 0; i < AllArt_Light.size(); ++i)
 	{
-		UpdateBuffer(RightBottom[i]);
+		UpdateBuffer(AllArt_Light[i]);
 	}
 
 }
