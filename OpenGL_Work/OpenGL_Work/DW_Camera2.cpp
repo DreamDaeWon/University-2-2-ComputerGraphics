@@ -14,7 +14,7 @@ void CDW_Camera2::CreateCamera(glm::vec3 _vPos, glm::vec3 _vLook)
 {
 
 	vPos[0] = _vPos.x;
-	vPos[1] = _vPos.y;
+	vPos.y = _vPos.y;
 	vPos[2] = _vPos.z;
 
 	m_Matrix_View = glm::mat4(1.0f);
@@ -46,7 +46,7 @@ void CDW_Camera2::Make_Camera_Matrix()
 
 	// 이동
 		// translation
-	glm::vec3 translationVector(vPos[0], vPos[1], vPos[2]);
+	glm::vec3 translationVector(vPos);
 	m_Matrix_View = glm::translate(m_Matrix_View, translationVector);
 
 	// 자전
@@ -143,9 +143,9 @@ void CDW_Camera2::Move_Right_Camera(float _fMove)
 	translationVector.z = translationVector.z * _fMove;
 
 
-	vPos[0] += translationVector.x;
+	vPos.x += translationVector.x;
 	//vPos[1] += translationVector.y;
-	vPos[2] -= translationVector.z;
+	vPos.z -= translationVector.z;
 }
 
 void CDW_Camera2::Move_Left_Camera(float _fMove)
@@ -157,9 +157,9 @@ void CDW_Camera2::Move_Left_Camera(float _fMove)
 	translationVector.z = translationVector.z * _fMove;
 
 
-	vPos[0] -= translationVector.x;
+	vPos.x -= translationVector.x;
 	//vPos[1] -= translationVector.y;
-	vPos[2] += translationVector.z;
+	vPos.z += translationVector.z;
 }
 
 void CDW_Camera2::Move_Back_Camera(float _fMove)
@@ -170,9 +170,9 @@ void CDW_Camera2::Move_Back_Camera(float _fMove)
 	translationVector.y = translationVector.y * _fMove;
 	translationVector.z = translationVector.z * _fMove;
 
-	vPos[0] -= translationVector.x;
+	vPos.x -= translationVector.x;
 	//vPos[1] -= translationVector.y;
-	vPos[2] += translationVector.z;
+	vPos.z += translationVector.z;
 }
 
 void CDW_Camera2::Move_Front_Camera(float _fMove)
@@ -183,9 +183,9 @@ void CDW_Camera2::Move_Front_Camera(float _fMove)
 	translationVector.y = translationVector.y * _fMove;
 	translationVector.z = translationVector.z * _fMove;
 
-	vPos[0] += translationVector.x;
+	vPos.x += translationVector.x;
 	//vPos[1] += translationVector.y;
-	vPos[2] -= translationVector.z;
+	vPos.z -= translationVector.z;
 }
 
 void CDW_Camera2::Move_Up_Camera(float _fMove)
@@ -197,7 +197,7 @@ void CDW_Camera2::Move_Up_Camera(float _fMove)
 	translationVector.z = translationVector.z * _fMove;
 
 	//vPos[0] += translationVector.x;
-	vPos[1] += translationVector.y;
+	vPos.y += translationVector.y;
 	//vPos[2] -= translationVector.z;
 }
 
@@ -210,7 +210,7 @@ void CDW_Camera2::Move_Down_Camera(float _fMove)
 	translationVector.z = translationVector.z * _fMove;
 
 	//vPos[0] += translationVector.x;
-	vPos[1] -= translationVector.y;
+	vPos.y -= translationVector.y;
 	//vPos[2] -= translationVector.z;
 }
 

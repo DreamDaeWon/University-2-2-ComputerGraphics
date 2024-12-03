@@ -62,44 +62,6 @@ float Pos_Pentagon[5][2]{ {-1.f,1.f },{-1.5f,-1.f }, {0.f,-2.f} ,{1.5f,-1.f} ,{1
 float Pos_Dot[5][2]{ {-0.1f,0.1f },{-0.1f,-0.1f }, {0.1f,-0.1f} ,{0.1f,-0.1f} ,{0.1f,0.1f} };
 
 
-float vertices[] = { //--- 버텍스 속성: 좌표값(FragPos), 노말값 (Normal)
-0.0f, 0.0f, -1.0f,
- 0.0f, 0.0f, -1.0f,
-0.0f, 0.0f, -1.0f,
-0.0f, 0.0f, -1.0f,
- 0.0f, 0.0f, -1.0f,
-	0.0f, 0.0f, -1.0f,
-	0.0f, 0.0f, 1.0f,
-0.0f, 0.0f, 1.0f, 
-0.0f, 0.0f, 1.0f,
-0.0f, 0.0f, 1.0f,
-0.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f,
--1.0f, 0.0f, 0.0f,
- -1.0f, 0.0f, 0.0f, 
-	 -1.0f, 0.0f, 0.0f,
-	 -1.0f, 0.0f, 0.0f,
-	-1.0f, 0.0f, 0.0f, 
--1.0f, 0.0f, 0.0f,
-1.0f, 0.0f, 0.0f, 
- 1.0f, 0.0f, 0.0f,
- 1.0f, 0.0f, 0.0f,
-	1.0f, 0.0f, 0.0f,
-1.0f, 0.0f, 0.0f,
-1.0f, 0.0f, 0.0f,
-	0.0f, -1.0f, 0.0f,
- 0.0f, -1.0f, 0.0f, 
-0.0f, -1.0f, 0.0f,
- 0.0f, -1.0f, 0.0f, 
-	0.0f, -1.0f, 0.0f,
-	 0.0f, -1.0f, 0.0f,
-	0.0f, 1.0f, 0.0f,
- 0.0f, 1.0f, 0.0f, 
-0.0f, 1.0f, 0.0f,
- 0.0f, 1.0f, 0.0f,
- 0.0f, 1.0f, 0.0f,
- 0.0f, 1.0f, 0.0f
-};
 
 
 enum ArtType {DWART_LINE, DWART_CIRCLE_SPIRAL, DWART_FACE, DWART_CUBE,DWART_TETRATEDRON, DWART_MODEL_SPHERE,DWART_MODEL_SYLINDER, DWART_END};
@@ -708,11 +670,16 @@ inline GLvoid Create_Face(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY, GLfloa
 
 	// 0 1
 	Art->Vertex.push_back(glm::vec3((0 - _rx), (0), (0 + _rz)));
+
+
+
 	Art->Vertex.push_back(glm::vec3((0 - _rx), (0), (0 - _rz)));
 
 
 	// 2 3
 	Art->Vertex.push_back(glm::vec3((0 + _rx), (0), (0 - _rz)));
+
+
 	Art->Vertex.push_back(glm::vec3((0 + _rx), (0), (0 + _rz)));
 
 
@@ -748,6 +715,8 @@ inline GLvoid Create_Face_Want_Color(vector<DWArt*>* pVec, GLfloat _CX, GLfloat 
 	Art->VertexColor.push_back(vColor);
 	Art->VertexColor.push_back(vColor);
 
+	Art->VertexColor.push_back(vColor);
+	Art->VertexColor.push_back(vColor);
 
 	// 반지름
 	Art->rx = _rx;
@@ -759,13 +728,25 @@ inline GLvoid Create_Face_Want_Color(vector<DWArt*>* pVec, GLfloat _CX, GLfloat 
 
 	// 0 1
 	Art->Vertex.push_back(glm::vec3((0 - _rx), (0), (0 + _rz)));
+
+
+
 	Art->Vertex.push_back(glm::vec3((0 - _rx), (0), (0 - _rz)));
 
 
 	// 2 3
 	Art->Vertex.push_back(glm::vec3((0 + _rx), (0), (0 - _rz)));
+
+
 	Art->Vertex.push_back(glm::vec3((0 + _rx), (0), (0 + _rz)));
 
+	
+	Art->Vertex_Nomal.push_back(glm::vec3(0.f, 1.f, 0.f));
+	Art->Vertex_Nomal.push_back(glm::vec3(0.f, 1.f, 0.f));
+	Art->Vertex_Nomal.push_back(glm::vec3(0.f, 1.f, 0.f));
+	Art->Vertex_Nomal.push_back(glm::vec3(0.f, 1.f, 0.f));
+	Art->Vertex_Nomal.push_back(glm::vec3(0.f, 1.f, 0.f));
+	Art->Vertex_Nomal.push_back(glm::vec3(0.f, 1.f, 0.f));
 
 
 	// 인덱스
@@ -977,8 +958,8 @@ inline GLvoid Create_Obj(const char* filename,vector<DWArt*>* pVec, GLfloat _CX,
 
 	for (int i = 0; i < Art->indexVerTex.size(); ++i)
 	{
-		//Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
-		Art->VertexColor.push_back(glm::vec3(0.2f,0.5f,0.7f));
+		Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
+		//Art->VertexColor.push_back(glm::vec3(0.2f,0.5f,0.7f));
 	}
 
 	pVec->push_back(Art);
@@ -1116,6 +1097,9 @@ inline GLvoid Create_Circle_Line(vector<DWArt*>* pVec, GLfloat _CX, GLfloat _CY,
 		Art->VertexColor.push_back(glm::vec3(RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f, RandomRGB(mt) / 10.f));
 		Art->Vertex.push_back(glm::vec3((Art->CenterX), (0.f), (Art->CenterZ)));
 		Art->indexVerTex.push_back(iIndex);
+
+		Art->Vertex_Nomal.push_back(glm::vec3(0.f,0.f,0.f));
+
 		++iIndex;
 	}
 

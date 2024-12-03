@@ -3,9 +3,16 @@
 
 uniform_int_distribution<int> RandomIndex(0, 5);
 
+uniform_real_distribution<float> RandomPos(-10, 10);
+
+uniform_real_distribution<float> RandomPos_Y(0, 10);
+
+
+//uniform_int_distribution<int> RandomIndex(0, 5);
+
 
 // 카메라 생성
-CDW_Camera2 DW_Camera{ glm::vec3(-1.f, 0.f,2.f),glm::vec3(0.f,0.f,-1.f) };
+CDW_Camera2 DW_Camera{ glm::vec3(-1.f, 2.f,2.f),glm::vec3(0.f,0.f,-1.f) };
 
 
 
@@ -66,6 +73,9 @@ int Shader_ProjectionTransform{};
 
 unsigned int lightPosLocation{};
 unsigned int lightColorLocation{};
+unsigned int lightPowerLocation{};
+
+float Light_Power{ 0.5f };
 
 
 unsigned int CameraPos{};
@@ -102,7 +112,9 @@ void make_shaderProgram()
 	lightPosLocation = glGetUniformLocation(shaderProgramID, "lightPos"); //--- lightPos 값 전달: (0.0, 0.0, 5.0);
 	//glUniform3f(lightPosLocation, 0.0, 0.0, 5.0);
 	lightColorLocation = glGetUniformLocation(shaderProgramID, "lightColor"); //--- lightColor 값 전달: (1.0, 1.0, 1.0) 백색
-	
+
+	lightPowerLocation = glGetUniformLocation(shaderProgramID, "lightPower"); //--- lightColor 값 전달: (1.0, 1.0, 1.0) 백색
+
 	CameraPos = glGetUniformLocation(shaderProgramID, "viewPos");
 	//glUniform3f(lightColorLocation, 1.0, 1.0, 1.0);
 	//objColorLocation = glGetUniformLocation(shaderProgramID, "objectColor"); //--- object Color값 전달: (1.0, 0.5, 0.3)의 색
@@ -158,7 +170,27 @@ void Object_Move(float fTimer);
 void Object_Move_up(float fTimer);
 
 
+///////////// 27번 //////////////////
+
+
+bool bSnow{};
+void Snow_Move(float fTimer);
+
+void Draw_Pyramid(int n, DWArt* pArt);
+
+
+/////////////// 28 번 /////////////////
+
+GLfloat Light_Move_Pos[4][3]{ (1.f, 2.f, 0.f), (-1.f, 2.f, 0.f), (0.f, 2.f, 1.f), (0.f, 2.f, -1.f) };
+int Light_Pos_Int{};
+
+
+
 ////////////////
+
+
+
+
 
 
 
@@ -201,6 +233,7 @@ GLvoid Timer(int Value)
 	Light_Move(0.01f);
 	Light_Move_up(0.01f);
 	Object_Move(0.01f);
+	Snow_Move(0.01f);
 
 	for (auto& iter : AllArt)
 		Update_light_Buffer(iter);
@@ -265,7 +298,7 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); // 디스플레이 모드 설정
 	glutInitWindowPosition(100, 100); // 윈도우의 위치 지정
 	glutInitWindowSize(WinsizeX, WinsizeY); // 윈도우의 크기 지정
-	g_WinID = glutCreateWindow("OGWork-24"); // 윈도우 생성(윈도우 이름)
+	g_WinID = glutCreateWindow("OGWork-27"); // 윈도우 생성(윈도우 이름)
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -289,12 +322,85 @@ void main(int argc, char** argv) //--- 윈도우 출력하고 콜백함수 설정
 	Initialize_Camera();
 	make_shaderProgram();
 
-	Create_Obj_Want_Color("obj_file\\cube3.obj", glm::vec3(1, 1, 1), &AllArt_Light, 0, -2, 2, 1, 1, 1);
+	Create_Obj_Want_Color("obj_file\\cube.obj", glm::vec3(1, 1, 1), &AllArt_Light, 0, 2, 2, 1, 1, 1);
 	Init_light_Buffers(&AllArt_Light);
 
+	Create_Face_Want_Color(&AllArt, 0, 0, 0, 10, 10, 10, glm::vec3(0.5, 0.5, 0.5));
+	Init_light_Buffers(&AllArt);
+
+	Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, 0, 0.5, 0, 1, 1, 1);
+	Init_light_Buffers(&AllArtTwo);
 
 
-	
+
+
+
+
+
+	Create_Circle_Line(&AllArt, 0, 0, 0, 5);
+	Init_light_Buffers(&AllArt);
+
+	AllArt.back()->vRotate[0] += 25.f;
+
+
+	Create_Circle_Line(&AllArt, 0, 0, 0, 5);
+	Init_light_Buffers(&AllArt);
+	AllArt.back()->vRotate[0] += 90.f;
+
+	Create_Circle_Line(&AllArt, 0, 0, 0, 5);
+	Init_light_Buffers(&AllArt);
+	AllArt.back()->vRotate[0] -= 25.f;
+
+
+
+	glm::vec3 revolutionAxisX(1.0f, 0.0f, 0.0f); // X축 기준
+
+	glm::vec3 Want_Spin = glm::vec3(0.f, 0.f, 1.f);
+	glm::mat4 Matrix = glm::mat4(1.f);
+	Create_Obj_Want_Color("obj_file\\high_sphere.obj", glm::vec3(1.f, 0.f, 0.f), &AllArtFour, 5, 0, 0, 1, 1, 1);
+	Init_light_Buffers(&AllArtFour);
+	float revolution_angleX = glm::radians(65.f); // 45도 회전 (라디안 단위)
+
+
+
+	Matrix = glm::rotate(Matrix, revolution_angleX, revolutionAxisX);
+
+
+	Want_Spin = Matrix * glm::vec4(Want_Spin, 1.f);
+	AllArtFour.back()->revolutionAxis_Want = Want_Spin;
+
+
+
+
+	Want_Spin = glm::vec3(1.f, 0.f, 0.f);
+	Matrix = glm::mat4(1.f);
+	Create_Obj_Want_Color("obj_file\\high_sphere.obj", glm::vec3(0, 1, 0), &AllArtFour, 0, 5, 0, 2, 2, 2);
+	Init_light_Buffers(&AllArtFour);
+	revolution_angleX = glm::radians(90.f); // 45도 회전 (라디안 단위)
+
+	Matrix = glm::rotate(Matrix, revolution_angleX, revolutionAxisX);
+	Matrix = glm::rotate(Matrix, revolution_angleX, glm::vec3(0.f, 0.f, 1.f));
+
+	Want_Spin = Matrix * glm::vec4(Want_Spin, 1.f);
+	AllArtFour.back()->revolutionAxis_Want = Want_Spin;
+
+
+
+
+	Want_Spin = glm::vec3(0.f, 0.f, 1.f);
+	Matrix = glm::mat4(1.f);
+	Create_Obj_Want_Color("obj_file\\high_sphere.obj", glm::vec3(0, 0, 1), &AllArtFour, -5, 0, 0, 3, 3, 3);
+	Init_light_Buffers(&AllArtFour);
+	revolution_angleX = glm::radians(-65.f); // 45도 회전 (라디안 단위)
+
+	Matrix = glm::rotate(Matrix, revolution_angleX, revolutionAxisX);
+	Want_Spin = Matrix * glm::vec4(Want_Spin, 1.f);
+	AllArtFour.back()->revolutionAxis_Want = Want_Spin;
+
+
+
+
+
 	glutKeyboardFunc(KeyInput);
 	glutSpecialFunc(SpecialKeyInput);
 	glutMouseFunc(MouseInput);
@@ -341,7 +447,7 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 			//}
 			//else
 			//{
-				projection = glm::perspective(glm::radians(90.f), (float)WinsizeX / WinsizeY, 0.1f, 200.f);
+			projection = glm::perspective(glm::radians(90.f), (float)WinsizeX / WinsizeY, 0.1f, 200.f);
 			//}
 
 			glUniformMatrix4fv(Shader_ProjectionTransform, 1, GL_FALSE, glm::value_ptr(projection));
@@ -369,6 +475,8 @@ GLvoid drawScene() //--- 콜백 함수: 그리기 콜백 함수
 
 			glUniform3f(CameraPos, DW_Camera.Get_vPos().x, DW_Camera.Get_vPos().y, DW_Camera.Get_vPos().z);
 			//glUniform3f(objColorLocation, 1.0, 0.5, 0.3);
+
+			glUniform1f(lightPowerLocation, Light_Power);
 
 
 			glBindVertexArray(iter->VAO);
@@ -506,81 +614,128 @@ GLvoid KeyInput(unsigned char key, int x, int y)
 
 	if (key == 'n')
 	{
-		bLight_Move_Up = true;
+		AllArt_Light.back()->vPos[2] -= 0.1f;
 	}
 
-	if (key == 'N')
+	if (key == 'f')
 	{
-		bLight_Move_Up = false;
+		AllArt_Light.back()->vPos[2] += 0.1f;
 	}
-
-
-
-
-
-
-
 
 
 	if (key == 't')
 	{
-		Delete_ALL_Art(AllArt);
-
-		Create_Obj("obj_file\\cube3.obj", &AllArt, 0, -2, 0, 2, 2, 2);
-		Init_light_Buffers(&AllArt);
+		bSnow = true;
+		if (AllArtThree.size() == 0)
+		{
+			for (int i = 0; i < 300; ++i)
+			{
+				Create_Obj_Want_Color("obj_file\\sphere.obj", glm::vec3(1.f, 1.f, 1.f), &AllArtThree, RandomPos(mt), RandomPos_Y(mt), RandomPos(mt), 1.f, 1.f, 1.f);
+				Init_light_Buffers(&AllArtThree);
+			}
+		}
 	}
+
+
 	if (key == 'T')
 	{
-		Delete_ALL_Art(AllArt);
-		Create_Obj("obj_file\\cone.obj", &AllArt, 0, -2, 0, 5, 5, 5);
-		Init_light_Buffers(&AllArt);
+		bSnow = false;
 	}
 
-	if (key == 'y')
-	{
-		Delete_ALL_Art(AllArt_Light);
-	}
-	if (key == 'Y')
-	{
-		Create_Obj_Want_Color("obj_file\\cube3.obj", glm::vec3(1, 1, 1), &AllArt_Light, 0, -2, 2, 1, 1, 1);
-		Init_light_Buffers(&AllArt_Light);
-	}
 
-	if (key == 'u')
+	if (key == '+')
 	{
-		bObject_Move = true;
-		bObject_Move_Up = false;
-	}
-	if (key == 'U')
-	{
-		bObject_Move_Up = true;
-		bObject_Move = false;
-	}
-
-	if (key == 'i')
-	{
-		bLight_Move = true;
-	}
-
-	if (key == 'I')
-	{
-		bLight_Move = false;
-	}
-
-	if (key == 'o')
-	{
-		if (AllArt_Light.size())
+		if (Light_Power <= 1.0)
 		{
-			AllArt_Light.back()->vPos[2] += 0.1f;
+			Light_Power += 0.1f;
 		}
 	}
 
-	if (key == 'O')
+	if (key == '-')
 	{
-		if (AllArt_Light.size())
+		if (Light_Power >= 0)
 		{
-			AllArt_Light.back()->vPos[2] -= 0.1f;
+			Light_Power -= 0.1f;
 		}
+	}
+
+	if (key == 'C')
+	{
+		AllArt_Light.back()->VertexColor.back().x = RandomRGB(mt) / 10.f;
+		AllArt_Light.back()->VertexColor.back().y = RandomRGB(mt) / 10.f;
+		AllArt_Light.back()->VertexColor.back().z = RandomRGB(mt) / 10.f;
+	}
+
+	if (key == 'p')
+	{
+		Light_Pos_Int++;
+		if (Light_Pos_Int >= 4)
+		{
+			Light_Pos_Int = 0;
+		}
+
+		AllArt_Light.back()->vPos[0] = Light_Move_Pos[Light_Pos_Int][0];
+		AllArt_Light.back()->vPos[1] = Light_Move_Pos[Light_Pos_Int][1];
+		AllArt_Light.back()->vPos[2] = Light_Move_Pos[Light_Pos_Int][2];
+	}
+
+	if (key == 'm')
+	{
+		AllArt_Light.back()->VertexColor.back().x = 0.f;
+		AllArt_Light.back()->VertexColor.back().y = 0.f;
+		AllArt_Light.back()->VertexColor.back().z = 0.f;
+	}
+
+	if (key == 'M')
+	{
+		AllArt_Light.back()->VertexColor.back().x = 1.f;
+		AllArt_Light.back()->VertexColor.back().y = 1.f;
+		AllArt_Light.back()->VertexColor.back().z = 1.f;
+	}
+
+	if (key == '1')
+	{
+		Delete_ALL_Art(AllArtTwo);
+		Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, 0, 0.5, 0, 1, 1, 1);
+		Init_light_Buffers(&AllArtTwo);
+
+		Draw_Pyramid(1, AllArtTwo.back());
+	}
+
+	if (key == '2')
+	{
+		Delete_ALL_Art(AllArtTwo);
+		Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, 0, 0.5, 0, 1, 1, 1);
+		Init_light_Buffers(&AllArtTwo);
+
+		Draw_Pyramid(2, AllArtTwo.back());
+	}
+
+	if (key == '3')
+	{
+		Delete_ALL_Art(AllArtTwo);
+		Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, 0, 0.5, 0, 1, 1, 1);
+		Init_light_Buffers(&AllArtTwo);
+
+		Draw_Pyramid(3, AllArtTwo.back());
+	}
+
+	if (key == '4')
+	{
+		Delete_ALL_Art(AllArtTwo);
+		Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, 0, 0.5, 0, 1, 1, 1);
+		Init_light_Buffers(&AllArtTwo);
+
+		Draw_Pyramid(4, AllArtTwo.back());
+	}
+
+	if (key == '5')
+	{
+		Delete_ALL_Art(AllArtTwo);
+		Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, 0, 0.5, 0, 1, 1, 1);
+		Init_light_Buffers(&AllArtTwo);
+
+		Draw_Pyramid(5, AllArtTwo.back());
 	}
 
 }
@@ -707,21 +862,82 @@ void Object_Move(float fTimer)
 		return;
 	}
 
-	if (bObject_Move)
+	if (AllArtFour.size() == 0)
 	{
-		for (int i = 0; i < AllArt.size(); ++i)
-		{
-			AllArt[i]->vRotate[1] += 20.f * fTimer;
-		}
+		return;
 	}
 
-	if (bObject_Move_Up)
+	for (int i = 0; i < AllArtFour.size(); ++i)
 	{
-		for (int i = 0; i < AllArt.size(); ++i)
-		{
-			AllArt[i]->vRotate[1] -= 20.f * fTimer;
-		}
+		AllArtFour[i]->vRevolution[3] += 5.f * fTimer;
 	}
+
+
+}
+
+void Snow_Move(float fTimer)
+{
+	if (bSnow)
+	{
+		for (int i = 0; i < AllArtThree.size(); ++i)
+		{
+			AllArtThree[i]->vPos[1] -= fTimer * 2.5f;
+
+			if (AllArtThree[i]->vPos[1] <= 0.f)
+			{
+				AllArtThree[i]->vPos[1] = 10.f;
+			}
+
+		}
+
+	}
+
+
+}
+
+
+void Draw_Pyramid(int n, DWArt* pArt)
+{
+
+	if (n == 1)
+	{
+		//Delete_ALL_Art(AllArtTwo);
+		//Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, 0, 0.5, 0, 1, 1, 1);
+		//Init_light_Buffers(&AllArtTwo);
+		return;
+	}
+
+	float fSize = pArt->vScale[0] / 2;
+	float fPos[3] = { pArt->vPos[0],pArt->vPos[1],pArt->vPos[2] };
+
+
+	// 위
+	Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, fPos[0], fPos[1] + fSize * 1.f, fPos[2], fSize * 2.f, fSize * 2.f, fSize * 2.f);
+	Init_light_Buffers(&AllArtTwo);
+	Draw_Pyramid(n - 1, AllArtTwo.back());
+
+	// 왼쪽 앞
+	Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, fPos[0] - fSize * 0.7f, fPos[1] - fSize * 1.f, fPos[2] - fSize * 0.7f, fSize * 2.f, fSize * 2.f, fSize * 2.f);
+	Init_light_Buffers(&AllArtTwo);
+	Draw_Pyramid(n - 1, AllArtTwo.back());
+
+	// 오른쪽 앞 
+	Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, fPos[0] + fSize * 0.7f, fPos[1] - fSize * 1.f, fPos[2] - fSize * 0.7f, fSize * 2.f, fSize * 2.f, fSize * 2.f);
+	Init_light_Buffers(&AllArtTwo);
+	Draw_Pyramid(n - 1, AllArtTwo.back());
+
+	// 왼쪽 뒤
+	Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, fPos[0] - fSize * 0.7f, fPos[1] - fSize * 1.f, fPos[2] + fSize * 0.7f, fSize * 2.f, fSize * 2.f, fSize * 2.f);
+	Init_light_Buffers(&AllArtTwo);
+	Draw_Pyramid(n - 1, AllArtTwo.back());
+
+	// 오른쪽 뒤 
+	Create_Obj_Want_Color("obj_file\\low_cone.obj", glm::vec3(0.4, 0.6, 0.9), &AllArtTwo, fPos[0] + fSize * 0.7f, fPos[1] - fSize * 1.f, fPos[2] + fSize * 0.7f, fSize * 2.f, fSize * 2.f, fSize * 2.f);
+	Init_light_Buffers(&AllArtTwo);
+	Draw_Pyramid(n - 1, AllArtTwo.back());
+
+
+	DeleteArt(AllArtTwo, pArt);
 
 
 }

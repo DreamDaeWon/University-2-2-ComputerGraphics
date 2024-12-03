@@ -61,7 +61,7 @@ public:
 		return vRotate;
 	}
 
-	GLfloat* Get_vPos()
+	glm::vec3 Get_vPos()
 	{
 		return vPos;
 	}
@@ -111,7 +111,7 @@ private:
 
 	GLfloat vRotate[3]{}; // 객체가 x y z 축으로 얼마만큼 회전하였는지?
 
-	GLfloat vPos[3]{}; // 객체가 원점에서 얼마만큼 움직이는지? // 로컬 좌표계임
+	glm::vec3 vPos{}; // 객체가 원점에서 얼마만큼 움직이는지? // 로컬 좌표계임
 
 	GLfloat vRevolution[4]{}; // 객체가 x y z 축으로 얼마만큼 공전하였는지?
 
